@@ -109,10 +109,9 @@ body {
 .toast { position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--dark);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:20px;opacity:0;transition:all .25s ease;pointer-events:none;white-space:nowrap;z-index:300; }
 .toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
 
-/* NAV BAR */
-.nav-bar { position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(255,255,255,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;align-items:flex-start;padding-top:10px;z-index:100;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none; }
-.nav-bar::-webkit-scrollbar { display:none; }
-.nav-item { display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 10px;min-width:62px;flex-shrink:0;scroll-snap-align:start;transition:transform .15s; }
+/* NAV BAR — only 3 items */
+.nav-bar { position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(255,255,255,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;align-items:flex-start;padding-top:10px;z-index:100; }
+.nav-item { display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;padding:4px 10px;transition:transform .15s; }
 .nav-item:active { transform:scale(.9); }
 .nav-icon { width:26px;height:26px;display:flex;align-items:center;justify-content:center; }
 .nav-icon svg { width:22px;height:22px;stroke:var(--text-3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s; }
@@ -131,21 +130,21 @@ body {
 .home-hero h1 { font-size:30px;font-weight:600;color:#fff;line-height:1.18;margin-bottom:8px; }
 .home-hero h1 em { color:var(--gold);font-style:italic;font-weight:300; }
 .home-hero p { font-size:14px;color:rgba(255,255,255,.55);font-weight:300;line-height:1.65;max-width:270px; }
-.home-content { padding:24px 20px;flex:1;overflow-y:auto; }
-.home-intro { font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:20px; }
-.feature-grid { display:flex;flex-direction:column;gap:10px; }
-.feature-item { display:flex;align-items:center;gap:14px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:all .18s; }
-.feature-item:active { background:var(--gold-light);transform:scale(.99); }
-.fi-icon { width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-.fi-icon svg { width:20px;height:20px;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;fill:none; }
-.fi-dark { background:rgba(26,30,42,.07); }
-.fi-dark svg { stroke:var(--dark-soft); }
-.fi-gold { background:var(--gold-light); }
-.fi-gold svg { stroke:var(--gold-dark); }
-.fi-text { flex:1; }
-.fi-text strong { display:block;font-size:14px;font-weight:500;margin-bottom:2px; }
-.fi-text span { font-size:12px;color:var(--text-3); }
-.fi-arrow { font-size:18px;color:var(--text-3);font-weight:300; }
+.home-content { padding:20px;flex:1;overflow-y:auto; }
+.home-intro { font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:16px; }
+
+/* HOME FEATURE GRID — 2 columns */
+.feature-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+.feature-tile { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:18px 10px;cursor:pointer;transition:all .18s;text-align:center;aspect-ratio:1; }
+.feature-tile:active { background:var(--gold-light);transform:scale(.97); }
+.ft-icon { width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.ft-icon svg { width:20px;height:20px;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;fill:none; }
+.ft-dark { background:rgba(26,30,42,.07); }
+.ft-dark svg { stroke:var(--dark-soft); }
+.ft-gold { background:var(--gold-light); }
+.ft-gold svg { stroke:var(--gold-dark); }
+.ft-text strong { display:block;font-size:13px;font-weight:600;margin-bottom:2px;line-height:1.3; }
+.ft-text span { font-size:11px;color:var(--text-3);line-height:1.3; }
 
 /* SCAN */
 .scan-area { border:1.5px dashed rgba(196,184,142,.55);border-radius:var(--r-xl);padding:36px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;background:var(--gold-light);text-align:center;cursor:pointer; }
@@ -177,6 +176,7 @@ body {
 .week-cell.done::after { content:'✓';font-size:11px;color:#fff;font-weight:600; }
 .week-cell.today-col { border-color:var(--gold); }
 .week-cell.today-col.done { background:var(--gold);border-color:var(--gold); }
+.week-cell.not-scheduled { background:transparent;border-color:transparent;cursor:default;pointer-events:none; }
 .heatmap-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px; }
 .heatmap-grid { display:flex;gap:3px;min-width:max-content; }
 .heatmap-col { display:flex;flex-direction:column;gap:3px; }
@@ -200,9 +200,15 @@ body {
 .check-label { flex:1;font-size:14px;transition:color .15s; }
 .check-box.checked + .check-label { color:var(--text-3);text-decoration:line-through; }
 .check-streak-pill { font-size:11px;font-weight:600;color:var(--gold-dark);background:var(--gold-light);padding:2px 8px;border-radius:10px; }
+.check-time-pill { font-size:11px;color:var(--text-3);background:var(--surface2);padding:2px 8px;border-radius:10px;margin-right:2px; }
 .fab { position:sticky;bottom:12px;right:20px;align-self:flex-end;width:46px;height:46px;min-width:46px;min-height:46px;border-radius:50%;background:var(--dark);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(26,30,42,.25);margin-top:auto;transition:transform .15s; }
 .fab:active { transform:scale(.92); }
 .fab svg { width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round; }
+
+/* CUSTOM DAYS PICKER */
+.custom-days-picker { display:flex;gap:6px;margin-top:4px; }
+.day-toggle-btn { flex:1;padding:8px 2px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:var(--bg);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center; }
+.day-toggle-btn.selected { background:var(--dark);color:#fff;border-color:var(--dark); }
 
 /* GOALS */
 .goal-card { background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px;cursor:pointer;transition:transform .15s; }
@@ -420,42 +426,36 @@ body {
     <p>Tu compañero digital para sacar el máximo provecho de tu agenda.</p>
   </div>
   <div class="home-content">
-    <p class="home-intro">Usa la barra de navegación inferior para explorar todas las funciones disponibles.</p>
-    <div class="feature-grid">
-      <div class="feature-item" onclick="navigateTo('scan')">
-        <div class="fi-icon fi-dark"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-        <div class="fi-text"><strong>Escanear página</strong><span>Fotografía tu agenda e importa contenido</span></div>
-        <span class="fi-arrow">›</span>
+    <p class="home-intro">Explora todas las funciones de tu agenda.</p>
+    <div class="feature-grid-2">
+      <div class="feature-tile" onclick="navigateTo('scan')">
+        <div class="ft-icon ft-dark"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <div class="ft-text"><strong>Escanear</strong><span>Importa páginas de tu agenda</span></div>
       </div>
-      <div class="feature-item" onclick="navigateTo('habits')">
-        <div class="fi-icon fi-gold"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <div class="fi-text"><strong>Rastreador de hábitos</strong><span>Visualiza tu progreso diario y rachas</span></div>
-        <span class="fi-arrow">›</span>
+      <div class="feature-tile" onclick="navigateTo('habits')">
+        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="ft-text"><strong>Hábitos</strong><span>Rachas y progreso diario</span></div>
       </div>
-      <div class="feature-item" onclick="navigateTo('goals')">
-        <div class="fi-icon fi-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-        <div class="fi-text"><strong>Mis metas</strong><span>Define y sigue tus objetivos con hitos</span></div>
-        <span class="fi-arrow">›</span>
+      <div class="feature-tile" onclick="navigateTo('goals')">
+        <div class="ft-icon ft-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="ft-text"><strong>Metas</strong><span>Objetivos e hitos</span></div>
       </div>
-      <div class="feature-item" onclick="navigateTo('calendar')">
-        <div class="fi-icon fi-gold"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-        <div class="fi-text"><strong>Calendario</strong><span>Tus próximos eventos en un vistazo</span></div>
-        <span class="fi-arrow">›</span>
+      <div class="feature-tile" onclick="navigateTo('calendar')">
+        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div class="ft-text"><strong>Calendario</strong><span>Eventos y agenda</span></div>
       </div>
-      <div class="feature-item" onclick="navigateTo('books')">
-        <div class="fi-icon fi-gold"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-        <div class="fi-text"><strong>Mis lecturas</strong><span>Libros, progreso y aprendizajes del año</span></div>
-        <span class="fi-arrow">›</span>
+      <div class="feature-tile" onclick="navigateTo('books')">
+        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="ft-text"><strong>Lecturas</strong><span>Libros y aprendizajes</span></div>
       </div>
-      <div class="feature-item" onclick="navigateTo('affirmations')">
-        <div class="fi-icon fi-gold"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-        <div class="fi-text"><strong>Afirmaciones</strong><span>100 afirmaciones · graba tu propia voz</span></div>
-        <span class="fi-arrow">›</span>
+      <div class="feature-tile" onclick="navigateTo('affirmations')">
+        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="ft-text"><strong>Afirmaciones</strong><span>100 afirmaciones de voz</span></div>
       </div>
-      <div class="feature-item" onclick="navigateTo('settings')">
-        <div class="fi-icon fi-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-        <div class="fi-text"><strong>Configuración</strong><span>Personaliza tu experiencia</span></div>
-        <span class="fi-arrow">›</span>
+      <div class="feature-tile" onclick="navigateTo('settings')" style="grid-column:span 2;aspect-ratio:auto;flex-direction:row;justify-content:flex-start;padding:16px 20px;text-align:left;gap:14px;">
+        <div class="ft-icon ft-dark" style="flex-shrink:0"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+        <div class="ft-text" style="text-align:left"><strong>Configuración</strong><span>Perfil, integraciones y preferencias</span></div>
+        <span style="font-size:18px;color:var(--text-3);margin-left:auto;font-weight:300">›</span>
       </div>
     </div>
   </div>
@@ -641,7 +641,32 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
 
-    <!-- EXPORTAR -->
+    <!-- PREFERENCIAS -->
+    <div class="settings-section">
+      <span class="settings-section-label">Preferencias</span>
+      <div class="settings-list">
+        <div class="settings-row">
+          <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
+          <div class="settings-row-text"><strong>Recordatorios diarios</strong><span>Notificaciones de hábitos y metas</span></div>
+          <label class="toggle-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="reminders-toggle" checked onchange="toggleReminders(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row" onclick="openModal('reminder-time-modal')">
+          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="settings-row-text"><strong>Hora de recordatorio</strong><span id="reminder-time-preview">8:00 AM</span></div>
+          <span class="settings-chevron">›</span>
+        </div>
+        <div class="settings-row" onclick="openModal('week-start-modal')">
+          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <div class="settings-row-text"><strong>Inicio de semana</strong><span id="week-start-preview">Domingo</span></div>
+          <span class="settings-chevron">›</span>
+        </div>
+      </div>
+    </div>
+
+   <!-- EXPORTAR -->
     <div class="settings-section">
       <span class="settings-section-label">Exportar datos</span>
       <div class="settings-list">
@@ -664,31 +689,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
           <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
           <div class="settings-row-text"><strong>Exportar eventos</strong><span>Todos los eventos como .ics</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">.ics ⬇</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- PREFERENCIAS -->
-    <div class="settings-section">
-      <span class="settings-section-label">Preferencias</span>
-      <div class="settings-list">
-        <div class="settings-row">
-          <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
-          <div class="settings-row-text"><strong>Recordatorios diarios</strong><span>Notificaciones de hábitos y metas</span></div>
-          <label class="toggle-switch" onclick="event.stopPropagation()">
-            <input type="checkbox" id="reminders-toggle" checked onchange="toggleReminders(this.checked)">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <div class="settings-row" onclick="openModal('reminder-time-modal')">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="settings-row-text"><strong>Hora de recordatorio</strong><span id="reminder-time-preview">8:00 AM</span></div>
-          <span class="settings-chevron">›</span>
-        </div>
-        <div class="settings-row" onclick="openModal('week-start-modal')">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-          <div class="settings-row-text"><strong>Inicio de semana</strong><span id="week-start-preview">Domingo</span></div>
-          <span class="settings-chevron">›</span>
         </div>
       </div>
     </div>
@@ -765,7 +765,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   </div>
 </div>
 
-<!-- NAV BAR -->
+<!-- NAV BAR — 3 items only -->
 <nav class="nav-bar">
   <div class="nav-item active" data-screen="home" onclick="navigateTo('home')">
     <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -775,31 +775,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   <div class="nav-item" data-screen="scan" onclick="navigateTo('scan')">
     <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
     <span class="nav-label">Escanear</span>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" data-screen="habits" onclick="navigateTo('habits')">
-    <div class="nav-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-    <span class="nav-label">Hábitos</span>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" data-screen="goals" onclick="navigateTo('goals')">
-    <div class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-    <span class="nav-label">Metas</span>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" data-screen="calendar" onclick="navigateTo('calendar')">
-    <div class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-    <span class="nav-label">Calendario</span>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" data-screen="books" onclick="navigateTo('books')">
-    <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-    <span class="nav-label">Libros</span>
-    <div class="nav-dot"></div>
-  </div>
-  <div class="nav-item" data-screen="affirmations" onclick="navigateTo('affirmations')">
-    <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-    <span class="nav-label">Afirmar</span>
     <div class="nav-dot"></div>
   </div>
   <div class="nav-item" data-screen="settings" onclick="navigateTo('settings')">
@@ -817,8 +792,35 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     <div class="modal-handle"></div>
     <div class="modal-title">Nuevo hábito</div>
     <div class="form-group"><label class="form-label">Nombre del hábito</label><input class="form-input" id="habit-name-input" type="text" placeholder="Ej. Meditar 10 min"></div>
-    <div class="form-group"><label class="form-label">Frecuencia</label><select class="form-select" id="habit-freq-input"><option value="diario">Diario</option><option value="lunes-viernes">Lunes a viernes</option><option value="semanal">Semanal</option></select></div>
+    <div class="form-group">
+      <label class="form-label">Frecuencia</label>
+      <select class="form-select" id="habit-freq-input" onchange="onFreqChange(this.value)">
+        <option value="diario">Diario</option>
+        <option value="lunes-viernes">Lunes a viernes</option>
+        <option value="semanal">Semanal</option>
+        <option value="personalizado">Personalizado</option>
+      </select>
+    </div>
+    <!-- Custom days picker — shown only for "personalizado" -->
+    <div class="form-group" id="custom-days-group" style="display:none">
+      <label class="form-label">Días de la semana</label>
+      <div class="custom-days-picker">
+        <button type="button" class="day-toggle-btn" data-day="0" onclick="toggleDay(this)">Dom</button>
+        <button type="button" class="day-toggle-btn" data-day="1" onclick="toggleDay(this)">Lun</button>
+        <button type="button" class="day-toggle-btn" data-day="2" onclick="toggleDay(this)">Mar</button>
+        <button type="button" class="day-toggle-btn" data-day="3" onclick="toggleDay(this)">Mié</button>
+        <button type="button" class="day-toggle-btn" data-day="4" onclick="toggleDay(this)">Jue</button>
+        <button type="button" class="day-toggle-btn" data-day="5" onclick="toggleDay(this)">Vie</button>
+        <button type="button" class="day-toggle-btn" data-day="6" onclick="toggleDay(this)">Sáb</button>
+      </div>
+    </div>
     <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="habit-cat-input"><option value="salud">Salud</option><option value="mente">Mente</option><option value="productividad">Productividad</option><option value="relaciones">Relaciones</option><option value="otro">Otro</option></select></div>
+    <!-- Notification time -->
+    <div class="form-group">
+      <label class="form-label">Hora de notificación <span style="color:var(--text-3);font-weight:400">(opcional)</span></label>
+      <input class="form-input" id="habit-time-input" type="time" placeholder="Usar hora global de configuración">
+      <span style="font-size:11px;color:var(--text-3);margin-top:3px">Si no se ingresa, se usará la hora global de recordatorio</span>
+    </div>
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('habit-modal')">Cancelar</button>
       <button class="btn-gold"    style="flex:2" onclick="addHabit()">Guardar hábito</button>
@@ -1067,14 +1069,29 @@ const fmt = d => {
 };
 const todayStr = fmt(today);
 
+// Returns array of 7 booleans [Sun,Mon,Tue,Wed,Thu,Fri,Sat] for a given freq string
+function freqToDays(freq, customDays) {
+  if (freq === 'diario')         return [true,true,true,true,true,true,true];
+  if (freq === 'lunes-viernes')  return [false,true,true,true,true,true,false];
+  if (freq === 'semanal')        return [true,false,false,false,false,false,false]; // Sunday only
+  if (freq === 'personalizado')  return customDays || [false,false,false,false,false,false,false];
+  return [true,true,true,true,true,true,true];
+}
+
+// Is this habit scheduled on a given Date object?
+function isScheduled(habit, dateObj) {
+  const days = freqToDays(habit.freq, habit.customDays);
+  return days[dateObj.getDay()];
+}
+
 const state = {
   currentScreen: 'home',
   habits: [
-    { id:1, name:'Meditar',      freq:'diario', cat:'mente',          streak:7,  completions:{} },
-    { id:2, name:'Ejercicio',    freq:'diario', cat:'salud',          streak:14, completions:{} },
-    { id:3, name:'Leer 30 min',  freq:'diario', cat:'mente',          streak:3,  completions:{} },
-    { id:4, name:'Agua 2L',      freq:'diario', cat:'salud',          streak:21, completions:{} },
-    { id:5, name:'Journaling',   freq:'diario', cat:'productividad',  streak:5,  completions:{} },
+    { id:1, name:'Meditar',      freq:'diario',        cat:'mente',         notifTime:'', customDays:null, streak:7,  completions:{} },
+    { id:2, name:'Ejercicio',    freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:14, completions:{} },
+    { id:3, name:'Leer 30 min',  freq:'lunes-viernes', cat:'mente',         notifTime:'', customDays:null, streak:3,  completions:{} },
+    { id:4, name:'Agua 2L',      freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:21, completions:{} },
+    { id:5, name:'Journaling',   freq:'personalizado', cat:'productividad', notifTime:'09:00', customDays:[false,true,true,false,true,true,false], streak:5, completions:{} },
   ],
   goals: [
     { id:1, title:'Leer 12 libros este año', cat:'Aprendizaje', desc:'Un libro por mes para crecer personal y profesionalmente.', milestones:[
@@ -1255,6 +1272,7 @@ state.habits.forEach((h, hi) => {
   for (let i = 0; i < 180; i++) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
+    if (!isScheduled(h, d)) continue; // only seed scheduled days
     const threshold = hi === 1 ? 0.08 : hi === 3 ? 0.12 : 0.28;
     if (Math.random() > threshold) h.completions[fmt(d)] = true;
   }
@@ -1319,6 +1337,37 @@ function showToast(msg) {
 function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function modalOverlayClick(e, id) { if (e.target===document.getElementById(id)) closeModal(id); }
+
+/* ================================================================
+   HABIT FREQUENCY UI
+================================================================ */
+function onFreqChange(val) {
+  const group = document.getElementById('custom-days-group');
+  const btns  = document.querySelectorAll('.day-toggle-btn');
+  if (val === 'personalizado') {
+    group.style.display = 'block';
+    // Default: all days selected (same as daily)
+    btns.forEach(b => b.classList.add('selected'));
+  } else if (val === 'diario') {
+    group.style.display = 'none';
+    btns.forEach(b => b.classList.add('selected'));
+  } else if (val === 'semanal') {
+    group.style.display = 'none';
+    // Pre-select only Sunday so state is ready if user switches to personalizado
+    btns.forEach(b => { b.classList.toggle('selected', b.dataset.day === '0'); });
+  } else {
+    group.style.display = 'none';
+  }
+}
+
+function toggleDay(btn) {
+  btn.classList.toggle('selected');
+}
+
+function getCustomDaysFromUI() {
+  const btns = document.querySelectorAll('.day-toggle-btn');
+  return Array.from(btns).map(b => b.classList.contains('selected'));
+}
 
 /* ================================================================
    SCAN
@@ -1395,7 +1444,7 @@ function parseGeminiResponse() {
     btn.className='btn-outline'; btn.style.flex='1';
     btn.textContent='Importar hábitos';
     btn.onclick=()=>{
-      data.habitos.forEach(h=>{ state.habits.push({id:state.nextHabitId++,name:h.nombre,freq:'diario',cat:'otro',streak:0,completions:{}}); });
+      data.habitos.forEach(h=>{ state.habits.push({id:state.nextHabitId++,name:h.nombre,freq:'diario',cat:'otro',notifTime:'',customDays:null,streak:0,completions:{}}); });
       showToast(data.habitos.length+' hábito(s) importados');
     };
     actions.appendChild(btn);
@@ -1450,8 +1499,15 @@ function renderWeekGrid() {
   state.habits.forEach(h=>{
     html += '<div class="week-grid-row"><span class="habit-name">'+h.name+'</span>';
     dates.forEach(d=>{
-      const ds=fmt(d); const done=h.completions[ds]; const isT=ds===todayStr;
-      html += '<div class="week-cell'+(done?' done':'')+(isT?' today-col':'')+'" onclick="toggleHabitDay('+h.id+',\''+ds+'\')"></div>';
+      const ds = fmt(d);
+      const scheduled = isScheduled(h, d);
+      const done = h.completions[ds];
+      const isT  = ds === todayStr;
+      if (!scheduled) {
+        html += '<div class="week-cell not-scheduled"></div>';
+      } else {
+        html += '<div class="week-cell'+(done?' done':'')+(isT?' today-col':'')+'" onclick="toggleHabitDay('+h.id+',\''+ds+'\')"></div>';
+      }
     });
     html += '</div>';
   });
@@ -1470,17 +1526,27 @@ function toggleHabitDay(id, dateStr) {
   renderStreaks();
 }
 
+function getEffectiveNotifTime(h) {
+  return h.notifTime || state.settings.reminderTime;
+}
+
 function renderDailyChecklist() {
   const el = document.getElementById('daily-checklist');
-  if (!state.habits.length) {
-    el.innerHTML = '<p style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0">Sin hábitos. Toca + para agregar uno.</p>';
+  const todayDate = new Date(todayStr+'T12:00:00');
+  // Only show habits scheduled for today
+  const todayHabits = state.habits.filter(h => isScheduled(h, todayDate));
+  if (!todayHabits.length) {
+    el.innerHTML = '<p style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0">Sin hábitos para hoy. Toca + para agregar uno.</p>';
     return;
   }
-  el.innerHTML = state.habits.map(h=>{
+  el.innerHTML = todayHabits.map(h=>{
     const done = h.completions[todayStr];
+    const notifTime = getEffectiveNotifTime(h);
+    const timeLabel = notifTime ? '<span class="check-time-pill">🔔 '+formatTime12(notifTime)+'</span>' : '';
     return '<div class="checklist-item" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')">' +
       '<div class="check-box'+(done?' checked':'')+'"></div>' +
       '<span class="check-label">'+h.name+'</span>' +
+      timeLabel +
       '<span class="check-streak-pill">🔥 '+h.streak+'</span>' +
       '</div>';
   }).join('');
@@ -1496,8 +1562,10 @@ function renderHeatmap() {
     for (let d=0;d<7;d++) {
       const date=new Date(start); date.setDate(start.getDate()+w*7+d);
       const ds=fmt(date);
-      const total=state.habits.length;
-      const done=state.habits.filter(h=>h.completions[ds]).length;
+      // For heatmap, only count scheduled habits
+      const scheduledHabits=state.habits.filter(h=>isScheduled(h,date));
+      const total=scheduledHabits.length;
+      const done=scheduledHabits.filter(h=>h.completions[ds]).length;
       const ratio=total?done/total:0;
       let lvl=0;
       if(ratio>0)   lvl=1;
@@ -1522,8 +1590,15 @@ function renderStreaks() {
   const sorted = [...state.habits].sort((a,b)=>b.streak-a.streak);
   el.innerHTML = sorted.map(h=>{
     const catClass = CAT_COLORS[h.cat]||'pill-gray';
+    const freqLabel = h.freq==='personalizado'
+      ? (['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].filter((_,i)=>h.customDays&&h.customDays[i]).join('·') || 'personalizado')
+      : h.freq;
     return '<div class="streak-row">' +
-      '<div class="streak-info"><strong>'+h.name+'</strong><span class="pill '+catClass+'" style="font-size:10px;padding:2px 7px;margin-top:3px">'+h.cat+'</span></div>' +
+      '<div class="streak-info"><strong>'+h.name+'</strong>' +
+      '<div style="display:flex;align-items:center;gap:6px;margin-top:3px">' +
+      '<span class="pill '+catClass+'" style="font-size:10px;padding:2px 7px">'+h.cat+'</span>' +
+      '<span style="font-size:10px;color:var(--text-3)">'+freqLabel+'</span>' +
+      '</div></div>' +
       '<div class="streak-count"><span class="num">'+h.streak+'</span><span style="font-size:16px">🔥</span></div>' +
       '</div>';
   }).join('');
@@ -1532,8 +1607,29 @@ function renderStreaks() {
 function addHabit() {
   const name = document.getElementById('habit-name-input').value.trim();
   if (!name) { showToast('Escribe el nombre del hábito'); return; }
-  state.habits.push({ id:state.nextHabitId++, name, freq:document.getElementById('habit-freq-input').value, cat:document.getElementById('habit-cat-input').value, streak:0, completions:{} });
-  document.getElementById('habit-name-input').value='';
+  const freq = document.getElementById('habit-freq-input').value;
+  let customDays = null;
+  if (freq === 'personalizado') {
+    customDays = getCustomDaysFromUI();
+    if (!customDays.some(Boolean)) { showToast('Selecciona al menos un día'); return; }
+  }
+  const notifTime = document.getElementById('habit-time-input').value;
+  state.habits.push({
+    id: state.nextHabitId++,
+    name,
+    freq,
+    cat: document.getElementById('habit-cat-input').value,
+    notifTime,
+    customDays,
+    streak: 0,
+    completions: {},
+  });
+  // Reset form
+  document.getElementById('habit-name-input').value = '';
+  document.getElementById('habit-time-input').value = '';
+  document.getElementById('habit-freq-input').value = 'diario';
+  document.getElementById('custom-days-group').style.display = 'none';
+  document.querySelectorAll('.day-toggle-btn').forEach(b=>b.classList.add('selected'));
   closeModal('habit-modal');
   renderHabits();
   showToast('¡Hábito agregado!');
@@ -1815,16 +1911,13 @@ function exportDayToICS(dateStr) { exportToICS(state.events.filter(e => e.date =
 ================================================================ */
 function renderSettings() {
   const s = state.settings;
-  // Profile preview
   const namePreview = document.getElementById('profile-name-preview');
   if (s.profile.name) namePreview.textContent = s.profile.name;
   else namePreview.textContent = 'Nombre, foto y datos personales';
 
-  // Gemini API status
   const geminiStatus = document.getElementById('gemini-api-status');
   geminiStatus.textContent = s.geminiKey ? '✓ API key configurada' : 'Sin configurar · Para escaneo directo';
 
-  // GCal status
   const gcalBadge = document.getElementById('gcal-status-badge');
   const gcalText  = document.getElementById('gcal-status-text');
   if (s.gcalConnected) {
@@ -1837,10 +1930,7 @@ function renderSettings() {
     gcalText.textContent = 'Sin conectar';
   }
 
-  // Reminder time
   document.getElementById('reminder-time-preview').textContent = formatTime12(s.reminderTime);
-
-  // Week start
   document.getElementById('week-start-preview').textContent = s.weekStart;
 }
 
@@ -1854,7 +1944,6 @@ function handleAvatarUpload(event) {
   const reader = new FileReader();
   reader.onload = (e) => {
     state.settings.profile.avatarDataUrl = e.target.result;
-    // Update avatar display in modal
     const circle = document.getElementById('profile-avatar-initials').parentElement;
     document.getElementById('profile-avatar-initials').style.display = 'none';
     let img = circle.querySelector('img');
@@ -1875,10 +1964,8 @@ function saveProfile() {
   state.settings.profile.tagline = tagline;
   state.settings.profile.email   = email;
 
-  // Update display name in modal
   if (name) {
     document.getElementById('profile-display-name').textContent = name;
-    // Compute initials
     const parts = name.split(' ').filter(Boolean);
     const initials = parts.length >= 2
       ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase()
@@ -1890,14 +1977,6 @@ function saveProfile() {
   closeModal('profile-modal');
   renderSettings();
   showToast('¡Perfil guardado!');
-}
-
-function openProfileModal() {
-  const s = state.settings.profile;
-  document.getElementById('profile-name-input').value    = s.name;
-  document.getElementById('profile-tagline-input').value = s.tagline;
-  document.getElementById('profile-email-input').value   = s.email;
-  openModal('profile-modal');
 }
 
 /* ================================================================
@@ -1972,16 +2051,6 @@ function toggleReminders(on) {
 
 const TIME_OPTIONS = ['06:00','07:00','08:00','09:00','10:00','12:00','18:00','20:00','21:00','22:00'];
 
-function openReminderTimeModal() {
-  // Render time grid
-  const grid = document.getElementById('time-options-grid');
-  grid.innerHTML = TIME_OPTIONS.map(t =>
-    '<div class="time-option'+(t===state.settings.reminderTime?' active':'')+'" onclick="selectTimeOption(this,\''+t+'\')">'+formatTime12(t)+'</div>'
-  ).join('');
-  document.getElementById('custom-time-input').value = state.settings.reminderTime;
-  openModal('reminder-time-modal');
-}
-
 function selectTimeOption(el, time) {
   document.querySelectorAll('.time-option').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
@@ -2005,7 +2074,6 @@ function formatTime12(t) {
   return h12 + ':' + String(m).padStart(2,'0') + ' ' + period;
 }
 
-// Wire up modal open with pre-populated data
 document.getElementById('reminder-time-modal').addEventListener('click', function(e){
   if (e.target === this) closeModal('reminder-time-modal');
 });
@@ -2028,14 +2096,6 @@ function saveWeekStart() {
   showToast('Inicio de semana: ' + pendingWeekStart);
 }
 
-function openWeekStartModal() {
-  pendingWeekStart = state.settings.weekStart;
-  document.querySelectorAll('.week-start-btn').forEach(b=>{
-    b.classList.toggle('active', b.textContent === state.settings.weekStart);
-  });
-  openModal('week-start-modal');
-}
-
 /* ================================================================
    SETTINGS — EXPORT CSV
 ================================================================ */
@@ -2051,10 +2111,13 @@ function downloadCSV(filename, rows) {
 
 function exportHabitsCSV() {
   if (!state.habits.length) { showToast('No hay hábitos para exportar'); return; }
-  const rows = [['Hábito','Categoría','Frecuencia','Racha actual','Días completados']];
+  const rows = [['Hábito','Categoría','Frecuencia','Hora notificación','Racha actual','Días completados']];
   state.habits.forEach(h => {
     const daysCompleted = Object.values(h.completions).filter(Boolean).length;
-    rows.push([h.name, h.cat, h.freq, h.streak, daysCompleted]);
+    const freqLabel = h.freq === 'personalizado'
+      ? (['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].filter((_,i)=>h.customDays&&h.customDays[i]).join(','))
+      : h.freq;
+    rows.push([h.name, h.cat, freqLabel, h.notifTime || state.settings.reminderTime, h.streak, daysCompleted]);
   });
   downloadCSV('vivela365-habitos.csv', rows);
   showToast('Hábitos exportados ✓');
@@ -2524,7 +2587,6 @@ function addAffirmation() {
 const _origOpenModal = openModal;
 function openModal(id) {
   if (id === 'reminder-time-modal') {
-    // re-render time grid fresh
     const grid = document.getElementById('time-options-grid');
     if (grid) {
       grid.innerHTML = TIME_OPTIONS.map(t =>
@@ -2561,6 +2623,14 @@ function openModal(id) {
     if (state.settings.gcalConnected) {
       document.getElementById('gcal-connected-email').textContent = state.settings.gcalEmail;
     }
+  }
+  if (id === 'habit-modal') {
+    // Reset the habit form cleanly each open
+    document.getElementById('habit-name-input').value = '';
+    document.getElementById('habit-time-input').value = '';
+    document.getElementById('habit-freq-input').value = 'diario';
+    document.getElementById('custom-days-group').style.display = 'none';
+    document.querySelectorAll('.day-toggle-btn').forEach(b => b.classList.add('selected'));
   }
   document.getElementById(id).classList.add('open');
 }
