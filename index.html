@@ -754,31 +754,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
 
-    <!-- RESPALDO AUTOMÁTICO -->
-    <div class="settings-section">
-      <span class="settings-section-label">Respaldo automático</span>
-      <div class="settings-list">
-        <div class="settings-row">
-          <div class="settings-icon si-green"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-          <div class="settings-row-text"><strong>Respaldo automático</strong><span id="auto-backup-status-text">Activo · Cada 7 días</span></div>
-          <label class="toggle-switch" onclick="event.stopPropagation()">
-            <input type="checkbox" id="auto-backup-toggle" checked onchange="toggleAutoBackup(this.checked)">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <div class="settings-row" onclick="openModal('backup-freq-modal')">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="settings-row-text"><strong>Frecuencia de respaldo</strong><span id="backup-freq-preview">Cada 7 días</span></div>
-          <span class="settings-chevron">›</span>
-        </div>
-        <div class="settings-row" onclick="openModal('backup-modal')">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-          <div class="settings-row-text"><strong>Respaldar y restaurar</strong><span>Exportar o importar todos tus datos</span></div>
-          <span class="settings-chevron">›</span>
-        </div>
-      </div>
-    </div>
-
     <!-- EXPORTAR -->
     <div class="settings-section">
       <span class="settings-section-label">Exportar datos</span>
@@ -1204,36 +1179,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   </div>
 </div>
 
-<!-- MODAL: Backup Frequency -->
-<div class="modal-overlay" id="backup-freq-modal" onclick="modalOverlayClick(event,'backup-freq-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Frecuencia de respaldo</div>
-    <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Cada cuánto tiempo se descargará automáticamente un archivo de respaldo al abrir la app.</p>
-    <div style="display:flex;flex-direction:column;gap:8px" id="backup-freq-options">
-      <div class="backup-freq-option" data-days="1"  onclick="selectBackupFreq(this)">Diario</div>
-      <div class="backup-freq-option" data-days="3"  onclick="selectBackupFreq(this)">Cada 3 días</div>
-      <div class="backup-freq-option" data-days="7"  onclick="selectBackupFreq(this)">Cada 7 días</div>
-      <div class="backup-freq-option" data-days="14" onclick="selectBackupFreq(this)">Cada 14 días</div>
-      <div class="backup-freq-option" data-days="30" onclick="selectBackupFreq(this)">Mensual</div>
-      <div class="backup-freq-option" data-days="0"  onclick="selectBackupFreq(this)">Nunca</div>
-    </div>
-    <div style="margin-top:20px;display:flex;gap:10px">
-      <button class="btn-outline" style="flex:1" onclick="closeModal('backup-freq-modal')">Cancelar</button>
-      <button class="btn-gold"    style="flex:2" onclick="saveBackupFreq()">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<style>
-.backup-freq-option {
-  padding:12px 16px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);
-  background:var(--bg);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;
-}
-.backup-freq-option.selected { background:var(--dark);color:#fff;border-color:var(--dark); }
-.backup-freq-option:active { background:var(--gold-light); }
-</style>
-
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1523,25 +1468,6 @@ state.habits.forEach((h, hi) => {
   }
 })();
 
-/* ================================================================
-   AUTO BACKUP CHECK
-================================================================ */
-function checkAutoBackup() {
-  const s = state.settings;
-  if (!s.autoBackupEnabled || !s.autoBackupDays) return;
-  const now = Date.now();
-  const last = s.lastBackupDate || 0;
-  const daysSince = (now - last) / (1000 * 60 * 60 * 24);
-  if (daysSince >= s.autoBackupDays) {
-    setTimeout(() => {
-      showToast('Respaldo automático en curso...');
-      setTimeout(() => {
-        exportFullBackup(true);
-        state.settings.lastBackupDate = now;
-      }, 800);
-    }, 2000);
-  }
-}
 
 /* ================================================================
    NAV
@@ -2668,23 +2594,6 @@ function importFullBackup(event) {
   reader.readAsText(file);
 }
 
-let pendingBackupDays = 7;
-
-function selectBackupFreq(el) {
-  pendingBackupDays = parseInt(el.dataset.days);
-  document.querySelectorAll('.backup-freq-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function saveBackupFreq() {
-  state.settings.autoBackupDays = pendingBackupDays;
-  const labels = {0:'Nunca',1:'Diario',3:'Cada 3 días',7:'Cada 7 días',14:'Cada 14 días',30:'Mensual'};
-  const label = labels[pendingBackupDays] || 'Cada '+pendingBackupDays+' días';
-  state.settings.autoBackupEnabled = pendingBackupDays > 0;
-  closeModal('backup-freq-modal');
-  renderSettings();
-  showToast('Frecuencia de respaldo: '+label);
-}
 
 function toggleAutoBackup(on) {
   state.settings.autoBackupEnabled = on;
