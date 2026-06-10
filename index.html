@@ -66,7 +66,7 @@ body {
 
 /* SHARED COMPONENTS */
 .screen-header {
-  padding: 52px 24px 18px;
+  padding: 34px 24px 12px;
   background: var(--surface);
   border-bottom: 0.5px solid var(--border);
   flex-shrink: 0;
@@ -74,8 +74,8 @@ body {
   top: 0;
   z-index: 10;
 }
-.screen-header h2 { font-size: 22px; font-weight: 600; }
-.screen-header p  { font-size: 13px; color: var(--text-3); margin-top: 3px; }
+.screen-header h2 { font-size: 20px; font-weight: 600; }
+.screen-header p  { font-size: 12px; color: var(--text-3); margin-top: 2px; }
 .screen-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
 .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 16px; }
 .card-title { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
@@ -93,11 +93,20 @@ body {
 .btn-outline { display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:transparent;color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s; }
 .btn-outline:active { background:var(--surface2); }
 
-/* MODAL */
+/* MODAL — swipe-to-dismiss */
 .modal-overlay { display:none;position:fixed;inset:0;z-index:200;background:rgba(26,30,42,.5);align-items:flex-end;justify-content:center; }
 .modal-overlay.open { display:flex; }
-.modal-sheet { background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:24px 24px calc(32px + var(--safe-b));width:100%;max-width:430px;max-height:88vh;overflow-y:auto; }
-.modal-handle { width:36px;height:4px;border-radius:2px;background:var(--border-mid);margin:0 auto 20px; }
+.modal-sheet {
+  background:var(--surface);
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  padding:24px 24px calc(32px + var(--safe-b));
+  width:100%;max-width:430px;max-height:88vh;overflow-y:auto;
+  touch-action:pan-y;
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  transform: translateY(0);
+  will-change: transform;
+}
+.modal-handle { width:36px;height:4px;border-radius:2px;background:var(--border-mid);margin:0 auto 20px;cursor:grab; }
 .modal-title { font-size:18px;font-weight:600;margin-bottom:20px; }
 .form-group { display:flex;flex-direction:column;gap:6px;margin-bottom:16px; }
 .form-label { font-size:12px;font-weight:500;color:var(--text-2); }
@@ -123,13 +132,13 @@ body {
 
 /* HOME */
 #screen-home { background:var(--bg); }
-.home-hero { background:var(--dark);padding:56px 28px 32px;position:relative;overflow:hidden;flex-shrink:0; }
+.home-hero { background:var(--dark);padding:42px 28px 26px;position:relative;overflow:hidden;flex-shrink:0; }
 .home-hero::before { content:'';position:absolute;top:-50px;right:-50px;width:240px;height:240px;border-radius:50%;background:rgba(196,184,142,.10); }
 .home-hero::after  { content:'';position:absolute;bottom:-70px;left:10px;width:160px;height:160px;border-radius:50%;background:rgba(196,184,142,.06); }
-.brand-tag { display:block;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px; }
-.home-hero h1 { font-size:30px;font-weight:600;color:#fff;line-height:1.18;margin-bottom:8px; }
+.brand-tag { display:block;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px; }
+.home-hero h1 { font-size:28px;font-weight:600;color:#fff;line-height:1.18;margin-bottom:6px; }
 .home-hero h1 em { color:var(--gold);font-style:italic;font-weight:300; }
-.home-hero p { font-size:14px;color:rgba(255,255,255,.55);font-weight:300;line-height:1.65;max-width:270px; }
+.home-hero p { font-size:13px;color:rgba(255,255,255,.55);font-weight:300;line-height:1.65;max-width:270px; }
 .home-content { padding:20px;flex:1;overflow-y:auto; }
 .home-intro { font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:16px; }
 
@@ -169,7 +178,8 @@ body {
 .week-grid-header { display:grid;grid-template-columns:1fr repeat(7, 28px);gap:4px;align-items:center;margin-bottom:6px; }
 .week-grid-header span { font-size:10px;font-weight:500;color:var(--text-3);text-align:center; }
 .week-grid-row { display:grid;grid-template-columns:1fr repeat(7, 28px);gap:4px;align-items:center;margin-bottom:6px; }
-.week-grid-row .habit-name { font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.week-grid-row .habit-name { font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;color:var(--text-1); }
+.week-grid-row .habit-name:hover { color:var(--gold-dark); }
 .week-cell { width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:0.5px solid var(--border-mid);background:var(--bg);cursor:pointer;transition:all .15s;flex-shrink:0; }
 .week-cell.done { background:var(--dark);border-color:var(--dark); }
 .week-cell.done::after { content:'✓';font-size:11px;color:#fff;font-weight:600; }
@@ -191,12 +201,12 @@ body {
 .streak-info span { font-size:12px;color:var(--text-3); }
 .streak-count { display:flex;align-items:center;gap:4px; }
 .streak-count .num { font-size:20px;font-weight:600;color:var(--dark); }
-.checklist-item { display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border);cursor:pointer; }
+.checklist-item { display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border); }
 .checklist-item:last-child { border-bottom:none; }
-.check-box { width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border-mid);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s; }
+.check-box { width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border-mid);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;cursor:pointer; }
 .check-box.checked { background:var(--dark);border-color:var(--dark); }
 .check-box.checked::after { content:'✓';font-size:12px;color:#fff;font-weight:700; }
-.check-label { flex:1;font-size:14px;transition:color .15s; }
+.check-label { flex:1;font-size:14px;transition:color .15s;cursor:pointer; }
 .check-box.checked + .check-label { color:var(--text-3);text-decoration:line-through; }
 .check-streak-pill { font-size:11px;font-weight:600;color:var(--gold-dark);background:var(--gold-light);padding:2px 8px;border-radius:10px; }
 .check-time-pill { font-size:11px;color:var(--text-3);background:var(--surface2);padding:2px 8px;border-radius:10px;margin-right:2px; }
@@ -229,14 +239,37 @@ body {
 .ms-label { font-size:13px;flex:1; }
 .milestone-item.done-ms .ms-label { color:var(--text-3);text-decoration:line-through; }
 
+/* GOAL ARCHIVE SECTION */
+.goal-archive-section { margin-top:8px; }
+.goal-archive-toggle {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:var(--r-lg);
+  cursor:pointer;
+  transition:background .15s;
+}
+.goal-archive-toggle:active { background:var(--gold-light); }
+.goal-archive-toggle-label { display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600; }
+.goal-archive-count { font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px; }
+.archive-logrado-count { background:var(--green-light);color:#3d7a60; }
+.archive-espera-count  { background:var(--amber-light);color:#9a7018; }
+.goal-archive-chevron { font-size:16px;color:var(--text-3);transition:transform .25s; }
+.goal-archive-chevron.open { transform:rotate(90deg); }
+.goal-archive-body { display:none;flex-direction:column;gap:8px;padding-top:8px; }
+.goal-archive-body.open { display:flex; }
+.goal-card.archived-logrado { border-left:3px solid var(--green);opacity:.9; }
+.goal-card.archived-espera  { border-left:3px solid var(--amber);opacity:.9; }
+
 /* CALENDAR */
-.cal-toggle { display:flex;background:var(--surface2);border-radius:var(--r-sm);padding:3px;gap:3px;margin:12px 20px 0;flex-shrink:0; }
-.cal-tab { flex:1;padding:8px;text-align:center;font-size:13px;font-weight:500;color:var(--text-2);border-radius:var(--r-sm);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .18s; }
+.cal-toggle { display:flex;background:var(--surface2);border-radius:var(--r-sm);padding:3px;gap:3px;margin:10px 20px 0;flex-shrink:0; }
+.cal-tab { flex:1;padding:7px;text-align:center;font-size:13px;font-weight:500;color:var(--text-2);border-radius:var(--r-sm);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .18s; }
 .cal-tab.active { background:var(--surface);color:var(--text-1); }
-.cal-month-nav { display:flex;align-items:center;justify-content:space-between;padding:12px 20px; }
+.cal-month-nav { display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px; }
 .cal-month-nav h3 { font-size:15px;font-weight:600; }
 .cal-month-nav button { background:none;border:none;font-size:22px;color:var(--text-2);cursor:pointer;padding:4px 8px; }
-.month-grid { padding:0 16px 12px; }
+.month-grid { padding:0 16px 8px; }
 .month-dow { display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px; }
 .month-dow span { text-align:center;font-size:10px;font-weight:600;color:var(--text-3);letter-spacing:.06em;padding:4px 0; }
 .month-days { display:grid;grid-template-columns:repeat(7,1fr);gap:2px; }
@@ -247,7 +280,7 @@ body {
 .month-day.today.has-event::after { background:var(--gold-mid); }
 .month-day.other-month { color:var(--text-3);opacity:.4; }
 .month-day.selected { background:var(--gold-light);color:var(--text-1);font-weight:600; }
-.day-events-panel { background:var(--surface);border-top:0.5px solid var(--border);padding:14px 20px;flex-shrink:0; }
+.day-events-panel { background:var(--surface);padding:12px 20px 16px;flex-shrink:0; }
 .day-events-panel h4 { font-size:13px;font-weight:600;margin-bottom:10px; }
 .day-event-row { display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px; }
 .day-event-row:last-child { border-bottom:none; }
@@ -299,6 +332,19 @@ body {
 .app-logo-sm em { font-style:italic;font-weight:300;color:var(--gold-dark); }
 .app-version { font-size:12px;color:var(--text-3); }
 
+/* PRIVACY NOTE */
+.privacy-note {
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:14px 16px;
+  margin-top:4px;
+}
+.privacy-note svg { width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:1px; }
+.privacy-note-text { font-size:12px;color:var(--text-2);line-height:1.6; }
+.privacy-note-text strong { display:block;font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:2px; }
+
 /* PROFILE AVATAR */
 .avatar-wrap { display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 0 20px; }
 .avatar-circle { width:80px;height:80px;border-radius:50%;background:var(--dark-mid);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;border:3px solid var(--gold-light); }
@@ -334,8 +380,8 @@ body {
 .danger-row span { font-size:12px;color:var(--text-3); }
 
 /* BOOKS */
-.books-toggle { display:flex;background:var(--surface2);border-radius:var(--r-sm);padding:3px;gap:3px;margin:12px 20px 0;flex-shrink:0; }
-.books-tab { flex:1;padding:8px;text-align:center;font-size:13px;font-weight:500;color:var(--text-2);border-radius:var(--r-sm);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .18s; }
+.books-toggle { display:flex;background:var(--surface2);border-radius:var(--r-sm);padding:3px;gap:3px;margin:10px 20px 0;flex-shrink:0; }
+.books-tab { flex:1;padding:7px;text-align:center;font-size:13px;font-weight:500;color:var(--text-2);border-radius:var(--r-sm);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .18s; }
 .books-tab.active { background:var(--surface);color:var(--text-1); }
 .shelf-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 20px; }
 .shelf-book { display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer; }
@@ -373,7 +419,7 @@ body {
 .add-learning-row input:focus { border-color:var(--gold); }
 
 /* AFFIRMATIONS */
-.affirmations-page-controls { padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--surface);border-bottom:0.5px solid var(--border); }
+.affirmations-page-controls { padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--surface);border-bottom:0.5px solid var(--border); }
 .affirmations-page-controls .control-label { font-size:13px;font-weight:500;color:var(--text-2); }
 .aff-card-wrap { flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;position:relative; }
 .aff-card { width:100%;max-width:340px;aspect-ratio:3/4;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;text-align:center;position:absolute;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s;cursor:grab;user-select:none;box-shadow:0 8px 32px rgba(0,0,0,.18); }
@@ -412,6 +458,9 @@ body {
   z-index:10;
   flex-shrink:0;
 }
+
+/* SVG CAL ICONS */
+.apple-cal-icon { display:inline-flex;align-items:center;justify-content:center; }
 </style>
 </head>
 <body>
@@ -519,7 +568,10 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   <div class="screen-body" id="habits-body">
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div class="card-title" style="margin:0">Esta semana</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="card-title" style="margin:0" id="week-grid-title">Esta semana</div>
+          <div style="font-size:11px;color:var(--text-3)" id="week-grid-range"></div>
+        </div>
         <div style="display:flex;gap:2px">
           <button onclick="shiftWeek(-1)" style="background:none;border:none;font-size:20px;color:var(--text-2);cursor:pointer;padding:2px 6px">‹</button>
           <button onclick="shiftWeek(1)"  style="background:none;border:none;font-size:20px;color:var(--text-2);cursor:pointer;padding:2px 6px">›</button>
@@ -604,7 +656,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     </div>
   </div>
 
-  <!-- FAB for month view -->
+  <!-- FAB for month view only -->
   <button class="fab" id="cal-month-fab" onclick="openAddEvent()">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
@@ -635,7 +687,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
           <div class="settings-icon si-dark">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
           </div>
-          <div class="settings-row-text"><strong>Apple Calendar</strong><span>Mostrar botones de exportar .ics</span></div>
+          <div class="settings-row-text"><strong>Apple Calendar</strong><span>Mostrar botones de Apple Cal</span></div>
           <label class="toggle-switch" onclick="event.stopPropagation()">
             <input type="checkbox" id="apple-cal-toggle" checked onchange="toggleCalProvider('apple', this.checked)">
             <span class="toggle-slider"></span>
@@ -702,6 +754,31 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
 
+    <!-- RESPALDO AUTOMÁTICO -->
+    <div class="settings-section">
+      <span class="settings-section-label">Respaldo automático</span>
+      <div class="settings-list">
+        <div class="settings-row">
+          <div class="settings-icon si-green"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="settings-row-text"><strong>Respaldo automático</strong><span id="auto-backup-status-text">Activo · Cada 7 días</span></div>
+          <label class="toggle-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="auto-backup-toggle" checked onchange="toggleAutoBackup(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row" onclick="openModal('backup-freq-modal')">
+          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="settings-row-text"><strong>Frecuencia de respaldo</strong><span id="backup-freq-preview">Cada 7 días</span></div>
+          <span class="settings-chevron">›</span>
+        </div>
+        <div class="settings-row" onclick="openModal('backup-modal')">
+          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="settings-row-text"><strong>Respaldar y restaurar</strong><span>Exportar o importar todos tus datos</span></div>
+          <span class="settings-chevron">›</span>
+        </div>
+      </div>
+    </div>
+
     <!-- EXPORTAR -->
     <div class="settings-section">
       <span class="settings-section-label">Exportar datos</span>
@@ -713,7 +790,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         </div>
         <div class="settings-row" onclick="exportGoalsCSV()">
           <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-          <div class="settings-row-text"><strong>Exportar objetivos</strong><span>Objeticos e hitos en CSV</span></div>
+          <div class="settings-row-text"><strong>Exportar objetivos</strong><span>Objetivos e hitos en CSV</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">CSV ⬇</span>
         </div>
         <div class="settings-row" onclick="exportBooksCSV()">
@@ -723,7 +800,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         </div>
         <div class="settings-row" onclick="exportAllToICS()">
           <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-          <div class="settings-row-text"><strong>Exportar eventos (.ics)</strong><span>Todos los eventos para Apple/Google Cal</span></div>
+          <div class="settings-row-text"><strong>Exportar eventos</strong><span>Todos los eventos para Apple/Google Cal</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">.ics ⬇</span>
         </div>
       </div>
@@ -760,9 +837,18 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
 
+    <!-- PRIVACIDAD -->
+    <div class="privacy-note">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="privacy-note-text">
+        <strong>Tu información es 100% privada</strong>
+        Todos tus datos se almacenan únicamente en tu dispositivo. Nada se sube a servidores ni a internet. Vívela365 no recopila, transmite ni comparte tu información personal.
+      </div>
+    </div>
+
     <div class="app-footer">
       <div class="app-logo-sm">Vívela<em>365</em></div>
-      <div class="app-version">Una relación más profunda contigo mismo.<br>Un día, una página, una intención a la vez</div>
+      <div class="app-version">Una relación más profunda contigo mismo.<br>Un día, una página, una intención a la vez.</div>
     </div>
   </div>
 </div>
@@ -989,6 +1075,14 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       <button class="btn-outline" style="flex:1" onclick="closeModal('profile-modal')">Cancelar</button>
       <button class="btn-gold"    style="flex:2" onclick="saveProfile()">Guardar perfil</button>
     </div>
+    <!-- Privacy note in profile modal -->
+    <div class="privacy-note" style="margin-top:16px">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="privacy-note-text">
+        <strong>Información privada</strong>
+        Tus datos personales nunca salen de tu dispositivo. Nada se sube a internet.
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1084,9 +1178,128 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   </div>
 </div>
 
+<!-- MODAL: Backup & Restore -->
+<div class="modal-overlay" id="backup-modal" onclick="modalOverlayClick(event,'backup-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Respaldar y restaurar</div>
+    <div style="background:var(--green-light);border-radius:var(--r-md);padding:14px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3d7a60" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <p style="font-size:13px;color:#3d7a60;line-height:1.55">Todos tus datos se guardan solo en este dispositivo. Exporta un respaldo para migrar a otro teléfono o como copia de seguridad personal.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <button class="btn-gold" onclick="exportFullBackup()">
+        ⬇ Exportar respaldo completo (.json)
+      </button>
+      <div style="text-align:center;font-size:12px;color:var(--text-3)">— o —</div>
+      <div style="background:var(--bg);border:1.5px dashed var(--border-mid);border-radius:var(--r-md);padding:20px;text-align:center;cursor:pointer" onclick="triggerImportBackup()">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <div style="font-size:14px;font-weight:500;margin-bottom:4px">Importar respaldo</div>
+        <div style="font-size:12px;color:var(--text-3)">Selecciona un archivo .json de Vívela365<br><span style="color:var(--red);font-weight:500">Reemplazará todos tus datos actuales</span></div>
+      </div>
+      <input type="file" id="import-backup-file" accept=".json" style="display:none" onchange="importFullBackup(event)">
+    </div>
+    <div id="backup-last-info" style="font-size:12px;color:var(--text-3);text-align:center;padding-bottom:4px"></div>
+    <button class="btn-outline" style="width:100%" onclick="closeModal('backup-modal')">Cerrar</button>
+  </div>
+</div>
+
+<!-- MODAL: Backup Frequency -->
+<div class="modal-overlay" id="backup-freq-modal" onclick="modalOverlayClick(event,'backup-freq-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Frecuencia de respaldo</div>
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Cada cuánto tiempo se descargará automáticamente un archivo de respaldo al abrir la app.</p>
+    <div style="display:flex;flex-direction:column;gap:8px" id="backup-freq-options">
+      <div class="backup-freq-option" data-days="1"  onclick="selectBackupFreq(this)">Diario</div>
+      <div class="backup-freq-option" data-days="3"  onclick="selectBackupFreq(this)">Cada 3 días</div>
+      <div class="backup-freq-option" data-days="7"  onclick="selectBackupFreq(this)">Cada 7 días</div>
+      <div class="backup-freq-option" data-days="14" onclick="selectBackupFreq(this)">Cada 14 días</div>
+      <div class="backup-freq-option" data-days="30" onclick="selectBackupFreq(this)">Mensual</div>
+      <div class="backup-freq-option" data-days="0"  onclick="selectBackupFreq(this)">Nunca</div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('backup-freq-modal')">Cancelar</button>
+      <button class="btn-gold"    style="flex:2" onclick="saveBackupFreq()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.backup-freq-option {
+  padding:12px 16px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);
+  background:var(--bg);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;
+}
+.backup-freq-option.selected { background:var(--dark);color:#fff;border-color:var(--dark); }
+.backup-freq-option:active { background:var(--gold-light); }
+</style>
+
 <div class="toast" id="toast"></div>
 
 <script>
+/* ================================================================
+   SWIPE-TO-DISMISS MODALS
+================================================================ */
+(function() {
+  let startY = 0, currentY = 0, isDragging = false;
+
+  function initSwipeDismiss(overlayId) {
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) return;
+    const sheet = overlay.querySelector('.modal-sheet');
+    if (!sheet) return;
+    const handle = sheet.querySelector('.modal-handle');
+    const dragTarget = handle || sheet;
+
+    dragTarget.addEventListener('pointerdown', e => {
+      // Only start drag from handle, or from the very top of the sheet if no handle
+      startY = e.clientY; currentY = 0; isDragging = true;
+      sheet.style.transition = 'none';
+      dragTarget.setPointerCapture(e.pointerId);
+    });
+
+    dragTarget.addEventListener('pointermove', e => {
+      if (!isDragging) return;
+      const dy = e.clientY - startY;
+      if (dy < 0) return; // don't allow dragging up
+      currentY = dy;
+      sheet.style.transform = `translateY(${dy}px)`;
+    });
+
+    dragTarget.addEventListener('pointerup', () => {
+      isDragging = false;
+      sheet.style.transition = 'transform 0.3s cubic-bezier(.4,0,.2,1)';
+      if (currentY > 100) {
+        sheet.style.transform = 'translateY(110%)';
+        setTimeout(() => {
+          overlay.classList.remove('open');
+          sheet.style.transform = 'translateY(0)';
+          sheet.style.transition = '';
+        }, 300);
+      } else {
+        sheet.style.transform = 'translateY(0)';
+        setTimeout(() => { sheet.style.transition = ''; }, 300);
+      }
+      currentY = 0;
+    });
+  }
+
+  // Init after DOM ready
+  const MODAL_IDS = [
+    'habit-modal','goal-modal','goal-detail-modal','event-modal',
+    'book-modal','book-detail-modal','aff-modal','profile-modal',
+    'gcal-modal','gemini-modal','reminder-time-modal','week-start-modal',
+    'backup-modal','backup-freq-modal'
+  ];
+  document.addEventListener('DOMContentLoaded', () => {
+    MODAL_IDS.forEach(id => initSwipeDismiss(id));
+  });
+  // Also init immediately for inline scripts
+  window.addEventListener('load', () => {
+    MODAL_IDS.forEach(id => initSwipeDismiss(id));
+  });
+})();
+
 /* ================================================================
    STATE
 ================================================================ */
@@ -1121,18 +1334,18 @@ const state = {
     { id:5, name:'Journaling',   freq:'personalizado', cat:'productividad', notifTime:'09:00', customDays:[false,true,true,false,true,true,false], streak:5, completions:{} },
   ],
   goals: [
-    { id:1, title:'Leer 12 libros este año', cat:'Aprendizaje', desc:'Un libro por mes para crecer personal y profesionalmente.', milestones:[
+    { id:1, title:'Leer 12 libros este año', cat:'Aprendizaje', desc:'Un libro por mes para crecer personal y profesionalmente.', status:'active', milestones:[
       {text:'Libro 1: Hábitos atómicos', done:true},
       {text:'Libro 2: El poder del ahora', done:true},
       {text:'Libro 3: Ikigai', done:false},
       {text:'Libro 4: La magia del orden', done:false},
     ]},
-    { id:2, title:'Correr mi primer 5K', cat:'Salud', desc:'Completar una carrera de 5K antes de fin de año.', milestones:[
+    { id:2, title:'Correr mi primer 5K', cat:'Salud', desc:'Completar una carrera de 5K antes de fin de año.', status:'active', milestones:[
       {text:'Correr 1K sin parar', done:true},
       {text:'Semana de entrenamiento consistente', done:false},
       {text:'Inscribirme en carrera oficial', done:false},
     ]},
-    { id:3, title:'Lanzar Vívela365', cat:'Profesional', desc:'Llevar la agenda y la app companion al mercado.', milestones:[
+    { id:3, title:'Lanzar Vívela365', cat:'Profesional', desc:'Llevar la agenda y la app companion al mercado.', status:'active', milestones:[
       {text:'Diseño de agenda terminado', done:true},
       {text:'App companion lista', done:false},
       {text:'Publicar en App Store y Play Store', done:false},
@@ -1270,6 +1483,9 @@ const state = {
     weekStart: 'Domingo',
     appleCalEnabled: true,
     googleCalEnabled: true,
+    autoBackupEnabled: true,
+    autoBackupDays: 7,
+    lastBackupDate: null,
   },
 };
 
@@ -1308,6 +1524,26 @@ state.habits.forEach((h, hi) => {
 })();
 
 /* ================================================================
+   AUTO BACKUP CHECK
+================================================================ */
+function checkAutoBackup() {
+  const s = state.settings;
+  if (!s.autoBackupEnabled || !s.autoBackupDays) return;
+  const now = Date.now();
+  const last = s.lastBackupDate || 0;
+  const daysSince = (now - last) / (1000 * 60 * 60 * 24);
+  if (daysSince >= s.autoBackupDays) {
+    setTimeout(() => {
+      showToast('Respaldo automático en curso...');
+      setTimeout(() => {
+        exportFullBackup(true);
+        state.settings.lastBackupDate = now;
+      }, 800);
+    }, 2000);
+  }
+}
+
+/* ================================================================
    NAV
 ================================================================ */
 function navigateTo(name) {
@@ -1340,7 +1576,6 @@ function showToast(msg) {
    MODAL
 ================================================================ */
 function openModal(id) {
-  /* --- habit modal: reset to add mode if not editing --- */
   if (id === 'habit-modal') {
     if (!document.getElementById('habit-edit-id').value) {
       document.getElementById('habit-modal-title').textContent = 'Nuevo hábito';
@@ -1356,7 +1591,6 @@ function openModal(id) {
       document.querySelectorAll('.day-toggle-btn').forEach(b => b.classList.add('selected'));
     }
   }
-  /* --- event modal: reset to add mode if not editing --- */
   if (id === 'event-modal') {
     if (!document.getElementById('event-edit-id').value) {
       document.getElementById('event-modal-title').textContent = 'Nuevo evento';
@@ -1370,7 +1604,6 @@ function openModal(id) {
       });
     }
   }
-  /* --- reminder time modal --- */
   if (id === 'reminder-time-modal') {
     const grid = document.getElementById('time-options-grid');
     if (grid) {
@@ -1380,7 +1613,6 @@ function openModal(id) {
       document.getElementById('custom-time-input').value = state.settings.reminderTime;
     }
   }
-  /* --- week start modal --- */
   if (id === 'week-start-modal') {
     pendingWeekStart = state.settings.weekStart;
     setTimeout(() => {
@@ -1389,7 +1621,6 @@ function openModal(id) {
       });
     }, 10);
   }
-  /* --- gemini modal --- */
   if (id === 'gemini-modal') {
     const keyStatus    = document.getElementById('gemini-key-status');
     const savedActions = document.getElementById('gemini-key-saved-actions');
@@ -1404,16 +1635,42 @@ function openModal(id) {
       if (savedActions) savedActions.style.display = 'none';
     }
   }
-  /* --- gcal modal --- */
   if (id === 'gcal-modal') {
     document.getElementById('gcal-connected-section').style.display    = state.settings.gcalConnected ? 'block' : 'none';
     document.getElementById('gcal-disconnected-section').style.display = state.settings.gcalConnected ? 'none'  : 'block';
     if (state.settings.gcalConnected) document.getElementById('gcal-connected-email').textContent = state.settings.gcalEmail;
   }
-  document.getElementById(id).classList.add('open');
+  if (id === 'backup-modal') {
+    const infoEl = document.getElementById('backup-last-info');
+    if (infoEl) {
+      infoEl.textContent = state.settings.lastBackupDate
+        ? 'Último respaldo: '+new Date(state.settings.lastBackupDate).toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'})
+        : 'Sin respaldos registrados aún';
+    }
+  }
+  if (id === 'backup-freq-modal') {
+    setTimeout(() => {
+      document.querySelectorAll('.backup-freq-option').forEach(o => {
+        o.classList.toggle('selected', parseInt(o.dataset.days) === state.settings.autoBackupDays);
+      });
+    }, 10);
+  }
+
+  const overlay = document.getElementById(id);
+  if (overlay) overlay.classList.add('open');
 }
 
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModal(id) {
+  const overlay = document.getElementById(id);
+  if (!overlay) return;
+  const sheet = overlay.querySelector('.modal-sheet');
+  if (sheet) { sheet.style.transform = ''; sheet.style.transition = ''; }
+  overlay.classList.remove('open');
+  // Reset edit IDs so next open is a fresh add
+  if (id === 'habit-modal') document.getElementById('habit-edit-id').value = '';
+  if (id === 'event-modal') document.getElementById('event-edit-id').value = '';
+}
+
 function modalOverlayClick(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
 
 /* ================================================================
@@ -1476,7 +1733,8 @@ function parseGeminiResponse() {
     actions.appendChild(btnImport);
     const btnICS = document.createElement('button');
     btnICS.className = 'btn-outline'; btnICS.style.flex = '1';
-    btnICS.textContent = '⬇ Apple Cal'; btnICS.style.display = 'none';
+    btnICS.textContent = 'Apple Cal';
+    btnICS.style.display = 'none';
     btnICS.onclick = () => exportToICS(importedEvents);
     actions.appendChild(btnICS);
   }
@@ -1495,7 +1753,7 @@ function parseGeminiResponse() {
     btn.className = 'btn-outline'; btn.style.flex = '1';
     btn.textContent = 'Importar metas';
     btn.onclick = () => {
-      data.metas.forEach(m => state.goals.push({id:state.nextGoalId++,title:m.titulo,cat:m.categoria||'Personal',desc:'',milestones:(m.hitos||[]).map(h=>({text:h,done:false}))}));
+      data.metas.forEach(m => state.goals.push({id:state.nextGoalId++,title:m.titulo,cat:m.categoria||'Personal',desc:'',status:'active',milestones:(m.hitos||[]).map(h=>({text:h,done:false}))}));
       showToast(data.metas.length+' meta(s) importadas');
     };
     actions.appendChild(btn);
@@ -1509,6 +1767,7 @@ function parseGeminiResponse() {
    HABITS
 ================================================================ */
 const DAYS_ES = ['D','L','M','M','J','V','S'];
+const MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const CAT_COLORS = { salud:'pill-green', mente:'pill-blue', productividad:'pill-gold', relaciones:'pill-amber', otro:'pill-gray' };
 
 function getWeekDates(offset) {
@@ -1531,6 +1790,23 @@ function shiftWeek(dir) { state.weekOffset += dir; renderWeekGrid(); }
 
 function renderWeekGrid() {
   const dates = getWeekDates(state.weekOffset);
+  const isCurrentWeek = state.weekOffset === 0;
+
+  // Update title and date range
+  document.getElementById('week-grid-title').textContent = isCurrentWeek ? 'Esta semana' : 'Semana';
+  const first = dates[0], last = dates[6];
+  let rangeText = '';
+  if (isCurrentWeek) {
+    rangeText = first.getDate()+' – '+last.getDate()+' '+MONTHS_SHORT[last.getMonth()];
+  } else {
+    if (first.getMonth() === last.getMonth()) {
+      rangeText = first.getDate()+' – '+last.getDate()+' '+MONTHS_SHORT[last.getMonth()];
+    } else {
+      rangeText = first.getDate()+' '+MONTHS_SHORT[first.getMonth()]+' – '+last.getDate()+' '+MONTHS_SHORT[last.getMonth()];
+    }
+  }
+  document.getElementById('week-grid-range').textContent = rangeText;
+
   let html = '<div class="week-grid-header"><span style="font-size:10px;font-weight:500;color:var(--text-3)">Hábito</span>';
   dates.forEach(d => {
     const isT = fmt(d) === todayStr;
@@ -1538,7 +1814,7 @@ function renderWeekGrid() {
   });
   html += '</div>';
   state.habits.forEach(h => {
-    html += '<div class="week-grid-row"><span class="habit-name">'+h.name+'</span>';
+    html += '<div class="week-grid-row"><span class="habit-name" onclick="openEditHabit('+h.id+')">'+h.name+'</span>';
     dates.forEach(d => {
       const ds = fmt(d);
       const scheduled = isScheduled(h, d);
@@ -1579,9 +1855,9 @@ function renderDailyChecklist() {
     const done = h.completions[todayStr];
     const notifTime = getEffectiveNotifTime(h);
     const timeLabel = notifTime ? '<span class="check-time-pill">🔔 '+formatTime12(notifTime)+'</span>' : '';
-    return '<div class="checklist-item" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')">'+
-      '<div class="check-box'+(done?' checked':'')+'"></div>'+
-      '<span class="check-label">'+h.name+'</span>'+
+    return '<div class="checklist-item">'+
+      '<div class="check-box'+(done?' checked':'')+'" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')"></div>'+
+      '<span class="check-label" onclick="openEditHabit('+h.id+')">'+h.name+'</span>'+
       timeLabel+
       '<span class="check-streak-pill">🔥 '+h.streak+'</span>'+
       '</div>';
@@ -1711,7 +1987,6 @@ function saveEditHabit() {
   h.cat       = document.getElementById('habit-cat-input').value;
   h.notifTime = document.getElementById('habit-time-input').value;
   h.customDays = customDays;
-  // completions preserved as-is
   closeModal('habit-modal');
   renderHabits();
   showToast('¡Hábito actualizado!');
@@ -1759,38 +2034,104 @@ function goalProgress(g) {
   return Math.round(g.milestones.filter(m => m.done).length / g.milestones.length * 100);
 }
 
+function goalCardHTML(g, extraClass) {
+  const pct = goalProgress(g);
+  const catClass = GOAL_CAT_COLORS[g.cat] || 'pill-gray';
+  const msDots = g.milestones.slice(0,6).map(m => '<div class="ms-dot'+(m.done?' done':'')+'"></div>').join('');
+  return '<div class="goal-card'+(extraClass?' '+extraClass:'')+'" onclick="openGoalDetail('+g.id+')">'+
+    '<div class="goal-card-header"><div class="goal-card-title">'+g.title+'</div><span class="pill '+catClass+'">'+g.cat+'</span></div>'+
+    '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
+    '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% · '+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+' hitos</span><div class="milestones-mini">'+msDots+'</div></div>'+
+    '</div>';
+}
+
+// Track collapsed state for archive sections
+const archiveOpen = { logrado: false, espera: false };
+
 function renderGoals() {
   const body = document.getElementById('goals-body');
-  if (!state.goals.length) {
-    body.innerHTML = '<div style="text-align:center;padding:60px 24px;flex:1"><div style="font-size:48px;opacity:.2;margin-bottom:14px">◎</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin objetivos aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca "+ Nueva" para crear tu primer objetivo</p></div>';
+  const active   = state.goals.filter(g => g.status === 'active');
+  const logrado  = state.goals.filter(g => g.status === 'logrado');
+  const espera   = state.goals.filter(g => g.status === 'espera');
+
+  let html = '';
+
+  if (!active.length && !logrado.length && !espera.length) {
+    html = '<div style="text-align:center;padding:60px 24px;flex:1"><div style="font-size:48px;opacity:.2;margin-bottom:14px">◎</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin objetivos aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca "+ Nueva" para crear tu primer objetivo</p></div>';
+    body.innerHTML = html;
     return;
   }
-  body.innerHTML = state.goals.map(g => {
-    const pct = goalProgress(g);
-    const catClass = GOAL_CAT_COLORS[g.cat] || 'pill-gray';
-    const msDots = g.milestones.slice(0,6).map(m => '<div class="ms-dot'+(m.done?' done':'')+'"></div>').join('');
-    return '<div class="goal-card" onclick="openGoalDetail('+g.id+')">'+
-      '<div class="goal-card-header"><div class="goal-card-title">'+g.title+'</div><span class="pill '+catClass+'">'+g.cat+'</span></div>'+
-      '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
-      '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% completado · '+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+' hitos</span><div class="milestones-mini">'+msDots+'</div></div>'+
-      '</div>';
-  }).join('');
+
+  // Active goals (always visible, not collapsable)
+  if (active.length) {
+    html += active.map(g => goalCardHTML(g)).join('');
+  } else {
+    html += '<div style="text-align:center;padding:24px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);color:var(--text-3);font-size:13px">Sin objetivos activos</div>';
+  }
+
+  // Logrado section (collapsable)
+  html += '<div class="goal-archive-section">'+
+    '<div class="goal-archive-toggle" onclick="toggleArchiveSection(\'logrado\')">'+
+    '<div class="goal-archive-toggle-label">'+
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>'+
+    'Logrados'+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<span class="goal-archive-count archive-logrado-count">'+logrado.length+'</span>'+
+    '<span class="goal-archive-chevron'+(archiveOpen.logrado?' open':'')+'" id="chevron-logrado">›</span>'+
+    '</div></div>'+
+    '<div class="goal-archive-body'+(archiveOpen.logrado?' open':'')+'" id="archive-body-logrado">'+
+    (logrado.length ? logrado.map(g => goalCardHTML(g,'archived-logrado')).join('') :
+      '<div style="padding:12px;font-size:13px;color:var(--text-3);text-align:center">Sin objetivos logrados aún</div>')+
+    '</div></div>';
+
+  // En espera section (collapsable)
+  html += '<div class="goal-archive-section">'+
+    '<div class="goal-archive-toggle" onclick="toggleArchiveSection(\'espera\')">'+
+    '<div class="goal-archive-toggle-label">'+
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+
+    'En espera'+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<span class="goal-archive-count archive-espera-count">'+espera.length+'</span>'+
+    '<span class="goal-archive-chevron'+(archiveOpen.espera?' open':'')+'" id="chevron-espera">›</span>'+
+    '</div></div>'+
+    '<div class="goal-archive-body'+(archiveOpen.espera?' open':'')+'" id="archive-body-espera">'+
+    (espera.length ? espera.map(g => goalCardHTML(g,'archived-espera')).join('') :
+      '<div style="padding:12px;font-size:13px;color:var(--text-3);text-align:center">Sin objetivos en espera</div>')+
+    '</div></div>';
+
+  body.innerHTML = html;
+}
+
+function toggleArchiveSection(key) {
+  archiveOpen[key] = !archiveOpen[key];
+  const body    = document.getElementById('archive-body-'+key);
+  const chevron = document.getElementById('chevron-'+key);
+  if (body)    body.classList.toggle('open', archiveOpen[key]);
+  if (chevron) chevron.classList.toggle('open', archiveOpen[key]);
 }
 
 function openGoalDetail(id) {
   const g = state.goals.find(x => x.id === id);
   if (!g) return;
   const pct = goalProgress(g);
-  const catClass = GOAL_CAT_COLORS[g.cat] || 'pill-gray';
-
   const catOptions = GOAL_CATS.map(c =>
     '<option value="'+c+'"'+(c===g.cat?' selected':'')+'>'+c+'</option>'
   ).join('');
 
+  // Status options
+  const statusOptions = [
+    {val:'active',   label:'Activo',    color:'var(--blue)'},
+    {val:'logrado',  label:'Logrado ✓', color:'var(--green)'},
+    {val:'espera',   label:'En espera', color:'var(--amber)'},
+  ];
+  const statusBtns = statusOptions.map(s =>
+    '<button class="btn-outline" style="flex:1;font-size:12px;'+(g.status===s.val?'background:var(--dark);color:#fff;border-color:var(--dark)':'')+'" onclick="setGoalStatus('+id+',\''+s.val+'\')">'+s.label+'</button>'
+  ).join('');
+
   document.getElementById('goal-detail-content').innerHTML =
     '<div class="modal-handle"></div>'+
-
-    /* Editable fields */
     '<div style="margin-bottom:16px">'+
     '<div style="font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Editar objetivo</div>'+
     '<div class="form-group" style="margin-bottom:8px">'+
@@ -1803,13 +2144,16 @@ function openGoalDetail(id) {
     '<button class="btn-outline" style="width:100%;margin-top:8px" onclick="saveGoalEdits('+id+')">Guardar cambios</button>'+
     '</div>'+
 
-    /* Progress bar */
+    '<div style="margin-bottom:14px">'+
+    '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Estado del objetivo</div>'+
+    '<div style="display:flex;gap:6px">'+statusBtns+'</div>'+
+    '</div>'+
+
     '<div style="margin-bottom:14px">'+
     '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-3);font-weight:500">Progreso general</span><span style="font-size:12px;font-weight:600">'+pct+'%</span></div>'+
     '<div class="goal-progress-bar" style="height:7px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
     '</div>'+
 
-    /* Milestones */
     '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Hitos ('+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+')</div>'+
     '<div class="milestone-list">'+
     g.milestones.map((m,i) =>
@@ -1820,23 +2164,28 @@ function openGoalDetail(id) {
       '</div>'
     ).join('')+
     '</div>'+
-
-    /* Add milestone */
     '<div style="display:flex;gap:8px;margin-top:12px">'+
     '<input class="form-input" id="ms-add-input-'+id+'" type="text" placeholder="Agregar nuevo hito..." style="flex:1">'+
     '<button class="btn-outline" onclick="addMilestone('+id+')">+ Agregar</button>'+
     '</div>'+
-
-    /* Clear completions + delete */
     '<div style="margin-top:16px;padding-top:16px;border-top:0.5px solid var(--border);display:flex;gap:8px">'+
     '<button class="btn-outline" style="flex:1;color:var(--amber);border-color:rgba(212,168,71,.4);font-size:12px" onclick="clearGoalCompletions('+id+')">Reiniciar hitos</button>'+
-    '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3);font-size:12px" onclick="deleteGoal('+id+')">Eliminar objetivo</button>'+
+    '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3);font-size:12px" onclick="deleteGoal('+id+')">Eliminar</button>'+
     '</div>'+
     '<div style="margin-top:10px">'+
     '<button class="btn-gold" onclick="closeModal(\'goal-detail-modal\')">Cerrar</button>'+
     '</div>';
 
   openModal('goal-detail-modal');
+}
+
+function setGoalStatus(id, status) {
+  const g = state.goals.find(x => x.id === id);
+  if (!g) return;
+  g.status = status;
+  renderGoals();
+  openGoalDetail(id);
+  showToast(status==='logrado'?'¡Objetivo marcado como logrado! 🎉':status==='espera'?'Objetivo puesto en espera':'Objetivo reactivado');
 }
 
 function escHtml(str) {
@@ -1853,7 +2202,6 @@ function saveGoalEdits(id) {
   g.desc  = document.getElementById('goal-edit-desc-'+id).value.trim();
   renderGoals();
   showToast('¡Objetivo actualizado!');
-  // Refresh detail modal
   openGoalDetail(id);
 }
 
@@ -1911,6 +2259,7 @@ function addGoal() {
     title,
     cat:        document.getElementById('goal-cat-input').value,
     desc:       document.getElementById('goal-desc-input').value.trim(),
+    status:     'active',
     milestones: ms ? [{text:ms,done:false}] : [],
   });
   ['goal-title-input','goal-desc-input','goal-milestone-input'].forEach(id => document.getElementById(id).value = '');
@@ -1925,6 +2274,12 @@ function addGoal() {
 const MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const tmrw = new Date(today); tmrw.setDate(tmrw.getDate()+1);
 const tmrwStr = fmt(tmrw);
+
+/* SVG Apple Cal icon */
+function appleCalSVG(size) {
+  size = size || 14;
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 15l2.5-2.5L13 15l4-4" stroke-linecap="round"/></svg>';
+}
 
 function setCalView(v) {
   state.calView = v;
@@ -1993,11 +2348,10 @@ function showDayEvents(ds) {
   document.getElementById('day-events-title').textContent =
     d.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'});
 
-  /* Day-level "add all" buttons */
   const headerBtns = document.getElementById('day-header-cal-btns');
   if (headerBtns) {
     let h = '';
-    if (apple)  h += '<button class="btn-outline" style="padding:5px 10px;font-size:11px" onclick="exportAllToICS()">🍎 Todos</button>';
+    if (apple)  h += '<button class="btn-outline" style="padding:5px 10px;font-size:11px;gap:4px" onclick="exportAllToICS()">'+appleCalSVG(13)+' Todos</button>';
     if (google) h += '<button class="btn-outline" style="padding:5px 10px;font-size:11px" onclick="addAllToGoogle()">G Todos</button>';
     headerBtns.innerHTML = h;
   }
@@ -2009,7 +2363,7 @@ function showDayEvents(ds) {
 
   document.getElementById('day-events-list').innerHTML = evs.map(e => {
     let calBtns = '';
-    if (apple)  calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;flex-shrink:0" onclick="exportToICS([state.events.find(x=>x.id==='+e.id+')])">🍎</button>';
+    if (apple)  calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;flex-shrink:0;gap:3px" onclick="exportToICS([state.events.find(x=>x.id==='+e.id+')])">'+appleCalSVG(12)+'</button>';
     if (google) calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;flex-shrink:0" onclick="openInGoogleCalendar(state.events.find(x=>x.id==='+e.id+'))">G</button>';
     calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;flex-shrink:0" onclick="openEditEvent('+e.id+')">✏️</button>';
     return '<div class="day-event-row">'+
@@ -2054,7 +2408,7 @@ function renderUpcoming() {
     html += '<div class="event-group"><div class="event-group-label">'+label+'</div>';
     evs.forEach((e,i) => {
       let calBtns = '';
-      if (apple)  calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px" onclick="exportToICS([state.events.find(x=>x.id==='+e.id+')])">🍎</button>';
+      if (apple)  calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;gap:3px" onclick="exportToICS([state.events.find(x=>x.id==='+e.id+')])">'+appleCalSVG(12)+'</button>';
       if (google) calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px" onclick="openInGoogleCalendar(state.events.find(x=>x.id==='+e.id+'))">G</button>';
       calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px" onclick="openEditEvent('+e.id+')">✏️</button>';
       html += '<div class="event-item">'+
@@ -2081,7 +2435,7 @@ function renderUpcomingBottomBar() {
   const apple  = state.settings.appleCalEnabled;
   const google = state.settings.googleCalEnabled;
   let h = '';
-  if (apple)  h += '<button class="btn-outline" style="flex:1;font-size:12px" onclick="exportAllToICS()">🍎 Agregar todos</button>';
+  if (apple)  h += '<button class="btn-outline" style="flex:1;font-size:12px;gap:5px" onclick="exportAllToICS()">'+appleCalSVG(14)+' Agregar todos</button>';
   if (google) h += '<button class="btn-outline" style="flex:1;font-size:12px" onclick="addAllToGoogle()">G Agregar todos</button>';
   el.innerHTML = h;
 }
@@ -2175,7 +2529,7 @@ function deleteEvent(id) {
 }
 
 /* ================================================================
-   CALENDAR EXPORT — stable UIDs + SEQUENCE for dedup/update
+   CALENDAR EXPORT
 ================================================================ */
 function toICSDate(dateStr, timeStr) {
   const d = dateStr.replace(/-/g,'');
@@ -2219,10 +2573,124 @@ function openInGoogleCalendar(e) {
   window.open(base+'&text='+encodeURIComponent(e.title)+dates+(e.notes?'&details='+encodeURIComponent(e.notes):''), '_blank');
 }
 
-function exportAllToICS()        { exportToICS(state.events); }
-function exportDayToICS(ds)      { exportToICS(state.events.filter(e => e.date===ds)); }
-function addAllToGoogle()        { state.events.forEach(e => openInGoogleCalendar(e)); }
-function addDayToGoogle(ds)      { state.events.filter(e => e.date===ds).forEach(e => openInGoogleCalendar(e)); }
+function exportAllToICS()  { exportToICS(state.events); }
+function addAllToGoogle()  { state.events.forEach(e => openInGoogleCalendar(e)); }
+
+/* ================================================================
+   BACKUP & RESTORE
+================================================================ */
+function buildBackupPayload() {
+  return {
+    version: '1.0.0',
+    exportDate: new Date().toISOString(),
+    appId: 'vivela365',
+    data: {
+      habits:       state.habits,
+      goals:        state.goals,
+      events:       state.events,
+      books:        state.books,
+      affirmations: state.affirmations,
+      settings:     state.settings,
+      counters: {
+        nextHabitId: state.nextHabitId,
+        nextGoalId:  state.nextGoalId,
+        nextEventId: state.nextEventId,
+        nextBookId:  state.nextBookId,
+        nextAffId:   state.nextAffId,
+      }
+    }
+  };
+}
+
+function exportFullBackup(silent) {
+  const payload = buildBackupPayload();
+  const json = JSON.stringify(payload, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const dateStr = new Date().toISOString().slice(0,10);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'vivela365-respaldo-'+dateStr+'.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  state.settings.lastBackupDate = Date.now();
+  if (!silent) showToast('¡Respaldo exportado correctamente!');
+}
+
+function triggerImportBackup() {
+  document.getElementById('import-backup-file').click();
+}
+
+function importFullBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const payload = JSON.parse(e.target.result);
+      if (payload.appId !== 'vivela365') {
+        showToast('Error: el archivo no es un respaldo de Vívela365');
+        return;
+      }
+      if (!confirm('¿Restaurar este respaldo? Se reemplazarán TODOS los datos actuales.\n\nFecha del respaldo: '+new Date(payload.exportDate).toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'}))) {
+        event.target.value = '';
+        return;
+      }
+      const d = payload.data;
+      state.habits       = d.habits       || [];
+      state.goals        = d.goals        || [];
+      state.events       = d.events       || [];
+      state.books        = d.books        || [];
+      state.affirmations = d.affirmations || state.affirmations;
+      if (d.settings) {
+        // Merge settings so new keys added later still work
+        Object.assign(state.settings, d.settings);
+      }
+      if (d.counters) {
+        state.nextHabitId = d.counters.nextHabitId || 100;
+        state.nextGoalId  = d.counters.nextGoalId  || 100;
+        state.nextEventId = d.counters.nextEventId || 100;
+        state.nextBookId  = d.counters.nextBookId  || 100;
+        state.nextAffId   = d.counters.nextAffId   || 200;
+      }
+      // Re-render current screen
+      if (state.currentScreen === 'habits')       renderHabits();
+      if (state.currentScreen === 'goals')        renderGoals();
+      if (state.currentScreen === 'calendar')     renderCalendar();
+      if (state.currentScreen === 'books')        renderBooks();
+      if (state.currentScreen === 'settings')     renderSettings();
+      closeModal('backup-modal');
+      showToast('¡Datos restaurados correctamente!');
+    } catch(err) {
+      showToast('Error al leer el archivo de respaldo');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+let pendingBackupDays = 7;
+
+function selectBackupFreq(el) {
+  pendingBackupDays = parseInt(el.dataset.days);
+  document.querySelectorAll('.backup-freq-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function saveBackupFreq() {
+  state.settings.autoBackupDays = pendingBackupDays;
+  const labels = {0:'Nunca',1:'Diario',3:'Cada 3 días',7:'Cada 7 días',14:'Cada 14 días',30:'Mensual'};
+  const label = labels[pendingBackupDays] || 'Cada '+pendingBackupDays+' días';
+  state.settings.autoBackupEnabled = pendingBackupDays > 0;
+  closeModal('backup-freq-modal');
+  renderSettings();
+  showToast('Frecuencia de respaldo: '+label);
+}
+
+function toggleAutoBackup(on) {
+  state.settings.autoBackupEnabled = on;
+  renderSettings();
+  showToast('Respaldo automático '+(on?'activado':'desactivado'));
+}
 
 /* ================================================================
    SETTINGS
@@ -2246,6 +2714,14 @@ function renderSettings() {
   document.getElementById('week-start-preview').textContent    = s.weekStart;
   document.getElementById('apple-cal-toggle').checked  = s.appleCalEnabled;
   document.getElementById('google-cal-toggle').checked = s.googleCalEnabled;
+  document.getElementById('auto-backup-toggle').checked = s.autoBackupEnabled;
+
+  const freqLabels = {0:'Desactivado',1:'Diario',3:'Cada 3 días',7:'Cada 7 días',14:'Cada 14 días',30:'Mensual'};
+  const freqLabel = freqLabels[s.autoBackupDays] || 'Cada '+s.autoBackupDays+' días';
+  document.getElementById('auto-backup-status-text').textContent =
+    s.autoBackupEnabled ? ('Activo · '+freqLabel) : 'Desactivado';
+  document.getElementById('backup-freq-preview').textContent = freqLabel;
+
   renderUpcomingBottomBar();
 }
 
@@ -2253,7 +2729,6 @@ function toggleCalProvider(provider, on) {
   if (provider === 'apple')  state.settings.appleCalEnabled  = on;
   if (provider === 'google') state.settings.googleCalEnabled = on;
   renderUpcomingBottomBar();
-  // Refresh day events buttons if calendar is open
   if (state.currentScreen === 'calendar' && state.calView === 'month') showDayEvents(state.selectedDay || todayStr);
   if (state.currentScreen === 'calendar' && state.calView === 'upcoming') renderUpcoming();
   showToast((provider==='apple'?'Apple Calendar':'Google Calendar')+(on?' activado':' desactivado'));
@@ -2406,15 +2881,15 @@ function exportHabitsCSV() {
 
 function exportGoalsCSV() {
   if (!state.goals.length) { showToast('No hay metas para exportar'); return; }
-  const rows = [['Objetivo','Categoría','Descripción','Progreso %','Hitos completados','Total hitos','Hitos']];
+  const rows = [['Objetivo','Categoría','Estado','Descripción','Progreso %','Hitos completados','Total hitos','Hitos']];
   state.goals.forEach(g => {
     const pct  = goalProgress(g);
     const done = g.milestones.filter(m=>m.done).length;
     const hitos = g.milestones.map(m=>(m.done?'✓ ':'○ ')+m.text).join(' | ');
-    rows.push([g.title, g.cat, g.desc, pct+'%', done, g.milestones.length, hitos]);
+    rows.push([g.title, g.cat, g.status||'active', g.desc, pct+'%', done, g.milestones.length, hitos]);
   });
   downloadCSV('vivela365-objetivos.csv', rows);
-  showToast('Objetivos exportadas ✓');
+  showToast('Objetivos exportados ✓');
 }
 
 function exportBooksCSV() {
@@ -2805,6 +3280,7 @@ document.getElementById('event-date-input').value = todayStr;
 renderHabits();
 renderGoals();
 renderSettings();
+checkAutoBackup();
 </script>
 </body>
 </html>
