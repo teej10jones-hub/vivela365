@@ -109,7 +109,7 @@ body {
 .toast { position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--dark);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:20px;opacity:0;transition:all .25s ease;pointer-events:none;white-space:nowrap;z-index:300; }
 .toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
 
-/* NAV BAR — only 3 items */
+/* NAV BAR */
 .nav-bar { position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(255,255,255,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;align-items:flex-start;padding-top:10px;z-index:100; }
 .nav-item { display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;padding:4px 10px;transition:transform .15s; }
 .nav-item:active { transform:scale(.9); }
@@ -133,7 +133,6 @@ body {
 .home-content { padding:20px;flex:1;overflow-y:auto; }
 .home-intro { font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:16px; }
 
-/* HOME FEATURE GRID — 2 columns */
 .feature-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
 .feature-tile { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:18px 10px;cursor:pointer;transition:all .18s;text-align:center;aspect-ratio:1; }
 .feature-tile:active { background:var(--gold-light);transform:scale(.97); }
@@ -186,7 +185,7 @@ body {
 .heatmap-cell.l3 { background:rgba(196,184,142,.85); }
 .heatmap-cell.l4 { background:var(--gold-dark); }
 .heatmap-months { display:flex;gap:3px;margin-bottom:2px;font-size:9px;color:var(--text-3);font-weight:500;min-width:max-content; }
-.streak-row { display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border); }
+.streak-row { display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:pointer; }
 .streak-row:last-child { border-bottom:none; }
 .streak-info strong { display:block;font-size:14px;font-weight:500; }
 .streak-info span { font-size:12px;color:var(--text-3); }
@@ -205,7 +204,6 @@ body {
 .fab:active { transform:scale(.92); }
 .fab svg { width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round; }
 
-/* CUSTOM DAYS PICKER */
 .custom-days-picker { display:flex;gap:6px;margin-top:4px; }
 .day-toggle-btn { flex:1;padding:8px 2px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:var(--bg);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center; }
 .day-toggle-btn.selected { background:var(--dark);color:#fff;border-color:var(--dark); }
@@ -311,38 +309,24 @@ body {
 .avatar-name { font-size:17px;font-weight:600; }
 .avatar-tagline { font-size:12px;color:var(--text-3); }
 
-/* GEMINI API KEY */
 .api-key-field { position:relative; }
 .api-key-field input { padding-right:44px; }
 .api-key-toggle { position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-3);font-size:14px;padding:4px; }
 
-/* STATUS BADGE */
 .status-badge { display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px; }
 .status-badge.connected { background:var(--green-light);color:#3d7a60; }
 .status-badge.connected::before { content:'';width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0; }
 .status-badge.disconnected { background:var(--surface2);color:var(--text-3); }
 .status-badge.disconnected::before { content:'';width:6px;height:6px;border-radius:50%;background:var(--text-3);flex-shrink:0; }
 
-/* WEEK START PICKER */
 .week-start-options { display:flex;gap:6px; }
 .week-start-btn { flex:1;padding:9px 4px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:var(--bg);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center; }
 .week-start-btn.active { background:var(--dark);color:#fff;border-color:var(--dark); }
 
-/* TIME PICKER GRID */
 .time-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
 .time-option { padding:10px 8px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:var(--bg);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center; }
 .time-option.active { background:var(--dark);color:#fff;border-color:var(--dark); }
 
-/* EXPORT CARDS */
-.export-option { display:flex;align-items:center;gap:12px;padding:14px;border:0.5px solid var(--border);border-radius:var(--r-md);background:var(--bg);cursor:pointer;transition:all .15s; }
-.export-option:active { background:var(--gold-light); }
-.export-icon { width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-.export-icon svg { width:18px;height:18px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round; }
-.export-text strong { display:block;font-size:13px;font-weight:500; }
-.export-text span { font-size:11px;color:var(--text-3); }
-.export-arrow { font-size:18px;color:var(--text-3);margin-left:auto; }
-
-/* DANGER ZONE */
 .danger-row { display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .12s; }
 .danger-row:last-child { border-bottom:none; }
 .danger-row:active { background:var(--red-light); }
@@ -414,6 +398,20 @@ body {
 .aff-progress-dots { display:flex;gap:5px;align-items:center; }
 .aff-dot { width:5px;height:5px;border-radius:50%;background:var(--border-mid);transition:all .2s; }
 .aff-dot.active { background:var(--dark);width:16px;border-radius:3px; }
+
+/* UPCOMING BOTTOM BAR */
+.upcoming-bottom-bar {
+  position:sticky;bottom:0;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-top:0.5px solid var(--border);
+  padding:10px 16px;
+  padding-bottom:calc(10px + var(--safe-b));
+  display:flex;align-items:center;gap:8px;
+  z-index:10;
+  flex-shrink:0;
+}
 </style>
 </head>
 <body>
@@ -438,7 +436,7 @@ body {
       </div>
       <div class="feature-tile" onclick="navigateTo('goals')">
         <div class="ft-icon ft-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-        <div class="ft-text"><strong>Metas</strong><span>Objetivos e hitos</span></div>
+        <div class="ft-text"><strong>Objetivos</strong><span>Objetivos e hitos</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('calendar')">
         <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
@@ -547,11 +545,11 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
     <div class="card">
-      <div class="card-title">Rachas actuales 🔥</div>
+      <div class="card-title">Rachas actuales 🔥 · toca para editar</div>
       <div id="streaks-list"></div>
     </div>
   </div>
-  <button class="fab" onclick="openModal('habit-modal')">
+  <button class="fab" onclick="openAddHabit()">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
 </div>
@@ -559,7 +557,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 <!-- GOALS -->
 <div id="screen-goals" class="screen">
   <div class="screen-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-    <div><h2>Mis metas</h2><p>Define y sigue tus objetivos</p></div>
+    <div><h2>Mis Objetivos</h2><p>Define y sigue tus objetivos</p></div>
     <button class="btn-outline" style="flex-shrink:0;margin-top:4px" onclick="openModal('goal-modal')">+ Nueva</button>
   </div>
   <div class="screen-body" id="goals-body"></div>
@@ -577,26 +575,37 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     <h3 id="cal-month-title"></h3>
     <button onclick="shiftMonth(1)">›</button>
   </div>
+
+  <!-- MONTH VIEW -->
   <div id="cal-month-view" style="flex:1;display:flex;flex-direction:column;overflow-y:auto">
     <div class="month-grid">
       <div class="month-dow"><span>DOM</span><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span></div>
       <div class="month-days" id="month-days-grid"></div>
     </div>
     <div class="day-events-panel" id="day-events-panel">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px">
         <h4 id="day-events-title" style="margin:0">Selecciona un día</h4>
-        <div style="display:flex;gap:6px">
-          <button class="btn-outline" style="padding:5px 10px;font-size:11px" onclick="exportDayToICS(state.selectedDay)">⬇ .ics</button>
-          <button class="btn-outline" style="padding:5px 10px;font-size:11px" onclick="exportAllToICS()">⬇ Todo</button>
-        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap" id="day-header-cal-btns"></div>
       </div>
       <div id="day-events-list"><p class="no-events-msg">—</p></div>
     </div>
   </div>
-  <div id="cal-upcoming-view" style="display:none;padding:16px 20px;overflow-y:auto;flex:1">
-    <div id="upcoming-list"></div>
+
+  <!-- UPCOMING VIEW -->
+  <div id="cal-upcoming-view" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+    <div style="flex:1;overflow-y:auto;padding:16px 20px 8px">
+      <div id="upcoming-list"></div>
+    </div>
+    <div class="upcoming-bottom-bar">
+      <div style="display:flex;gap:8px;flex:1" id="upcoming-all-btns"></div>
+      <button class="fab" style="position:static;margin:0;flex-shrink:0;box-shadow:0 2px 8px rgba(26,30,42,.2);width:42px;height:42px;min-width:42px;min-height:42px" onclick="openAddEvent()">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
   </div>
-  <button class="fab" onclick="openModal('event-modal')">
+
+  <!-- FAB for month view -->
+  <button class="fab" id="cal-month-fab" onclick="openAddEvent()">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
 </div>
@@ -606,7 +615,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   <div class="screen-header"><h2>Configuración</h2><p>Personaliza tu experiencia</p></div>
   <div class="screen-body">
 
-    <!-- PERFIL -->
+    <!-- CUENTA -->
     <div class="settings-section">
       <span class="settings-section-label">Cuenta</span>
       <div class="settings-list">
@@ -614,6 +623,33 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
           <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
           <div class="settings-row-text"><strong>Perfil</strong><span id="profile-name-preview">Nombre, foto y datos personales</span></div>
           <span class="settings-chevron">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDARIOS -->
+    <div class="settings-section">
+      <span class="settings-section-label">Calendarios</span>
+      <div class="settings-list">
+        <div class="settings-row">
+          <div class="settings-icon si-dark">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <div class="settings-row-text"><strong>Apple Calendar</strong><span>Mostrar botones de exportar .ics</span></div>
+          <label class="toggle-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="apple-cal-toggle" checked onchange="toggleCalProvider('apple', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-icon si-blue">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <div class="settings-row-text"><strong>Google Calendar</strong><span>Mostrar botones de Google Cal</span></div>
+          <label class="toggle-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="google-cal-toggle" checked onchange="toggleCalProvider('google', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
         </div>
       </div>
     </div>
@@ -647,7 +683,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       <div class="settings-list">
         <div class="settings-row">
           <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
-          <div class="settings-row-text"><strong>Recordatorios diarios</strong><span>Notificaciones de hábitos y metas</span></div>
+          <div class="settings-row-text"><strong>Recordatorios diarios</strong><span>Notificaciones de hábitos y objetivos</span></div>
           <label class="toggle-switch" onclick="event.stopPropagation()">
             <input type="checkbox" id="reminders-toggle" checked onchange="toggleReminders(this.checked)">
             <span class="toggle-slider"></span>
@@ -666,7 +702,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
 
-   <!-- EXPORTAR -->
+    <!-- EXPORTAR -->
     <div class="settings-section">
       <span class="settings-section-label">Exportar datos</span>
       <div class="settings-list">
@@ -677,7 +713,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         </div>
         <div class="settings-row" onclick="exportGoalsCSV()">
           <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-          <div class="settings-row-text"><strong>Exportar metas</strong><span>Metas e hitos en CSV</span></div>
+          <div class="settings-row-text"><strong>Exportar objetivos</strong><span>Objeticos e hitos en CSV</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">CSV ⬇</span>
         </div>
         <div class="settings-row" onclick="exportBooksCSV()">
@@ -687,7 +723,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         </div>
         <div class="settings-row" onclick="exportAllToICS()">
           <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-          <div class="settings-row-text"><strong>Exportar eventos</strong><span>Todos los eventos como .ics</span></div>
+          <div class="settings-row-text"><strong>Exportar eventos (.ics)</strong><span>Todos los eventos para Apple/Google Cal</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">.ics ⬇</span>
         </div>
       </div>
@@ -709,7 +745,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
 
-    <!-- ZONA DE PELIGRO -->
+    <!-- ZONA DE RIESGO -->
     <div class="settings-section">
       <span class="settings-section-label">Zona de riesgo</span>
       <div class="settings-list">
@@ -717,7 +753,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
           <div class="settings-icon si-red" style="flex-shrink:0"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
           <div style="flex:1">
             <strong>Borrar todos los datos</strong>
-            <div><span>Elimina hábitos, metas y eventos locales</span></div>
+            <div><span>Elimina hábitos, objetivos y eventos locales</span></div>
           </div>
           <span class="settings-chevron" style="color:var(--red)">›</span>
         </div>
@@ -765,7 +801,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   </div>
 </div>
 
-<!-- NAV BAR — 3 items only -->
+<!-- NAV BAR -->
 <nav class="nav-bar">
   <div class="nav-item active" data-screen="home" onclick="navigateTo('home')">
     <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -786,11 +822,12 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 
 <!-- ===== MODALS ===== -->
 
-<!-- MODAL: Add Habit -->
+<!-- MODAL: Add / Edit Habit -->
 <div class="modal-overlay" id="habit-modal" onclick="modalOverlayClick(event,'habit-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">Nuevo hábito</div>
+    <input type="hidden" id="habit-edit-id" value="">
+    <div class="modal-title" id="habit-modal-title">Nuevo hábito</div>
     <div class="form-group"><label class="form-label">Nombre del hábito</label><input class="form-input" id="habit-name-input" type="text" placeholder="Ej. Meditar 10 min"></div>
     <div class="form-group">
       <label class="form-label">Frecuencia</label>
@@ -801,7 +838,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         <option value="personalizado">Personalizado</option>
       </select>
     </div>
-    <!-- Custom days picker — shown only for "personalizado" -->
     <div class="form-group" id="custom-days-group" style="display:none">
       <label class="form-label">Días de la semana</label>
       <div class="custom-days-picker">
@@ -815,15 +851,17 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
     <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="habit-cat-input"><option value="salud">Salud</option><option value="mente">Mente</option><option value="productividad">Productividad</option><option value="relaciones">Relaciones</option><option value="otro">Otro</option></select></div>
-    <!-- Notification time -->
     <div class="form-group">
       <label class="form-label">Hora de notificación <span style="color:var(--text-3);font-weight:400">(opcional)</span></label>
-      <input class="form-input" id="habit-time-input" type="time" placeholder="Usar hora global de configuración">
+      <input class="form-input" id="habit-time-input" type="time">
       <span style="font-size:11px;color:var(--text-3);margin-top:3px">Si no se ingresa, se usará la hora global de recordatorio</span>
+    </div>
+    <div id="habit-delete-row" style="display:none;margin-bottom:12px">
+      <button class="btn-outline" id="habit-delete-btn" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)">Eliminar hábito</button>
     </div>
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('habit-modal')">Cancelar</button>
-      <button class="btn-gold"    style="flex:2" onclick="addHabit()">Guardar hábito</button>
+      <button class="btn-gold" id="habit-save-btn" style="flex:2" onclick="addHabit()">Guardar hábito</button>
     </div>
   </div>
 </div>
@@ -832,28 +870,29 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 <div class="modal-overlay" id="goal-modal" onclick="modalOverlayClick(event,'goal-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">Nueva meta</div>
-    <div class="form-group"><label class="form-label">Título de la meta</label><input class="form-input" id="goal-title-input" type="text" placeholder="Ej. Leer 12 libros este año"></div>
+    <div class="modal-title">Nuevo objetivo</div>
+    <div class="form-group"><label class="form-label">Título del objetivo</label><input class="form-input" id="goal-title-input" type="text" placeholder="Ej. Leer 12 libros este año"></div>
     <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="goal-cat-input"><option value="Personal">Personal</option><option value="Salud">Salud</option><option value="Profesional">Profesional</option><option value="Finanzas">Finanzas</option><option value="Relaciones">Relaciones</option><option value="Aprendizaje">Aprendizaje</option><option value="Otro">Otro</option></select></div>
     <div class="form-group"><label class="form-label">Descripción (opcional)</label><textarea class="form-textarea" id="goal-desc-input" placeholder="¿Por qué es importante esta meta?"></textarea></div>
     <div class="form-group"><label class="form-label">Primer hito</label><input class="form-input" id="goal-milestone-input" type="text" placeholder="Ej. Leer el primer libro"></div>
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('goal-modal')">Cancelar</button>
-      <button class="btn-gold"    style="flex:2" onclick="addGoal()">Crear meta</button>
+      <button class="btn-gold"    style="flex:2" onclick="addGoal()">Crear objetivo</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: Goal Detail -->
+<!-- MODAL: Goal Detail / Edit -->
 <div class="modal-overlay" id="goal-detail-modal" onclick="modalOverlayClick(event,'goal-detail-modal')">
   <div class="modal-sheet" id="goal-detail-content"></div>
 </div>
 
-<!-- MODAL: Add Event -->
+<!-- MODAL: Add / Edit Event -->
 <div class="modal-overlay" id="event-modal" onclick="modalOverlayClick(event,'event-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">Nuevo evento</div>
+    <input type="hidden" id="event-edit-id" value="">
+    <div class="modal-title" id="event-modal-title">Nuevo evento</div>
     <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="event-title-input" type="text" placeholder="Ej. Reunión con equipo"></div>
     <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" id="event-date-input" type="date"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -871,9 +910,12 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         <div class="ecswatch" data-color="#1A1E2A" style="width:28px;height:28px;border-radius:50%;background:#1A1E2A;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
       </div>
     </div>
+    <div id="event-delete-row" style="display:none;margin-bottom:12px">
+      <button class="btn-outline" id="event-delete-btn" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)">Eliminar evento</button>
+    </div>
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('event-modal')">Cancelar</button>
-      <button class="btn-gold"    style="flex:2" onclick="addEvent()">Guardar evento</button>
+      <button class="btn-gold" id="event-save-btn" style="flex:2" onclick="addEvent()">Guardar evento</button>
     </div>
   </div>
 </div>
@@ -940,18 +982,9 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         <div class="avatar-tagline" id="profile-display-tagline">vivela365.app</div>
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Nombre</label>
-      <input class="form-input" id="profile-name-input" type="text" placeholder="Tu nombre completo">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Frase o intención del año</label>
-      <input class="form-input" id="profile-tagline-input" type="text" placeholder="Ej. Este año vivo con propósito">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Correo electrónico</label>
-      <input class="form-input" id="profile-email-input" type="email" placeholder="tu@correo.com">
-    </div>
+    <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="profile-name-input" type="text" placeholder="Tu nombre completo"></div>
+    <div class="form-group"><label class="form-label">Frase o intención del año</label><input class="form-input" id="profile-tagline-input" type="text" placeholder="Ej. Este año vivo con propósito"></div>
+    <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" id="profile-email-input" type="email" placeholder="tu@correo.com"></div>
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('profile-modal')">Cancelar</button>
       <button class="btn-gold"    style="flex:2" onclick="saveProfile()">Guardar perfil</button>
@@ -976,10 +1009,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
     <div id="gcal-disconnected-section">
-      <div class="form-group">
-        <label class="form-label">Correo de Google Calendar</label>
-        <input class="form-input" id="gcal-email-input" type="email" placeholder="tu@gmail.com">
-      </div>
+      <div class="form-group"><label class="form-label">Correo de Google Calendar</label><input class="form-input" id="gcal-email-input" type="email" placeholder="tu@gmail.com"></div>
       <button class="btn-gold" style="margin-bottom:12px" onclick="connectGCal()">Simular conexión</button>
     </div>
     <div style="border-top:0.5px solid var(--border);padding-top:16px;margin-top:4px">
@@ -1024,7 +1054,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Hora de recordatorio</div>
-    <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Elige a qué hora quieres recibir tu recordatorio diario de hábitos y metas.</p>
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Elige a qué hora quieres recibir tu recordatorio diario de hábitos y objetivos.</p>
     <div class="time-grid" id="time-options-grid"></div>
     <div class="form-group" style="margin-top:16px">
       <label class="form-label">O ingresa una hora específica</label>
@@ -1069,19 +1099,16 @@ const fmt = d => {
 };
 const todayStr = fmt(today);
 
-// Returns array of 7 booleans [Sun,Mon,Tue,Wed,Thu,Fri,Sat] for a given freq string
 function freqToDays(freq, customDays) {
-  if (freq === 'diario')         return [true,true,true,true,true,true,true];
-  if (freq === 'lunes-viernes')  return [false,true,true,true,true,true,false];
-  if (freq === 'semanal')        return [true,false,false,false,false,false,false]; // Sunday only
-  if (freq === 'personalizado')  return customDays || [false,false,false,false,false,false,false];
+  if (freq === 'diario')        return [true,true,true,true,true,true,true];
+  if (freq === 'lunes-viernes') return [false,true,true,true,true,true,false];
+  if (freq === 'semanal')       return [true,false,false,false,false,false,false];
+  if (freq === 'personalizado') return customDays || [false,false,false,false,false,false,false];
   return [true,true,true,true,true,true,true];
 }
 
-// Is this habit scheduled on a given Date object?
 function isScheduled(habit, dateObj) {
-  const days = freqToDays(habit.freq, habit.customDays);
-  return days[dateObj.getDay()];
+  return freqToDays(habit.freq, habit.customDays)[dateObj.getDay()];
 }
 
 const state = {
@@ -1118,10 +1145,10 @@ const state = {
   weekOffset: 0,
   selectedEventColor: '#C4B88E',
   nextHabitId: 20,
-  nextGoalId: 20,
+  nextGoalId:  20,
   nextEventId: 20,
-  nextBookId: 10,
-  nextAffId: 101,
+  nextBookId:  10,
+  nextAffId:   101,
   affIndex: 0,
   affQueue: [],
   affAutoPlay: false,
@@ -1229,41 +1256,20 @@ const state = {
   ],
   bookView: 'shelf',
   books: [
-    {
-      id:1, title:'Hábitos atómicos', author:'James Clear',
-      cover: null, totalPages: 320, currentPage: 280,
-      status:'reading', rating: 0,
-      freeNotes: 'Un libro transformador sobre sistemas vs metas.',
-      quotes:  ['Pequeños cambios, resultados extraordinarios.'],
-      lessons: ['Los hábitos son el compound interest de la superación personal.'],
-      actions: ['Rediseñar mi entorno para que los buenos hábitos sean obvios.'],
-    },
-    {
-      id:2, title:'El poder del ahora', author:'Eckhart Tolle',
-      cover: null, totalPages: 240, currentPage: 240,
-      status:'finished', rating: 5,
-      freeNotes: '',
-      quotes:  ['"El momento presente es lo único que siempre será."'],
-      lessons: ['La mente es una herramienta, no quien eres.'],
-      actions: ['Practicar presencia consciente 5 min al día.'],
-    },
-    {
-      id:3, title:'Ikigai', author:'Héctor García',
-      cover: null, totalPages: 208, currentPage: 0,
-      status:'not-started', rating: 0,
-      freeNotes: '', quotes:[], lessons:[], actions:[],
-    },
+    { id:1, title:'Hábitos atómicos', author:'James Clear', cover:null, totalPages:320, currentPage:280, status:'reading', rating:0, freeNotes:'Un libro transformador sobre sistemas vs metas.', quotes:['Pequeños cambios, resultados extraordinarios.'], lessons:['Los hábitos son el compound interest de la superación personal.'], actions:['Rediseñar mi entorno para que los buenos hábitos sean obvios.'] },
+    { id:2, title:'El poder del ahora', author:'Eckhart Tolle', cover:null, totalPages:240, currentPage:240, status:'finished', rating:5, freeNotes:'', quotes:['"El momento presente es lo único que siempre será."'], lessons:['La mente es una herramienta, no quien eres.'], actions:['Practicar presencia consciente 5 min al día.'] },
+    { id:3, title:'Ikigai', author:'Héctor García', cover:null, totalPages:208, currentPage:0, status:'not-started', rating:0, freeNotes:'', quotes:[], lessons:[], actions:[] },
   ],
-
-  // Settings state
   settings: {
-    profile: { name: '', tagline: '', email: '', avatarDataUrl: null },
+    profile: { name:'', tagline:'', email:'', avatarDataUrl:null },
     geminiKey: '',
     gcalConnected: false,
     gcalEmail: '',
     remindersEnabled: true,
     reminderTime: '08:00',
     weekStart: 'Domingo',
+    appleCalEnabled: true,
+    googleCalEnabled: true,
   },
 };
 
@@ -1272,8 +1278,8 @@ state.habits.forEach((h, hi) => {
   for (let i = 0; i < 180; i++) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    if (!isScheduled(h, d)) continue; // only seed scheduled days
-    const threshold = hi === 1 ? 0.08 : hi === 3 ? 0.12 : 0.28;
+    if (!isScheduled(h, d)) continue;
+    const threshold = hi===1 ? 0.08 : hi===3 ? 0.12 : 0.28;
     if (Math.random() > threshold) h.completions[fmt(d)] = true;
   }
 });
@@ -1281,22 +1287,21 @@ state.habits.forEach((h, hi) => {
 /* Seed events */
 (function(){
   const colors = ['#C4B88E','#6BAA8E','#5B82B4','#C4645A','#1A1E2A'];
-  const titles = ['Reunión de equipo','Entrega de agenda','Llamada con distribuidora',
-    'Meditación grupal','Revisión mensual','Sesión fotográfica','Llamada con diseñadora',
-    'Presentación de proyecto','Cita médica','Almuerzo con socia'];
+  const titles = ['Reunión de equipo','Entrega de agenda','Llamada con distribuidora','Meditación grupal','Revisión mensual','Sesión fotográfica','Llamada con diseñadora','Presentación de proyecto','Cita médica','Almuerzo con socia'];
   for (let i = -8; i <= 35; i++) {
     if (Math.random() < 0.3) {
       const d = new Date(today);
       d.setDate(d.getDate() + i);
-      const h = 8 + Math.floor(Math.random() * 10);
+      const h = 8 + Math.floor(Math.random()*10);
       state.events.push({
-        id: state.nextEventId++,
-        title: titles[Math.floor(Math.random()*titles.length)],
-        date: fmt(d),
-        start: String(h).padStart(2,'0')+':00',
-        end:   String(h+1).padStart(2,'0')+':00',
-        notes: '',
-        color: colors[Math.floor(Math.random()*colors.length)],
+        id:       state.nextEventId++,
+        title:    titles[Math.floor(Math.random()*titles.length)],
+        date:     fmt(d),
+        start:    String(h).padStart(2,'0')+':00',
+        end:      String(h+1).padStart(2,'0')+':00',
+        notes:    '',
+        color:    colors[Math.floor(Math.random()*colors.length)],
+        sequence: 0,
       });
     }
   }
@@ -1312,12 +1317,12 @@ function navigateTo(name) {
   const nav = document.querySelector('[data-screen="'+name+'"]');
   if (nav) nav.classList.add('active');
   state.currentScreen = name;
-  if (name==='habits')   renderHabits();
-  if (name==='goals')    renderGoals();
-  if (name==='calendar') renderCalendar();
-  if (name==='books')    renderBooks();
+  if (name==='habits')       renderHabits();
+  if (name==='goals')        renderGoals();
+  if (name==='calendar')     renderCalendar();
+  if (name==='books')        renderBooks();
   if (name==='affirmations') renderAffirmations();
-  if (name==='settings') renderSettings();
+  if (name==='settings')     renderSettings();
 }
 
 /* ================================================================
@@ -1328,46 +1333,88 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(t._t);
-  t._t = setTimeout(()=>t.classList.remove('show'), 2500);
+  t._t = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 /* ================================================================
    MODAL
 ================================================================ */
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function modalOverlayClick(e, id) { if (e.target===document.getElementById(id)) closeModal(id); }
-
-/* ================================================================
-   HABIT FREQUENCY UI
-================================================================ */
-function onFreqChange(val) {
-  const group = document.getElementById('custom-days-group');
-  const btns  = document.querySelectorAll('.day-toggle-btn');
-  if (val === 'personalizado') {
-    group.style.display = 'block';
-    // Default: all days selected (same as daily)
-    btns.forEach(b => b.classList.add('selected'));
-  } else if (val === 'diario') {
-    group.style.display = 'none';
-    btns.forEach(b => b.classList.add('selected'));
-  } else if (val === 'semanal') {
-    group.style.display = 'none';
-    // Pre-select only Sunday so state is ready if user switches to personalizado
-    btns.forEach(b => { b.classList.toggle('selected', b.dataset.day === '0'); });
-  } else {
-    group.style.display = 'none';
+function openModal(id) {
+  /* --- habit modal: reset to add mode if not editing --- */
+  if (id === 'habit-modal') {
+    if (!document.getElementById('habit-edit-id').value) {
+      document.getElementById('habit-modal-title').textContent = 'Nuevo hábito';
+      document.getElementById('habit-save-btn').textContent    = 'Guardar hábito';
+      document.getElementById('habit-save-btn').setAttribute('onclick','addHabit()');
+      document.getElementById('habit-delete-row').style.display = 'none';
+      document.getElementById('habit-edit-id').value  = '';
+      document.getElementById('habit-name-input').value = '';
+      document.getElementById('habit-time-input').value = '';
+      document.getElementById('habit-freq-input').value = 'diario';
+      document.getElementById('habit-cat-input').value  = 'salud';
+      document.getElementById('custom-days-group').style.display = 'none';
+      document.querySelectorAll('.day-toggle-btn').forEach(b => b.classList.add('selected'));
+    }
   }
+  /* --- event modal: reset to add mode if not editing --- */
+  if (id === 'event-modal') {
+    if (!document.getElementById('event-edit-id').value) {
+      document.getElementById('event-modal-title').textContent = 'Nuevo evento';
+      document.getElementById('event-save-btn').textContent    = 'Guardar evento';
+      document.getElementById('event-save-btn').setAttribute('onclick','addEvent()');
+      document.getElementById('event-delete-row').style.display = 'none';
+      document.getElementById('event-edit-id').value = '';
+      state.selectedEventColor = '#C4B88E';
+      document.querySelectorAll('.ecswatch').forEach(s => {
+        s.style.borderColor = s.dataset.color === '#C4B88E' ? '#1A1E2A' : 'transparent';
+      });
+    }
+  }
+  /* --- reminder time modal --- */
+  if (id === 'reminder-time-modal') {
+    const grid = document.getElementById('time-options-grid');
+    if (grid) {
+      grid.innerHTML = TIME_OPTIONS.map(t =>
+        '<div class="time-option'+(t===state.settings.reminderTime?' active':'')+'" onclick="selectTimeOption(this,\''+t+'\')">'+formatTime12(t)+'</div>'
+      ).join('');
+      document.getElementById('custom-time-input').value = state.settings.reminderTime;
+    }
+  }
+  /* --- week start modal --- */
+  if (id === 'week-start-modal') {
+    pendingWeekStart = state.settings.weekStart;
+    setTimeout(() => {
+      document.querySelectorAll('.week-start-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim() === state.settings.weekStart);
+      });
+    }, 10);
+  }
+  /* --- gemini modal --- */
+  if (id === 'gemini-modal') {
+    const keyStatus    = document.getElementById('gemini-key-status');
+    const savedActions = document.getElementById('gemini-key-saved-actions');
+    if (state.settings.geminiKey) {
+      document.getElementById('gemini-key-input').value = '••••••••••••••••';
+      document.getElementById('gemini-key-input').type  = 'password';
+      if (keyStatus) { keyStatus.style.display='block'; keyStatus.innerHTML='<div style="background:var(--green-light);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:#3d7a60;display:flex;align-items:center;gap:8px"><span>✓</span><span>API key ya configurada</span></div>'; }
+      if (savedActions) savedActions.style.display = 'block';
+    } else {
+      document.getElementById('gemini-key-input').value = '';
+      if (keyStatus)    keyStatus.style.display    = 'none';
+      if (savedActions) savedActions.style.display = 'none';
+    }
+  }
+  /* --- gcal modal --- */
+  if (id === 'gcal-modal') {
+    document.getElementById('gcal-connected-section').style.display    = state.settings.gcalConnected ? 'block' : 'none';
+    document.getElementById('gcal-disconnected-section').style.display = state.settings.gcalConnected ? 'none'  : 'block';
+    if (state.settings.gcalConnected) document.getElementById('gcal-connected-email').textContent = state.settings.gcalEmail;
+  }
+  document.getElementById(id).classList.add('open');
 }
 
-function toggleDay(btn) {
-  btn.classList.toggle('selected');
-}
-
-function getCustomDaysFromUI() {
-  const btns = document.querySelectorAll('.day-toggle-btn');
-  return Array.from(btns).map(b => b.classList.contains('selected'));
-}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function modalOverlayClick(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
 
 /* ================================================================
    SCAN
@@ -1375,10 +1422,10 @@ function getCustomDaysFromUI() {
 function copyPrompt() {
   const text = document.getElementById('gemini-prompt').innerText;
   navigator.clipboard.writeText(text)
-    .then(()=>showToast('¡Prompt copiado al portapapeles!'))
-    .catch(()=>{
-      const ta=document.createElement('textarea');
-      ta.value=text; document.body.appendChild(ta); ta.select();
+    .then(()  => showToast('¡Prompt copiado al portapapeles!'))
+    .catch(()  => {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
       document.execCommand('copy'); document.body.removeChild(ta);
       showToast('¡Prompt copiado!');
     });
@@ -1397,14 +1444,10 @@ function parseGeminiResponse() {
   content.innerHTML = ''; actions.innerHTML = '';
 
   const sections = [];
-  if (data.eventos && data.eventos.length)
-    sections.push({ title: data.eventos.length+' evento(s) detectado(s)', items: data.eventos.map(e=>e.titulo+(e.hora_inicio?' · '+e.hora_inicio:'')) });
-  if (data.habitos && data.habitos.length)
-    sections.push({ title: data.habitos.length+' hábito(s) detectado(s)', items: data.habitos.map(h=>h.nombre) });
-  if (data.metas && data.metas.length)
-    sections.push({ title: data.metas.length+' meta(s) detectada(s)', items: data.metas.map(m=>m.titulo) });
-  if (data.tareas && data.tareas.length)
-    sections.push({ title: data.tareas.length+' tarea(s) detectada(s)', items: data.tareas.map(t=>t.titulo) });
+  if (data.eventos && data.eventos.length) sections.push({ title:data.eventos.length+' evento(s) detectado(s)', items:data.eventos.map(e=>e.titulo+(e.hora_inicio?' · '+e.hora_inicio:'')) });
+  if (data.habitos && data.habitos.length) sections.push({ title:data.habitos.length+' hábito(s) detectado(s)', items:data.habitos.map(h=>h.nombre) });
+  if (data.metas   && data.metas.length)   sections.push({ title:data.metas.length+' meta(s) detectada(s)',    items:data.metas.map(m=>m.titulo) });
+  if (data.tareas  && data.tareas.length)  sections.push({ title:data.tareas.length+' tarea(s) detectada(s)',  items:data.tareas.map(t=>t.titulo) });
 
   if (!sections.length) { showToast('No se encontró contenido reconocible'); return; }
 
@@ -1419,42 +1462,40 @@ function parseGeminiResponse() {
   if (data.eventos && data.eventos.length) {
     let importedEvents = [];
     const btnImport = document.createElement('button');
-    btnImport.className='btn-outline'; btnImport.style.flex='1';
-    btnImport.textContent='Importar al calendario';
-    btnImport.onclick=()=>{
+    btnImport.className = 'btn-outline'; btnImport.style.flex = '1';
+    btnImport.textContent = 'Importar al calendario';
+    btnImport.onclick = () => {
       importedEvents = [];
-      data.eventos.forEach(e=>{
-        const ev = {id:state.nextEventId++,title:e.titulo,date:e.fecha||todayStr,start:e.hora_inicio||'',end:e.hora_fin||'',notes:e.notas||'',color:'#C4B88E'};
-        state.events.push(ev);
-        importedEvents.push(ev);
+      data.eventos.forEach(e => {
+        const ev = { id:state.nextEventId++, title:e.titulo, date:e.fecha||todayStr, start:e.hora_inicio||'', end:e.hora_fin||'', notes:e.notas||'', color:'#C4B88E', sequence:0 };
+        state.events.push(ev); importedEvents.push(ev);
       });
       showToast(data.eventos.length+' evento(s) importados al calendario');
-      btnICS.style.display='inline-flex';
+      btnICS.style.display = 'inline-flex';
     };
     actions.appendChild(btnImport);
     const btnICS = document.createElement('button');
-    btnICS.className='btn-outline'; btnICS.style.flex='1';
-    btnICS.textContent='⬇ Apple Cal';
-    btnICS.style.display='none';
-    btnICS.onclick=()=>exportToICS(importedEvents);
+    btnICS.className = 'btn-outline'; btnICS.style.flex = '1';
+    btnICS.textContent = '⬇ Apple Cal'; btnICS.style.display = 'none';
+    btnICS.onclick = () => exportToICS(importedEvents);
     actions.appendChild(btnICS);
   }
   if (data.habitos && data.habitos.length) {
     const btn = document.createElement('button');
-    btn.className='btn-outline'; btn.style.flex='1';
-    btn.textContent='Importar hábitos';
-    btn.onclick=()=>{
-      data.habitos.forEach(h=>{ state.habits.push({id:state.nextHabitId++,name:h.nombre,freq:'diario',cat:'otro',notifTime:'',customDays:null,streak:0,completions:{}}); });
+    btn.className = 'btn-outline'; btn.style.flex = '1';
+    btn.textContent = 'Importar hábitos';
+    btn.onclick = () => {
+      data.habitos.forEach(h => state.habits.push({id:state.nextHabitId++,name:h.nombre,freq:'diario',cat:'otro',notifTime:'',customDays:null,streak:0,completions:{}}));
       showToast(data.habitos.length+' hábito(s) importados');
     };
     actions.appendChild(btn);
   }
   if (data.metas && data.metas.length) {
     const btn = document.createElement('button');
-    btn.className='btn-outline'; btn.style.flex='1';
-    btn.textContent='Importar metas';
-    btn.onclick=()=>{
-      data.metas.forEach(m=>{ state.goals.push({id:state.nextGoalId++,title:m.titulo,cat:m.categoria||'Personal',desc:'',milestones:(m.hitos||[]).map(h=>({text:h,done:false}))}); });
+    btn.className = 'btn-outline'; btn.style.flex = '1';
+    btn.textContent = 'Importar metas';
+    btn.onclick = () => {
+      data.metas.forEach(m => state.goals.push({id:state.nextGoalId++,title:m.titulo,cat:m.categoria||'Personal',desc:'',milestones:(m.hitos||[]).map(h=>({text:h,done:false}))}));
       showToast(data.metas.length+' meta(s) importadas');
     };
     actions.appendChild(btn);
@@ -1474,7 +1515,7 @@ function getWeekDates(offset) {
   const d = new Date(today);
   const dow = d.getDay();
   d.setDate(d.getDate() - dow + offset*7);
-  return Array.from({length:7},(_,i)=>{ const x=new Date(d); x.setDate(d.getDate()+i); return x; });
+  return Array.from({length:7}, (_,i) => { const x = new Date(d); x.setDate(d.getDate()+i); return x; });
 }
 
 function renderHabits() {
@@ -1491,14 +1532,14 @@ function shiftWeek(dir) { state.weekOffset += dir; renderWeekGrid(); }
 function renderWeekGrid() {
   const dates = getWeekDates(state.weekOffset);
   let html = '<div class="week-grid-header"><span style="font-size:10px;font-weight:500;color:var(--text-3)">Hábito</span>';
-  dates.forEach(d=>{
-    const isT = fmt(d)===todayStr;
+  dates.forEach(d => {
+    const isT = fmt(d) === todayStr;
     html += '<span style="color:'+(isT?'var(--dark)':'var(--text-3)')+';font-weight:'+(isT?'600':'500')+'">'+DAYS_ES[d.getDay()]+'</span>';
   });
   html += '</div>';
-  state.habits.forEach(h=>{
+  state.habits.forEach(h => {
     html += '<div class="week-grid-row"><span class="habit-name">'+h.name+'</span>';
-    dates.forEach(d=>{
+    dates.forEach(d => {
       const ds = fmt(d);
       const scheduled = isScheduled(h, d);
       const done = h.completions[ds];
@@ -1515,39 +1556,34 @@ function renderWeekGrid() {
 }
 
 function toggleHabitDay(id, dateStr) {
-  const h = state.habits.find(x=>x.id===id);
+  const h = state.habits.find(x => x.id === id);
   if (!h) return;
   h.completions[dateStr] = !h.completions[dateStr];
-  if (dateStr === todayStr) {
-    h.streak = h.completions[dateStr] ? h.streak+1 : Math.max(0,h.streak-1);
-  }
+  if (dateStr === todayStr) h.streak = h.completions[dateStr] ? h.streak+1 : Math.max(0, h.streak-1);
   renderWeekGrid();
   renderDailyChecklist();
   renderStreaks();
 }
 
-function getEffectiveNotifTime(h) {
-  return h.notifTime || state.settings.reminderTime;
-}
+function getEffectiveNotifTime(h) { return h.notifTime || state.settings.reminderTime; }
 
 function renderDailyChecklist() {
   const el = document.getElementById('daily-checklist');
   const todayDate = new Date(todayStr+'T12:00:00');
-  // Only show habits scheduled for today
   const todayHabits = state.habits.filter(h => isScheduled(h, todayDate));
   if (!todayHabits.length) {
     el.innerHTML = '<p style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0">Sin hábitos para hoy. Toca + para agregar uno.</p>';
     return;
   }
-  el.innerHTML = todayHabits.map(h=>{
+  el.innerHTML = todayHabits.map(h => {
     const done = h.completions[todayStr];
     const notifTime = getEffectiveNotifTime(h);
     const timeLabel = notifTime ? '<span class="check-time-pill">🔔 '+formatTime12(notifTime)+'</span>' : '';
-    return '<div class="checklist-item" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')">' +
-      '<div class="check-box'+(done?' checked':'')+'"></div>' +
-      '<span class="check-label">'+h.name+'</span>' +
-      timeLabel +
-      '<span class="check-streak-pill">🔥 '+h.streak+'</span>' +
+    return '<div class="checklist-item" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')">'+
+      '<div class="check-box'+(done?' checked':'')+'"></div>'+
+      '<span class="check-label">'+h.name+'</span>'+
+      timeLabel+
+      '<span class="check-streak-pill">🔥 '+h.streak+'</span>'+
       '</div>';
   }).join('');
 }
@@ -1556,52 +1592,59 @@ function renderHeatmap() {
   const weeks = 26;
   const start = new Date(today);
   start.setDate(start.getDate() - (weeks*7 - 1));
-  let cols=''; let lastMonth=-1; let monthLabels='';
-  for (let w=0; w<weeks; w++) {
-    let col='<div class="heatmap-col">';
-    for (let d=0;d<7;d++) {
-      const date=new Date(start); date.setDate(start.getDate()+w*7+d);
-      const ds=fmt(date);
-      // For heatmap, only count scheduled habits
-      const scheduledHabits=state.habits.filter(h=>isScheduled(h,date));
-      const total=scheduledHabits.length;
-      const done=scheduledHabits.filter(h=>h.completions[ds]).length;
-      const ratio=total?done/total:0;
-      let lvl=0;
-      if(ratio>0)   lvl=1;
-      if(ratio>0.4) lvl=2;
-      if(ratio>0.7) lvl=3;
-      if(ratio===1) lvl=4;
-      col+='<div class="heatmap-cell'+(lvl?' l'+lvl:'')+'"></div>';
-      if(d===0 && date.getMonth()!==lastMonth) {
-        lastMonth=date.getMonth();
-        monthLabels+='<span>'+date.toLocaleDateString('es-MX',{month:'short'})+'</span>';
+  let cols = ''; let lastMonth = -1; let monthLabels = '';
+  for (let w = 0; w < weeks; w++) {
+    let col = '<div class="heatmap-col">';
+    for (let d = 0; d < 7; d++) {
+      const date = new Date(start); date.setDate(start.getDate() + w*7 + d);
+      const ds = fmt(date);
+      const scheduledHabits = state.habits.filter(h => isScheduled(h, date));
+      const total = scheduledHabits.length;
+      const done  = scheduledHabits.filter(h => h.completions[ds]).length;
+      const ratio = total ? done/total : 0;
+      let lvl = 0;
+      if (ratio > 0)   lvl = 1;
+      if (ratio > 0.4) lvl = 2;
+      if (ratio > 0.7) lvl = 3;
+      if (ratio === 1) lvl = 4;
+      col += '<div class="heatmap-cell'+(lvl?' l'+lvl:'')+'"></div>';
+      if (d === 0 && date.getMonth() !== lastMonth) {
+        lastMonth = date.getMonth();
+        monthLabels += '<span>'+date.toLocaleDateString('es-MX',{month:'short'})+'</span>';
       }
     }
-    col+='</div>'; cols+=col;
+    col += '</div>'; cols += col;
   }
-  document.getElementById('heatmap-grid').innerHTML = cols;
+  document.getElementById('heatmap-grid').innerHTML   = cols;
   document.getElementById('heatmap-months').innerHTML = monthLabels;
 }
 
 function renderStreaks() {
   const el = document.getElementById('streaks-list');
-  if (!state.habits.length) { el.innerHTML='<p style="font-size:13px;color:var(--text-3);text-align:center;padding:12px 0">Sin hábitos aún</p>'; return; }
-  const sorted = [...state.habits].sort((a,b)=>b.streak-a.streak);
-  el.innerHTML = sorted.map(h=>{
-    const catClass = CAT_COLORS[h.cat]||'pill-gray';
-    const freqLabel = h.freq==='personalizado'
-      ? (['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].filter((_,i)=>h.customDays&&h.customDays[i]).join('·') || 'personalizado')
+  if (!state.habits.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text-3);text-align:center;padding:12px 0">Sin hábitos aún</p>'; return; }
+  const sorted = [...state.habits].sort((a,b) => b.streak - a.streak);
+  el.innerHTML = sorted.map(h => {
+    const catClass  = CAT_COLORS[h.cat] || 'pill-gray';
+    const freqLabel = h.freq === 'personalizado'
+      ? (['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].filter((_,i) => h.customDays && h.customDays[i]).join('·') || 'personalizado')
       : h.freq;
-    return '<div class="streak-row">' +
-      '<div class="streak-info"><strong>'+h.name+'</strong>' +
-      '<div style="display:flex;align-items:center;gap:6px;margin-top:3px">' +
-      '<span class="pill '+catClass+'" style="font-size:10px;padding:2px 7px">'+h.cat+'</span>' +
-      '<span style="font-size:10px;color:var(--text-3)">'+freqLabel+'</span>' +
-      '</div></div>' +
-      '<div class="streak-count"><span class="num">'+h.streak+'</span><span style="font-size:16px">🔥</span></div>' +
-      '</div>';
+    return '<div class="streak-row" onclick="openEditHabit('+h.id+')">'+
+      '<div class="streak-info"><strong>'+h.name+'</strong>'+
+      '<div style="display:flex;align-items:center;gap:6px;margin-top:3px">'+
+      '<span class="pill '+catClass+'" style="font-size:10px;padding:2px 7px">'+h.cat+'</span>'+
+      '<span style="font-size:10px;color:var(--text-3)">'+freqLabel+'</span>'+
+      '</div></div>'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+      '<div class="streak-count"><span class="num">'+h.streak+'</span><span style="font-size:16px">🔥</span></div>'+
+      '<span style="font-size:16px;color:var(--text-3)">›</span>'+
+      '</div></div>';
   }).join('');
+}
+
+/* --- Add Habit --- */
+function openAddHabit() {
+  document.getElementById('habit-edit-id').value = '';
+  openModal('habit-modal');
 }
 
 function addHabit() {
@@ -1613,127 +1656,267 @@ function addHabit() {
     customDays = getCustomDaysFromUI();
     if (!customDays.some(Boolean)) { showToast('Selecciona al menos un día'); return; }
   }
-  const notifTime = document.getElementById('habit-time-input').value;
   state.habits.push({
     id: state.nextHabitId++,
     name,
     freq,
-    cat: document.getElementById('habit-cat-input').value,
-    notifTime,
+    cat:      document.getElementById('habit-cat-input').value,
+    notifTime:document.getElementById('habit-time-input').value,
     customDays,
-    streak: 0,
+    streak:   0,
     completions: {},
   });
-  // Reset form
-  document.getElementById('habit-name-input').value = '';
-  document.getElementById('habit-time-input').value = '';
-  document.getElementById('habit-freq-input').value = 'diario';
-  document.getElementById('custom-days-group').style.display = 'none';
-  document.querySelectorAll('.day-toggle-btn').forEach(b=>b.classList.add('selected'));
   closeModal('habit-modal');
   renderHabits();
   showToast('¡Hábito agregado!');
 }
 
+/* --- Edit Habit --- */
+function openEditHabit(id) {
+  const h = state.habits.find(x => x.id === id);
+  if (!h) return;
+  document.getElementById('habit-edit-id').value   = id;
+  document.getElementById('habit-modal-title').textContent = 'Editar hábito';
+  document.getElementById('habit-save-btn').textContent    = 'Guardar cambios';
+  document.getElementById('habit-save-btn').setAttribute('onclick', 'saveEditHabit()');
+  document.getElementById('habit-delete-row').style.display = 'flex';
+  document.getElementById('habit-delete-btn').setAttribute('onclick', 'deleteHabit('+id+')');
+  document.getElementById('habit-name-input').value = h.name;
+  document.getElementById('habit-freq-input').value = h.freq;
+  document.getElementById('habit-cat-input').value  = h.cat;
+  document.getElementById('habit-time-input').value = h.notifTime || '';
+  onFreqChange(h.freq);
+  if (h.freq === 'personalizado' && h.customDays) {
+    document.querySelectorAll('.day-toggle-btn').forEach(b => {
+      b.classList.toggle('selected', !!h.customDays[parseInt(b.dataset.day)]);
+    });
+  }
+  document.getElementById('habit-modal').classList.add('open');
+}
+
+function saveEditHabit() {
+  const id = parseInt(document.getElementById('habit-edit-id').value);
+  const h  = state.habits.find(x => x.id === id);
+  if (!h) return;
+  const name = document.getElementById('habit-name-input').value.trim();
+  if (!name) { showToast('Escribe el nombre del hábito'); return; }
+  const freq = document.getElementById('habit-freq-input').value;
+  let customDays = null;
+  if (freq === 'personalizado') {
+    customDays = getCustomDaysFromUI();
+    if (!customDays.some(Boolean)) { showToast('Selecciona al menos un día'); return; }
+  }
+  h.name      = name;
+  h.freq      = freq;
+  h.cat       = document.getElementById('habit-cat-input').value;
+  h.notifTime = document.getElementById('habit-time-input').value;
+  h.customDays = customDays;
+  // completions preserved as-is
+  closeModal('habit-modal');
+  renderHabits();
+  showToast('¡Hábito actualizado!');
+}
+
+function deleteHabit(id) {
+  if (!confirm('¿Eliminar este hábito? Se perderá todo el historial de rachas.')) return;
+  state.habits = state.habits.filter(h => h.id !== id);
+  closeModal('habit-modal');
+  renderHabits();
+  showToast('Hábito eliminado');
+}
+
+function onFreqChange(val) {
+  const group = document.getElementById('custom-days-group');
+  const btns  = document.querySelectorAll('.day-toggle-btn');
+  if (val === 'personalizado') {
+    group.style.display = 'block';
+    btns.forEach(b => b.classList.add('selected'));
+  } else if (val === 'diario') {
+    group.style.display = 'none';
+    btns.forEach(b => b.classList.add('selected'));
+  } else if (val === 'semanal') {
+    group.style.display = 'none';
+    btns.forEach(b => { b.classList.toggle('selected', b.dataset.day === '0'); });
+  } else {
+    group.style.display = 'none';
+  }
+}
+
+function toggleDay(btn) { btn.classList.toggle('selected'); }
+
+function getCustomDaysFromUI() {
+  return Array.from(document.querySelectorAll('.day-toggle-btn')).map(b => b.classList.contains('selected'));
+}
+
 /* ================================================================
    GOALS
 ================================================================ */
-const GOAL_CAT_COLORS = { Personal:'pill-gold',Salud:'pill-green',Profesional:'pill-blue',Finanzas:'pill-amber',Relaciones:'pill-amber',Aprendizaje:'pill-blue',Otro:'pill-gray' };
+const GOAL_CAT_COLORS = { Personal:'pill-gold', Salud:'pill-green', Profesional:'pill-blue', Finanzas:'pill-amber', Relaciones:'pill-amber', Aprendizaje:'pill-blue', Otro:'pill-gray' };
+const GOAL_CATS = ['Personal','Salud','Profesional','Finanzas','Relaciones','Aprendizaje','Otro'];
 
 function goalProgress(g) {
   if (!g.milestones.length) return 0;
-  return Math.round(g.milestones.filter(m=>m.done).length / g.milestones.length * 100);
+  return Math.round(g.milestones.filter(m => m.done).length / g.milestones.length * 100);
 }
 
 function renderGoals() {
   const body = document.getElementById('goals-body');
   if (!state.goals.length) {
-    body.innerHTML='<div style="text-align:center;padding:60px 24px;flex:1"><div style="font-size:48px;opacity:.2;margin-bottom:14px">◎</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin metas aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca "+ Nueva" para crear tu primera meta</p></div>';
+    body.innerHTML = '<div style="text-align:center;padding:60px 24px;flex:1"><div style="font-size:48px;opacity:.2;margin-bottom:14px">◎</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin objetivos aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca "+ Nueva" para crear tu primer objetivo</p></div>';
     return;
   }
-  body.innerHTML = state.goals.map(g=>{
+  body.innerHTML = state.goals.map(g => {
     const pct = goalProgress(g);
-    const catClass = GOAL_CAT_COLORS[g.cat]||'pill-gray';
-    const msDots = g.milestones.slice(0,6).map(m=>'<div class="ms-dot'+(m.done?' done':'')+'"></div>').join('');
-    return '<div class="goal-card" onclick="openGoalDetail('+g.id+')">' +
-      '<div class="goal-card-header"><div class="goal-card-title">'+g.title+'</div><span class="pill '+catClass+'">'+g.cat+'</span></div>' +
-      '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>' +
-      '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% completado · '+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+' hitos</span><div class="milestones-mini">'+msDots+'</div></div>' +
+    const catClass = GOAL_CAT_COLORS[g.cat] || 'pill-gray';
+    const msDots = g.milestones.slice(0,6).map(m => '<div class="ms-dot'+(m.done?' done':'')+'"></div>').join('');
+    return '<div class="goal-card" onclick="openGoalDetail('+g.id+')">'+
+      '<div class="goal-card-header"><div class="goal-card-title">'+g.title+'</div><span class="pill '+catClass+'">'+g.cat+'</span></div>'+
+      '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% completado · '+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+' hitos</span><div class="milestones-mini">'+msDots+'</div></div>'+
       '</div>';
   }).join('');
 }
 
 function openGoalDetail(id) {
-  const g = state.goals.find(x=>x.id===id);
+  const g = state.goals.find(x => x.id === id);
   if (!g) return;
   const pct = goalProgress(g);
-  const catClass = GOAL_CAT_COLORS[g.cat]||'pill-gray';
+  const catClass = GOAL_CAT_COLORS[g.cat] || 'pill-gray';
+
+  const catOptions = GOAL_CATS.map(c =>
+    '<option value="'+c+'"'+(c===g.cat?' selected':'')+'>'+c+'</option>'
+  ).join('');
+
   document.getElementById('goal-detail-content').innerHTML =
-    '<div class="modal-handle"></div>' +
-    '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px">' +
-      '<div class="modal-title" style="margin:0;flex:1">'+g.title+'</div>' +
-      '<span class="pill '+catClass+'">'+g.cat+'</span>' +
-    '</div>' +
-    (g.desc?'<p style="font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:14px">'+g.desc+'</p>':'') +
-    '<div style="margin-bottom:14px">' +
-      '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-3);font-weight:500">Progreso general</span><span style="font-size:12px;font-weight:600">'+pct+'%</span></div>' +
-      '<div class="goal-progress-bar" style="height:7px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>' +
-    '</div>' +
-    '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Hitos ('+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+')</div>' +
-    '<div class="milestone-list">' +
-      g.milestones.map((m,i)=>
-        '<div class="milestone-item'+(m.done?' done-ms':'')+'" onclick="toggleMilestone('+id+','+i+')">' +
-          '<div class="ms-check"></div>' +
-          '<span class="ms-label">'+m.text+'</span>' +
-        '</div>'
-      ).join('') +
-    '</div>' +
-    '<div style="display:flex;gap:8px;margin-top:12px">' +
-      '<input class="form-input" id="ms-add-input-'+id+'" type="text" placeholder="Agregar nuevo hito..." style="flex:1">' +
-      '<button class="btn-outline" onclick="addMilestone('+id+')">+ Agregar</button>' +
-    '</div>' +
-    '<div style="margin-top:20px;display:flex;gap:10px">' +
-      '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteGoal('+id+')">Eliminar</button>' +
-      '<button class="btn-gold" style="flex:2" onclick="closeModal(\'goal-detail-modal\')">Cerrar</button>' +
+    '<div class="modal-handle"></div>'+
+
+    /* Editable fields */
+    '<div style="margin-bottom:16px">'+
+    '<div style="font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Editar objetivo</div>'+
+    '<div class="form-group" style="margin-bottom:8px">'+
+    '<input class="form-input" id="goal-edit-title-'+id+'" type="text" value="'+escHtml(g.title)+'" placeholder="Título del objetivo">'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'+
+    '<select class="form-select" id="goal-edit-cat-'+id+'">'+catOptions+'</select>'+
+    '</div>'+
+    '<textarea class="form-textarea" id="goal-edit-desc-'+id+'" placeholder="Descripción (opcional)" style="height:60px">'+escHtml(g.desc)+'</textarea>'+
+    '<button class="btn-outline" style="width:100%;margin-top:8px" onclick="saveGoalEdits('+id+')">Guardar cambios</button>'+
+    '</div>'+
+
+    /* Progress bar */
+    '<div style="margin-bottom:14px">'+
+    '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-3);font-weight:500">Progreso general</span><span style="font-size:12px;font-weight:600">'+pct+'%</span></div>'+
+    '<div class="goal-progress-bar" style="height:7px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
+    '</div>'+
+
+    /* Milestones */
+    '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Hitos ('+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+')</div>'+
+    '<div class="milestone-list">'+
+    g.milestones.map((m,i) =>
+      '<div class="milestone-item'+(m.done?' done-ms':'')+'" onclick="toggleMilestone('+id+','+i+')">'+
+      '<div class="ms-check"></div>'+
+      '<span class="ms-label">'+escHtml(m.text)+'</span>'+
+      '<span style="font-size:16px;color:var(--text-3);cursor:pointer;padding:0 4px" onclick="event.stopPropagation();removeMilestone('+id+','+i+')">×</span>'+
+      '</div>'
+    ).join('')+
+    '</div>'+
+
+    /* Add milestone */
+    '<div style="display:flex;gap:8px;margin-top:12px">'+
+    '<input class="form-input" id="ms-add-input-'+id+'" type="text" placeholder="Agregar nuevo hito..." style="flex:1">'+
+    '<button class="btn-outline" onclick="addMilestone('+id+')">+ Agregar</button>'+
+    '</div>'+
+
+    /* Clear completions + delete */
+    '<div style="margin-top:16px;padding-top:16px;border-top:0.5px solid var(--border);display:flex;gap:8px">'+
+    '<button class="btn-outline" style="flex:1;color:var(--amber);border-color:rgba(212,168,71,.4);font-size:12px" onclick="clearGoalCompletions('+id+')">Reiniciar hitos</button>'+
+    '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3);font-size:12px" onclick="deleteGoal('+id+')">Eliminar objetivo</button>'+
+    '</div>'+
+    '<div style="margin-top:10px">'+
+    '<button class="btn-gold" onclick="closeModal(\'goal-detail-modal\')">Cerrar</button>'+
     '</div>';
+
   openModal('goal-detail-modal');
 }
 
+function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function saveGoalEdits(id) {
+  const g = state.goals.find(x => x.id === id);
+  if (!g) return;
+  const newTitle = document.getElementById('goal-edit-title-'+id).value.trim();
+  if (!newTitle) { showToast('El título no puede estar vacío'); return; }
+  g.title = newTitle;
+  g.cat   = document.getElementById('goal-edit-cat-'+id).value;
+  g.desc  = document.getElementById('goal-edit-desc-'+id).value.trim();
+  renderGoals();
+  showToast('¡Objetivo actualizado!');
+  // Refresh detail modal
+  openGoalDetail(id);
+}
+
 function toggleMilestone(goalId, msIdx) {
-  const g = state.goals.find(x=>x.id===goalId);
+  const g = state.goals.find(x => x.id === goalId);
   if (!g) return;
   g.milestones[msIdx].done = !g.milestones[msIdx].done;
   openGoalDetail(goalId);
   renderGoals();
 }
 
+function removeMilestone(goalId, msIdx) {
+  const g = state.goals.find(x => x.id === goalId);
+  if (!g) return;
+  if (!confirm('¿Eliminar este hito?')) return;
+  g.milestones.splice(msIdx, 1);
+  openGoalDetail(goalId);
+  renderGoals();
+}
+
 function addMilestone(goalId) {
-  const g = state.goals.find(x=>x.id===goalId);
+  const g   = state.goals.find(x => x.id === goalId);
   const inp = document.getElementById('ms-add-input-'+goalId);
-  if (!inp||!inp.value.trim()) { showToast('Escribe el nombre del hito'); return; }
-  g.milestones.push({text:inp.value.trim(),done:false});
+  if (!inp || !inp.value.trim()) { showToast('Escribe el nombre del hito'); return; }
+  g.milestones.push({ text:inp.value.trim(), done:false });
   openGoalDetail(goalId);
   renderGoals();
   showToast('¡Hito agregado!');
 }
 
+function clearGoalCompletions(id) {
+  if (!confirm('¿Reiniciar todos los hitos de este objetivo? Esta acción no se puede deshacer.')) return;
+  const g = state.goals.find(x => x.id === id);
+  if (!g) return;
+  g.milestones.forEach(m => m.done = false);
+  openGoalDetail(id);
+  renderGoals();
+  showToast('Hitos reiniciados');
+}
+
 function deleteGoal(id) {
-  if (!confirm('¿Eliminar esta meta?')) return;
-  state.goals = state.goals.filter(g=>g.id!==id);
+  if (!confirm('¿Eliminar este objetivo y todos sus hitos? Esta acción no se puede deshacer.')) return;
+  state.goals = state.goals.filter(g => g.id !== id);
   closeModal('goal-detail-modal');
   renderGoals();
-  showToast('Meta eliminada');
+  showToast('Objetivo eliminado');
 }
 
 function addGoal() {
   const title = document.getElementById('goal-title-input').value.trim();
-  if (!title) { showToast('Escribe el título de la meta'); return; }
+  if (!title) { showToast('Escribe el título del objetivo'); return; }
   const ms = document.getElementById('goal-milestone-input').value.trim();
-  state.goals.push({ id:state.nextGoalId++, title, cat:document.getElementById('goal-cat-input').value, desc:document.getElementById('goal-desc-input').value.trim(), milestones:ms?[{text:ms,done:false}]:[] });
-  ['goal-title-input','goal-desc-input','goal-milestone-input'].forEach(id=>document.getElementById(id).value='');
+  state.goals.push({
+    id:         state.nextGoalId++,
+    title,
+    cat:        document.getElementById('goal-cat-input').value,
+    desc:       document.getElementById('goal-desc-input').value.trim(),
+    milestones: ms ? [{text:ms,done:false}] : [],
+  });
+  ['goal-title-input','goal-desc-input','goal-milestone-input'].forEach(id => document.getElementById(id).value = '');
   closeModal('goal-modal');
   renderGoals();
-  showToast('¡Meta creada!');
+  showToast('¡Objetivo creado!');
 }
 
 /* ================================================================
@@ -1745,11 +1928,23 @@ const tmrwStr = fmt(tmrw);
 
 function setCalView(v) {
   state.calView = v;
-  document.getElementById('tab-month').classList.toggle('active',v==='month');
-  document.getElementById('tab-upcoming').classList.toggle('active',v==='upcoming');
-  document.getElementById('cal-month-view').style.display    = v==='month'?'flex':'none';
-  document.getElementById('cal-upcoming-view').style.display = v==='upcoming'?'block':'none';
-  if (v==='upcoming') renderUpcoming();
+  document.getElementById('tab-month').classList.toggle('active',    v==='month');
+  document.getElementById('tab-upcoming').classList.toggle('active', v==='upcoming');
+  const mv = document.getElementById('cal-month-view');
+  const uv = document.getElementById('cal-upcoming-view');
+  const mf = document.getElementById('cal-month-fab');
+  if (v === 'month') {
+    mv.style.display = 'flex'; mv.style.flexDirection = 'column';
+    uv.style.display = 'none';
+    mf.style.display = 'flex';
+    renderMonthGrid();
+  } else {
+    mv.style.display = 'none';
+    uv.style.display = 'flex'; uv.style.flexDirection = 'column';
+    mf.style.display = 'none';
+    renderUpcoming();
+    renderUpcomingBottomBar();
+  }
 }
 
 function shiftMonth(dir) {
@@ -1758,191 +1953,318 @@ function shiftMonth(dir) {
 }
 
 function renderCalendar() {
-  document.getElementById('cal-month-view').style.display='flex';
-  document.getElementById('cal-month-view').style.flexDirection='column';
-  document.getElementById('cal-upcoming-view').style.display='none';
-  document.getElementById('tab-month').classList.add('active');
-  document.getElementById('tab-upcoming').classList.remove('active');
-  state.calView='month';
-  renderMonthGrid();
+  setCalView('month');
 }
 
 function renderMonthGrid() {
-  const y=state.calDate.getFullYear(), m=state.calDate.getMonth();
+  const y = state.calDate.getFullYear(), m = state.calDate.getMonth();
   document.getElementById('cal-month-title').textContent = MONTHS_ES[m]+' '+y;
-  const firstDay = new Date(y,m,1).getDay();
+  const firstDay   = new Date(y,m,1).getDay();
   const daysInMonth = new Date(y,m+1,0).getDate();
-  const eventDates = new Set(state.events.map(e=>e.date));
-  let html='';
-  for(let i=0;i<firstDay;i++){
-    const pd=new Date(y,m,-firstDay+i+1);
-    html+='<div class="month-day other-month">'+pd.getDate()+'</div>';
+  const eventDates = new Set(state.events.map(e => e.date));
+  let html = '';
+  for (let i = 0; i < firstDay; i++) {
+    const pd = new Date(y,m,-firstDay+i+1);
+    html += '<div class="month-day other-month">'+pd.getDate()+'</div>';
   }
-  for(let d=1;d<=daysInMonth;d++){
-    const ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const isToday=ds===todayStr;
-    const hasEv=eventDates.has(ds);
-    const isSel=state.selectedDay===ds&&!isToday;
-    let cls='month-day';
-    if(isToday) cls+=' today';
-    else if(isSel) cls+=' selected';
-    if(hasEv) cls+=' has-event';
-    html+='<div class="'+cls+'" onclick="selectDay(\''+ds+'\')">'+d+'</div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const isToday = ds === todayStr;
+    const hasEv   = eventDates.has(ds);
+    const isSel   = state.selectedDay === ds && !isToday;
+    let cls = 'month-day';
+    if (isToday)   cls += ' today';
+    else if (isSel) cls += ' selected';
+    if (hasEv) cls += ' has-event';
+    html += '<div class="'+cls+'" onclick="selectDay(\''+ds+'\')">'+d+'</div>';
   }
-  document.getElementById('month-days-grid').innerHTML=html;
-  showDayEvents(state.selectedDay||todayStr);
+  document.getElementById('month-days-grid').innerHTML = html;
+  showDayEvents(state.selectedDay || todayStr);
 }
 
-function selectDay(ds) { state.selectedDay=ds; renderMonthGrid(); }
+function selectDay(ds) { state.selectedDay = ds; renderMonthGrid(); }
 
 function showDayEvents(ds) {
-  const evs=state.events.filter(e=>e.date===ds).sort((a,b)=>a.start.localeCompare(b.start));
-  const d=new Date(ds+'T12:00:00');
+  const evs   = state.events.filter(e => e.date === ds).sort((a,b) => a.start.localeCompare(b.start));
+  const d     = new Date(ds+'T12:00:00');
+  const apple  = state.settings.appleCalEnabled;
+  const google = state.settings.googleCalEnabled;
+
   document.getElementById('day-events-title').textContent =
     d.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'});
-  if(!evs.length){
-    document.getElementById('day-events-list').innerHTML='<p class="no-events-msg">Sin eventos este día</p>';
+
+  /* Day-level "add all" buttons */
+  const headerBtns = document.getElementById('day-header-cal-btns');
+  if (headerBtns) {
+    let h = '';
+    if (apple)  h += '<button class="btn-outline" style="padding:5px 10px;font-size:11px" onclick="exportAllToICS()">🍎 Todos</button>';
+    if (google) h += '<button class="btn-outline" style="padding:5px 10px;font-size:11px" onclick="addAllToGoogle()">G Todos</button>';
+    headerBtns.innerHTML = h;
+  }
+
+  if (!evs.length) {
+    document.getElementById('day-events-list').innerHTML = '<p class="no-events-msg">Sin eventos este día</p>';
     return;
   }
-  document.getElementById('day-events-list').innerHTML = evs.map(e=>
-    '<div class="day-event-row"><div class="day-event-dot" style="background:'+e.color+'"></div>' +
-    '<div style="flex:1"><div style="font-size:13px;font-weight:500">'+e.title+'</div>' +
-    (e.start?'<div style="font-size:11px;color:var(--text-3)">'+e.start+(e.end?' – '+e.end:'')+'</div>':'')+
-    '</div>' +
-    '<button class="btn-outline" style="padding:4px 8px;font-size:11px;flex-shrink:0" onclick="openInGoogleCalendar(state.events.find(x=>x.id==='+e.id+'))">G+</button>' +
-    '</div>'
-  ).join('');
+
+  document.getElementById('day-events-list').innerHTML = evs.map(e => {
+    let calBtns = '';
+    if (apple)  calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;flex-shrink:0" onclick="exportToICS([state.events.find(x=>x.id==='+e.id+')])">🍎</button>';
+    if (google) calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;flex-shrink:0" onclick="openInGoogleCalendar(state.events.find(x=>x.id==='+e.id+'))">G</button>';
+    calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px;flex-shrink:0" onclick="openEditEvent('+e.id+')">✏️</button>';
+    return '<div class="day-event-row">'+
+      '<div class="day-event-dot" style="background:'+e.color+'"></div>'+
+      '<div style="flex:1">'+
+      '<div style="font-size:13px;font-weight:500">'+e.title+'</div>'+
+      (e.start?'<div style="font-size:11px;color:var(--text-3)">'+e.start+(e.end?' – '+e.end:'')+'</div>':'')+
+      '</div>'+
+      '<div style="display:flex;gap:4px;align-items:center">'+calBtns+'</div>'+
+      '</div>';
+  }).join('');
 }
 
 function renderUpcoming() {
-  const sorted=[...state.events].sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));
-  const future=sorted.filter(e=>e.date>=todayStr);
-  const past=sorted.filter(e=>e.date<todayStr).slice(-5).reverse();
-  const groups={};
-  future.forEach(e=>{ if(!groups[e.date]) groups[e.date]=[]; groups[e.date].push(e); });
-  const pastKey='__past__';
-  if(past.length){ groups[pastKey]=past; }
-  const container=document.getElementById('upcoming-list');
-  if(!future.length&&!past.length){ container.innerHTML='<p style="text-align:center;color:var(--text-3);font-size:14px;padding:40px 0">Sin eventos. Importa desde Escanear o agrega uno manualmente.</p>'; return; }
-  let html='';
-  const allKeys=Object.keys(groups).sort();
-  allKeys.forEach(key=>{
-    const evs=groups[key];
-    const isPast=key===pastKey;
-    let label='';
-    if(isPast) label='Recientes';
-    else if(key===todayStr) label='Hoy';
-    else if(key===tmrwStr) label='Mañana';
+  const apple  = state.settings.appleCalEnabled;
+  const google = state.settings.googleCalEnabled;
+  const sorted = [...state.events].sort((a,b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+  const future = sorted.filter(e => e.date >= todayStr);
+  const past   = sorted.filter(e => e.date <  todayStr).slice(-5).reverse();
+  const groups = {};
+  future.forEach(e => { if (!groups[e.date]) groups[e.date]=[]; groups[e.date].push(e); });
+  const pastKey = '__past__';
+  if (past.length) groups[pastKey] = past;
+  const container = document.getElementById('upcoming-list');
+  if (!future.length && !past.length) {
+    container.innerHTML = '<p style="text-align:center;color:var(--text-3);font-size:14px;padding:40px 0">Sin eventos. Importa desde Escanear o agrega uno manualmente.</p>';
+    return;
+  }
+  let html = '';
+  const allKeys = Object.keys(groups).sort();
+  allKeys.forEach(key => {
+    const evs    = groups[key];
+    const isPast = key === pastKey;
+    let label = '';
+    if (isPast)           label = 'Recientes';
+    else if (key===todayStr) label = 'Hoy';
+    else if (key===tmrwStr)  label = 'Mañana';
     else {
-      const d=new Date(key+'T12:00:00');
-      label=d.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
+      const d = new Date(key+'T12:00:00');
+      label = d.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
     }
-    html+='<div class="event-group"><div class="event-group-label">'+label+'</div>';
-    evs.forEach((e,i)=>{
-      html+='<div class="event-item"><div class="event-dot-col"><div class="event-color-dot" style="background:'+e.color+'"></div>'+(i<evs.length-1?'<div class="event-line"></div>':'')+'</div>' +
-        '<div class="event-info"><div class="event-title">'+e.title+'</div>'+(e.start?'<div class="event-time">'+e.start+(e.end?' – '+e.end:'')+'</div>':'')+(e.notes?'<div class="event-notes">'+e.notes+'</div>':'')+'</div></div>';
+    html += '<div class="event-group"><div class="event-group-label">'+label+'</div>';
+    evs.forEach((e,i) => {
+      let calBtns = '';
+      if (apple)  calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px" onclick="exportToICS([state.events.find(x=>x.id==='+e.id+')])">🍎</button>';
+      if (google) calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px" onclick="openInGoogleCalendar(state.events.find(x=>x.id==='+e.id+'))">G</button>';
+      calBtns += '<button class="btn-outline" style="padding:3px 7px;font-size:10px" onclick="openEditEvent('+e.id+')">✏️</button>';
+      html += '<div class="event-item">'+
+        '<div class="event-dot-col">'+
+        '<div class="event-color-dot" style="background:'+e.color+'"></div>'+
+        (i < evs.length-1 ? '<div class="event-line"></div>' : '')+
+        '</div>'+
+        '<div class="event-info">'+
+        '<div class="event-title">'+e.title+'</div>'+
+        (e.start?'<div class="event-time">'+e.start+(e.end?' – '+e.end:'')+'</div>':'')+
+        (e.notes?'<div class="event-notes">'+e.notes+'</div>':'')+
+        '</div>'+
+        '<div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0">'+calBtns+'</div>'+
+        '</div>';
     });
-    html+='</div>';
+    html += '</div>';
   });
-  container.innerHTML=html;
+  container.innerHTML = html;
+}
+
+function renderUpcomingBottomBar() {
+  const el = document.getElementById('upcoming-all-btns');
+  if (!el) return;
+  const apple  = state.settings.appleCalEnabled;
+  const google = state.settings.googleCalEnabled;
+  let h = '';
+  if (apple)  h += '<button class="btn-outline" style="flex:1;font-size:12px" onclick="exportAllToICS()">🍎 Agregar todos</button>';
+  if (google) h += '<button class="btn-outline" style="flex:1;font-size:12px" onclick="addAllToGoogle()">G Agregar todos</button>';
+  el.innerHTML = h;
 }
 
 function selectEventColor(el) {
-  document.querySelectorAll('.ecswatch').forEach(s=>s.style.borderColor='transparent');
-  el.style.borderColor='#1A1E2A';
-  state.selectedEventColor=el.dataset.color;
+  document.querySelectorAll('.ecswatch').forEach(s => s.style.borderColor = 'transparent');
+  el.style.borderColor = '#1A1E2A';
+  state.selectedEventColor = el.dataset.color;
+}
+
+/* --- Add Event --- */
+function openAddEvent() {
+  document.getElementById('event-edit-id').value = '';
+  openModal('event-modal');
 }
 
 function addEvent() {
-  const title=document.getElementById('event-title-input').value.trim();
-  const date=document.getElementById('event-date-input').value;
-  if(!title){ showToast('Escribe el título del evento'); return; }
-  if(!date)  { showToast('Selecciona una fecha'); return; }
-  state.events.push({ id:state.nextEventId++, title, date, start:document.getElementById('event-start-input').value, end:document.getElementById('event-end-input').value, notes:document.getElementById('event-notes-input').value.trim(), color:state.selectedEventColor });
-  ['event-title-input','event-date-input','event-start-input','event-end-input','event-notes-input'].forEach(id=>document.getElementById(id).value='');
+  const title = document.getElementById('event-title-input').value.trim();
+  const date  = document.getElementById('event-date-input').value;
+  if (!title) { showToast('Escribe el título del evento'); return; }
+  if (!date)  { showToast('Selecciona una fecha'); return; }
+  state.events.push({
+    id:       state.nextEventId++,
+    title,
+    date,
+    start:    document.getElementById('event-start-input').value,
+    end:      document.getElementById('event-end-input').value,
+    notes:    document.getElementById('event-notes-input').value.trim(),
+    color:    state.selectedEventColor,
+    sequence: 0,
+  });
+  ['event-title-input','event-date-input','event-start-input','event-end-input','event-notes-input'].forEach(id => document.getElementById(id).value = '');
   closeModal('event-modal');
-  if(state.currentScreen==='calendar') renderCalendar();
+  if (state.currentScreen === 'calendar') renderCalendar();
   showToast('¡Evento guardado!');
 }
 
+/* --- Edit Event --- */
+function openEditEvent(id) {
+  const e = state.events.find(x => x.id === id);
+  if (!e) return;
+  document.getElementById('event-edit-id').value = id;
+  document.getElementById('event-modal-title').textContent = 'Editar evento';
+  document.getElementById('event-save-btn').textContent    = 'Guardar cambios';
+  document.getElementById('event-save-btn').setAttribute('onclick', 'saveEditEvent()');
+  document.getElementById('event-delete-row').style.display = 'flex';
+  document.getElementById('event-delete-btn').setAttribute('onclick', 'deleteEvent('+id+');closeModal(\'event-modal\')');
+  document.getElementById('event-title-input').value = e.title;
+  document.getElementById('event-date-input').value  = e.date;
+  document.getElementById('event-start-input').value = e.start || '';
+  document.getElementById('event-end-input').value   = e.end   || '';
+  document.getElementById('event-notes-input').value = e.notes || '';
+  state.selectedEventColor = e.color || '#C4B88E';
+  document.querySelectorAll('.ecswatch').forEach(s => {
+    s.style.borderColor = s.dataset.color === e.color ? '#1A1E2A' : 'transparent';
+  });
+  document.getElementById('event-modal').classList.add('open');
+}
+
+function saveEditEvent() {
+  const id = parseInt(document.getElementById('event-edit-id').value);
+  const e  = state.events.find(x => x.id === id);
+  if (!e) return;
+  const title = document.getElementById('event-title-input').value.trim();
+  const date  = document.getElementById('event-date-input').value;
+  if (!title) { showToast('Escribe el título del evento'); return; }
+  if (!date)  { showToast('Selecciona una fecha'); return; }
+  e.title    = title;
+  e.date     = date;
+  e.start    = document.getElementById('event-start-input').value;
+  e.end      = document.getElementById('event-end-input').value;
+  e.notes    = document.getElementById('event-notes-input').value.trim();
+  e.color    = state.selectedEventColor;
+  e.sequence = (e.sequence || 0) + 1;
+  closeModal('event-modal');
+  if (state.currentScreen === 'calendar') {
+    if (state.calView === 'upcoming') { renderUpcoming(); renderUpcomingBottomBar(); }
+    else renderCalendar();
+  }
+  showToast('¡Evento actualizado!');
+}
+
+function deleteEvent(id) {
+  if (!confirm('¿Eliminar este evento?')) return;
+  state.events = state.events.filter(e => e.id !== id);
+  if (state.currentScreen === 'calendar') {
+    if (state.calView === 'upcoming') { renderUpcoming(); renderUpcomingBottomBar(); }
+    else renderCalendar();
+  }
+  showToast('Evento eliminado');
+}
+
 /* ================================================================
-   CALENDAR EXPORT
+   CALENDAR EXPORT — stable UIDs + SEQUENCE for dedup/update
 ================================================================ */
 function toICSDate(dateStr, timeStr) {
   const d = dateStr.replace(/-/g,'');
   if (!timeStr) return d;
-  const t = timeStr.replace(':','')+'00';
-  return d+'T'+t;
+  return d+'T'+timeStr.replace(':','')+'00';
 }
 
+function stableUID(eventId) { return 'vivela365-event-'+eventId+'@vivela365.app'; }
+
 function exportToICS(events) {
-  if (!events.length) { showToast('Sin eventos para exportar'); return; }
+  if (!events || !events.length) { showToast('Sin eventos para exportar'); return; }
   let ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Vívela365//ES','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
   events.forEach(e => {
-    const uid = e.id + '-' + Date.now() + '@vivela365';
     const dtstart = toICSDate(e.date, e.start);
     const dtend   = toICSDate(e.date, e.end || e.start);
-    ics.push('BEGIN:VEVENT','UID:'+uid,'SUMMARY:'+e.title,'DTSTART:'+dtstart,'DTEND:'+dtend,e.notes?'DESCRIPTION:'+e.notes:'','END:VEVENT');
+    ics.push(
+      'BEGIN:VEVENT',
+      'UID:'+stableUID(e.id),
+      'SEQUENCE:'+(e.sequence||0),
+      'SUMMARY:'+e.title,
+      'DTSTART:'+dtstart,
+      'DTEND:'+dtend,
+      e.notes ? 'DESCRIPTION:'+e.notes : '',
+      'END:VEVENT'
+    );
   });
   ics.push('END:VCALENDAR');
   const blob = new Blob([ics.filter(Boolean).join('\r\n')], { type:'text/calendar;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = 'vivela365-eventos.ics';
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(url);
+  const a    = document.createElement('a'); a.href=url; a.download='vivela365-eventos.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
   showToast('Archivo .ics descargado ✓');
 }
 
 function openInGoogleCalendar(e) {
-  const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+  if (!e) return;
+  const base  = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
   const dates = e.start
-    ? '&dates=' + toICSDate(e.date, e.start) + '/' + toICSDate(e.date, e.end || e.start)
-    : '&dates=' + e.date.replace(/-/g,'') + '/' + e.date.replace(/-/g,'');
-  const url = base + '&text=' + encodeURIComponent(e.title) + dates + (e.notes ? '&details=' + encodeURIComponent(e.notes) : '');
-  window.open(url, '_blank');
+    ? '&dates='+toICSDate(e.date,e.start)+'/'+toICSDate(e.date,e.end||e.start)
+    : '&dates='+e.date.replace(/-/g,'')+'/'+e.date.replace(/-/g,'');
+  window.open(base+'&text='+encodeURIComponent(e.title)+dates+(e.notes?'&details='+encodeURIComponent(e.notes):''), '_blank');
 }
 
-function exportAllToICS() { exportToICS(state.events); }
-function exportDayToICS(dateStr) { exportToICS(state.events.filter(e => e.date === dateStr)); }
+function exportAllToICS()        { exportToICS(state.events); }
+function exportDayToICS(ds)      { exportToICS(state.events.filter(e => e.date===ds)); }
+function addAllToGoogle()        { state.events.forEach(e => openInGoogleCalendar(e)); }
+function addDayToGoogle(ds)      { state.events.filter(e => e.date===ds).forEach(e => openInGoogleCalendar(e)); }
 
 /* ================================================================
-   SETTINGS — PROFILE
+   SETTINGS
 ================================================================ */
 function renderSettings() {
   const s = state.settings;
-  const namePreview = document.getElementById('profile-name-preview');
-  if (s.profile.name) namePreview.textContent = s.profile.name;
-  else namePreview.textContent = 'Nombre, foto y datos personales';
-
-  const geminiStatus = document.getElementById('gemini-api-status');
-  geminiStatus.textContent = s.geminiKey ? '✓ API key configurada' : 'Sin configurar · Para escaneo directo';
+  document.getElementById('profile-name-preview').textContent = s.profile.name || 'Nombre, foto y datos personales';
+  document.getElementById('gemini-api-status').textContent    = s.geminiKey ? '✓ API key configurada' : 'Sin configurar · Para escaneo directo';
 
   const gcalBadge = document.getElementById('gcal-status-badge');
   const gcalText  = document.getElementById('gcal-status-text');
   if (s.gcalConnected) {
-    gcalBadge.className = 'status-badge connected';
-    gcalBadge.textContent = 'Conectado';
+    gcalBadge.className = 'status-badge connected'; gcalBadge.textContent = 'Conectado';
     gcalText.textContent = s.gcalEmail;
   } else {
-    gcalBadge.className = 'status-badge disconnected';
-    gcalBadge.textContent = 'Desconectado';
+    gcalBadge.className = 'status-badge disconnected'; gcalBadge.textContent = 'Desconectado';
     gcalText.textContent = 'Sin conectar';
   }
 
   document.getElementById('reminder-time-preview').textContent = formatTime12(s.reminderTime);
-  document.getElementById('week-start-preview').textContent = s.weekStart;
+  document.getElementById('week-start-preview').textContent    = s.weekStart;
+  document.getElementById('apple-cal-toggle').checked  = s.appleCalEnabled;
+  document.getElementById('google-cal-toggle').checked = s.googleCalEnabled;
+  renderUpcomingBottomBar();
 }
 
-function triggerAvatarUpload() {
-  document.getElementById('avatar-file-input').click();
+function toggleCalProvider(provider, on) {
+  if (provider === 'apple')  state.settings.appleCalEnabled  = on;
+  if (provider === 'google') state.settings.googleCalEnabled = on;
+  renderUpcomingBottomBar();
+  // Refresh day events buttons if calendar is open
+  if (state.currentScreen === 'calendar' && state.calView === 'month') showDayEvents(state.selectedDay || todayStr);
+  if (state.currentScreen === 'calendar' && state.calView === 'upcoming') renderUpcoming();
+  showToast((provider==='apple'?'Apple Calendar':'Google Calendar')+(on?' activado':' desactivado'));
 }
+
+function triggerAvatarUpload() { document.getElementById('avatar-file-input').click(); }
 
 function handleAvatarUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = e => {
     state.settings.profile.avatarDataUrl = e.target.result;
     const circle = document.getElementById('profile-avatar-initials').parentElement;
     document.getElementById('profile-avatar-initials').style.display = 'none';
@@ -1959,81 +2281,56 @@ function saveProfile() {
   const name    = document.getElementById('profile-name-input').value.trim();
   const tagline = document.getElementById('profile-tagline-input').value.trim();
   const email   = document.getElementById('profile-email-input').value.trim();
-
-  state.settings.profile.name    = name;
-  state.settings.profile.tagline = tagline;
-  state.settings.profile.email   = email;
-
+  state.settings.profile = { ...state.settings.profile, name, tagline, email };
   if (name) {
     document.getElementById('profile-display-name').textContent = name;
     const parts = name.split(' ').filter(Boolean);
-    const initials = parts.length >= 2
-      ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase()
-      : name.slice(0,2).toUpperCase();
+    const initials = parts.length >= 2 ? (parts[0][0]+parts[parts.length-1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
     document.getElementById('profile-avatar-initials').textContent = initials;
   }
   if (tagline) document.getElementById('profile-display-tagline').textContent = tagline;
-
   closeModal('profile-modal');
   renderSettings();
   showToast('¡Perfil guardado!');
 }
 
-/* ================================================================
-   SETTINGS — GOOGLE CALENDAR
-================================================================ */
 function connectGCal() {
   const email = document.getElementById('gcal-email-input').value.trim();
   if (!email) { showToast('Ingresa tu correo de Google'); return; }
-  state.settings.gcalConnected = true;
-  state.settings.gcalEmail     = email;
-  document.getElementById('gcal-connected-section').style.display = 'block';
+  state.settings.gcalConnected = true; state.settings.gcalEmail = email;
+  document.getElementById('gcal-connected-section').style.display    = 'block';
   document.getElementById('gcal-disconnected-section').style.display = 'none';
   document.getElementById('gcal-connected-email').textContent = email;
-  renderSettings();
-  showToast('Google Calendar conectado ✓');
+  renderSettings(); showToast('Google Calendar conectado ✓');
 }
 
 function disconnectGCal() {
-  state.settings.gcalConnected = false;
-  state.settings.gcalEmail = '';
-  document.getElementById('gcal-connected-section').style.display = 'none';
+  state.settings.gcalConnected = false; state.settings.gcalEmail = '';
+  document.getElementById('gcal-connected-section').style.display    = 'none';
   document.getElementById('gcal-disconnected-section').style.display = 'block';
   document.getElementById('gcal-email-input').value = '';
-  renderSettings();
-  showToast('Google Calendar desconectado');
+  renderSettings(); showToast('Google Calendar desconectado');
 }
 
-/* ================================================================
-   SETTINGS — GEMINI API KEY
-================================================================ */
 function saveGeminiKey() {
   const key = document.getElementById('gemini-key-input').value.trim();
   if (!key) { showToast('Ingresa tu API key de Gemini'); return; }
-  if (!key.startsWith('AIza') && key.length < 10) {
-    showToast('La clave no parece válida'); return;
-  }
   state.settings.geminiKey = key;
-
   const statusEl = document.getElementById('gemini-key-status');
   statusEl.style.display = 'block';
   statusEl.innerHTML = '<div style="background:var(--green-light);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:#3d7a60;display:flex;align-items:center;gap:8px"><span>✓</span><span>API key guardada correctamente</span></div>';
-
   document.getElementById('gemini-key-saved-actions').style.display = 'block';
   document.getElementById('gemini-key-input').value = '••••••••••••••••';
-  document.getElementById('gemini-key-input').type = 'password';
-
-  renderSettings();
-  showToast('¡API key de Gemini guardada!');
+  document.getElementById('gemini-key-input').type  = 'password';
+  renderSettings(); showToast('¡API key de Gemini guardada!');
 }
 
 function removeGeminiKey() {
   state.settings.geminiKey = '';
   document.getElementById('gemini-key-input').value = '';
-  document.getElementById('gemini-key-status').style.display = 'none';
-  document.getElementById('gemini-key-saved-actions').style.display = 'none';
-  renderSettings();
-  showToast('API key eliminada');
+  document.getElementById('gemini-key-status').style.display         = 'none';
+  document.getElementById('gemini-key-saved-actions').style.display  = 'none';
+  renderSettings(); showToast('API key eliminada');
 }
 
 function toggleApiKeyVisibility() {
@@ -2041,51 +2338,40 @@ function toggleApiKeyVisibility() {
   inp.type = inp.type === 'password' ? 'text' : 'password';
 }
 
-/* ================================================================
-   SETTINGS — REMINDERS
-================================================================ */
 function toggleReminders(on) {
   state.settings.remindersEnabled = on;
-  showToast('Recordatorios ' + (on ? 'activados ✓' : 'desactivados'));
+  showToast('Recordatorios '+(on?'activados ✓':'desactivados'));
 }
 
 const TIME_OPTIONS = ['06:00','07:00','08:00','09:00','10:00','12:00','18:00','20:00','21:00','22:00'];
 
 function selectTimeOption(el, time) {
-  document.querySelectorAll('.time-option').forEach(o=>o.classList.remove('active'));
+  document.querySelectorAll('.time-option').forEach(o => o.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('custom-time-input').value = time;
 }
 
 function saveReminderTime() {
-  const customVal = document.getElementById('custom-time-input').value;
-  if (!customVal) { showToast('Selecciona o ingresa una hora'); return; }
-  state.settings.reminderTime = customVal;
+  const val = document.getElementById('custom-time-input').value;
+  if (!val) { showToast('Selecciona o ingresa una hora'); return; }
+  state.settings.reminderTime = val;
   closeModal('reminder-time-modal');
   renderSettings();
-  showToast('Hora de recordatorio: ' + formatTime12(customVal));
+  showToast('Hora de recordatorio: '+formatTime12(val));
 }
 
 function formatTime12(t) {
   if (!t) return '8:00 AM';
   const [h, m] = t.split(':').map(Number);
   const period = h >= 12 ? 'PM' : 'AM';
-  const h12 = h % 12 || 12;
-  return h12 + ':' + String(m).padStart(2,'0') + ' ' + period;
+  return (h%12||12)+':'+ String(m).padStart(2,'0')+' '+period;
 }
 
-document.getElementById('reminder-time-modal').addEventListener('click', function(e){
-  if (e.target === this) closeModal('reminder-time-modal');
-});
-
-/* ================================================================
-   SETTINGS — WEEK START
-================================================================ */
 let pendingWeekStart = 'Domingo';
 
 function selectWeekStart(val, btn) {
   pendingWeekStart = val;
-  document.querySelectorAll('.week-start-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.week-start-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
 
@@ -2093,20 +2379,15 @@ function saveWeekStart() {
   state.settings.weekStart = pendingWeekStart;
   closeModal('week-start-modal');
   renderSettings();
-  showToast('Inicio de semana: ' + pendingWeekStart);
+  showToast('Inicio de semana: '+pendingWeekStart);
 }
 
-/* ================================================================
-   SETTINGS — EXPORT CSV
-================================================================ */
 function downloadCSV(filename, rows) {
   const csv = rows.map(r => r.map(cell => '"'+String(cell).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const blob = new Blob(['\uFEFF'+csv], { type: 'text/csv;charset=utf-8' });
+  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(url);
+  const a    = document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
 function exportHabitsCSV() {
@@ -2114,10 +2395,10 @@ function exportHabitsCSV() {
   const rows = [['Hábito','Categoría','Frecuencia','Hora notificación','Racha actual','Días completados']];
   state.habits.forEach(h => {
     const daysCompleted = Object.values(h.completions).filter(Boolean).length;
-    const freqLabel = h.freq === 'personalizado'
+    const freqLabel = h.freq==='personalizado'
       ? (['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].filter((_,i)=>h.customDays&&h.customDays[i]).join(','))
       : h.freq;
-    rows.push([h.name, h.cat, freqLabel, h.notifTime || state.settings.reminderTime, h.streak, daysCompleted]);
+    rows.push([h.name, h.cat, freqLabel, h.notifTime||state.settings.reminderTime, h.streak, daysCompleted]);
   });
   downloadCSV('vivela365-habitos.csv', rows);
   showToast('Hábitos exportados ✓');
@@ -2125,50 +2406,33 @@ function exportHabitsCSV() {
 
 function exportGoalsCSV() {
   if (!state.goals.length) { showToast('No hay metas para exportar'); return; }
-  const rows = [['Meta','Categoría','Descripción','Progreso %','Hitos completados','Total hitos','Hitos']];
+  const rows = [['Objetivo','Categoría','Descripción','Progreso %','Hitos completados','Total hitos','Hitos']];
   state.goals.forEach(g => {
-    const pct = goalProgress(g);
+    const pct  = goalProgress(g);
     const done = g.milestones.filter(m=>m.done).length;
     const hitos = g.milestones.map(m=>(m.done?'✓ ':'○ ')+m.text).join(' | ');
     rows.push([g.title, g.cat, g.desc, pct+'%', done, g.milestones.length, hitos]);
   });
-  downloadCSV('vivela365-metas.csv', rows);
-  showToast('Metas exportadas ✓');
+  downloadCSV('vivela365-objetivos.csv', rows);
+  showToast('Objetivos exportadas ✓');
 }
 
 function exportBooksCSV() {
   if (!state.books.length) { showToast('No hay libros para exportar'); return; }
   const rows = [['Título','Autor','Estado','Páginas actuales','Total páginas','% leído','Calificación','Notas','Lecciones','Acciones']];
+  const statusMap = {'not-started':'No iniciado','reading':'Leyendo','finished':'Terminado'};
   state.books.forEach(b => {
-    const pct = bookPct(b);
-    const statusMap = {'not-started':'No iniciado','reading':'Leyendo','finished':'Terminado'};
-    rows.push([
-      b.title, b.author, statusMap[b.status]||b.status,
-      b.currentPage, b.totalPages, pct+'%',
-      b.rating ? b.rating+'/5' : '-',
-      b.freeNotes,
-      b.lessons.join(' | '),
-      b.actions.join(' | '),
-    ]);
+    rows.push([b.title, b.author, statusMap[b.status]||b.status, b.currentPage, b.totalPages, bookPct(b)+'%', b.rating?b.rating+'/5':'-', b.freeNotes, b.lessons.join(' | '), b.actions.join(' | ')]);
   });
   downloadCSV('vivela365-lecturas.csv', rows);
   showToast('Lecturas exportadas ✓');
 }
 
-/* ================================================================
-   SETTINGS — DANGER ZONE
-================================================================ */
 function confirmClearData() {
-  const confirmed = confirm('⚠️ ¿Estás seguro? Esto borrará todos tus hábitos, metas y eventos locales. Esta acción no se puede deshacer.');
-  if (!confirmed) return;
-  state.habits  = [];
-  state.goals   = [];
-  state.events  = [];
-  state.books   = [];
+  if (!confirm('⚠️ ¿Estás seguro? Esto borrará todos tus hábitos, objetivos y eventos locales. Esta acción no se puede deshacer.')) return;
+  state.habits = []; state.goals = []; state.events = []; state.books = [];
   state.settings.profile = { name:'', tagline:'', email:'', avatarDataUrl:null };
-  state.settings.geminiKey = '';
-  state.settings.gcalConnected = false;
-  state.settings.gcalEmail = '';
+  state.settings.geminiKey = ''; state.settings.gcalConnected = false; state.settings.gcalEmail = '';
   renderSettings();
   showToast('Datos borrados');
 }
@@ -2181,14 +2445,11 @@ const STATUS_PILLS  = { 'not-started':'pill-gray',   'reading':'pill-blue', 'fin
 const STATUS_COLORS = { 'not-started':'var(--surface2)', 'reading':'var(--blue)', 'finished':'var(--green)' };
 const COVER_COLORS  = ['#2D3245','#3D4358','#4A5568','#553C3C','#3C5545','#3C4A5A'];
 
-function bookPct(b) {
-  if (!b.totalPages) return 0;
-  return Math.min(100, Math.round(b.currentPage / b.totalPages * 100));
-}
+function bookPct(b) { return !b.totalPages ? 0 : Math.min(100, Math.round(b.currentPage/b.totalPages*100)); }
 
 function setBooksView(v) {
   state.bookView = v;
-  document.getElementById('tab-shelf').classList.toggle('active', v==='shelf');
+  document.getElementById('tab-shelf').classList.toggle('active',    v==='shelf');
   document.getElementById('tab-booklist').classList.toggle('active', v==='list');
   renderBooksContent();
 }
@@ -2204,7 +2465,7 @@ function renderBooks() {
 function renderBooksContent() {
   const el = document.getElementById('books-content');
   if (!state.books.length) {
-    el.innerHTML='<div style="text-align:center;padding:60px 24px"><div style="font-size:48px;opacity:.2;margin-bottom:14px">📚</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin libros aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca "+ Agregar" para añadir tu primer libro</p></div>';
+    el.innerHTML = '<div style="text-align:center;padding:60px 24px"><div style="font-size:48px;opacity:.2;margin-bottom:14px">📚</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin libros aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca "+ Agregar" para añadir tu primer libro</p></div>';
     return;
   }
   if (state.bookView==='shelf') renderShelf(el);
@@ -2214,129 +2475,117 @@ function renderBooksContent() {
 function coverBg(b, idx) { return COVER_COLORS[idx % COVER_COLORS.length]; }
 
 function renderShelf(el) {
-  const byStatus = (s) => state.books.filter(b=>b.status===s);
+  const byStatus = s => state.books.filter(b => b.status===s);
   const sections = [
-    { label:'Leyendo ahora',  books: byStatus('reading')     },
-    { label:'Por leer',       books: byStatus('not-started') },
-    { label:'Terminados',     books: byStatus('finished')    },
-  ].filter(s=>s.books.length);
-  el.innerHTML = sections.map(sec=>
-    '<div style="padding:16px 20px 0"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">'+sec.label+'</div>' +
-    '<div class="shelf-grid" style="padding:0;margin:0 -4px">' +
-    sec.books.map((b,i)=>{
-      const pct = bookPct(b);
-      const bg  = coverBg(b,i);
-      return '<div class="shelf-book" onclick="openBookDetail('+b.id+')">' +
-        '<div class="shelf-cover" style="background:'+bg+'">' +
-        (b.cover ? '<img src="'+b.cover+'" alt="">' :
-          '<div class="shelf-cover-placeholder"><span>'+b.title+'</span></div>') +
-        '<div class="shelf-status-bar"><div class="shelf-status-fill" style="width:'+pct+'%;background:'+STATUS_COLORS[b.status]+'"></div></div>' +
-        '</div>' +
-        '<div class="shelf-book-title">'+b.title+'</div>' +
-        '<div class="shelf-book-author">'+b.author+'</div>' +
+    { label:'Leyendo ahora',  books:byStatus('reading')     },
+    { label:'Por leer',       books:byStatus('not-started') },
+    { label:'Terminados',     books:byStatus('finished')    },
+  ].filter(s => s.books.length);
+  el.innerHTML = sections.map(sec =>
+    '<div style="padding:16px 20px 0">'+
+    '<div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">'+sec.label+'</div>'+
+    '<div class="shelf-grid" style="padding:0;margin:0 -4px">'+
+    sec.books.map((b,i) => {
+      const pct = bookPct(b), bg = coverBg(b,i);
+      return '<div class="shelf-book" onclick="openBookDetail('+b.id+')">'+
+        '<div class="shelf-cover" style="background:'+bg+'">'+
+        (b.cover?'<img src="'+b.cover+'" alt="">':'<div class="shelf-cover-placeholder"><span>'+b.title+'</span></div>')+
+        '<div class="shelf-status-bar"><div class="shelf-status-fill" style="width:'+pct+'%;background:'+STATUS_COLORS[b.status]+'"></div></div>'+
+        '</div>'+
+        '<div class="shelf-book-title">'+b.title+'</div>'+
+        '<div class="shelf-book-author">'+b.author+'</div>'+
         '</div>';
-    }).join('') +
+    }).join('')+
     '</div></div>'
   ).join('');
 }
 
 function renderBookList(el) {
-  el.innerHTML = '<div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px">' +
-    state.books.map((b,i)=>{
-      const pct = bookPct(b);
-      const bg  = coverBg(b,i);
-      const pillClass = STATUS_PILLS[b.status];
-      return '<div class="book-list-item" onclick="openBookDetail('+b.id+')">' +
-        '<div class="book-list-cover" style="background:'+bg+'">' +
-        (b.cover?'<img src="'+b.cover+'" alt="">':'') +
-        '</div>' +
-        '<div class="book-list-info">' +
-        '<div class="book-list-title">'+b.title+'</div>' +
-        '<div class="book-list-author">'+b.author+'</div>' +
-        '<div class="book-list-progress"><div class="book-list-progress-fill" style="width:'+pct+'%;background:'+STATUS_COLORS[b.status]+'"></div></div>' +
-        '<div class="book-list-meta">' +
-        '<span class="book-list-pct">'+b.currentPage+(b.totalPages?'/'+b.totalPages+' pág':' pág')+' · '+pct+'%</span>' +
-        '<span class="pill '+pillClass+'">'+STATUS_LABELS[b.status]+'</span>' +
+  el.innerHTML = '<div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px">'+
+    state.books.map((b,i) => {
+      const pct = bookPct(b), bg = coverBg(b,i), pillClass = STATUS_PILLS[b.status];
+      return '<div class="book-list-item" onclick="openBookDetail('+b.id+')">'+
+        '<div class="book-list-cover" style="background:'+bg+'">'+(b.cover?'<img src="'+b.cover+'" alt="">':'')+'</div>'+
+        '<div class="book-list-info">'+
+        '<div class="book-list-title">'+b.title+'</div>'+
+        '<div class="book-list-author">'+b.author+'</div>'+
+        '<div class="book-list-progress"><div class="book-list-progress-fill" style="width:'+pct+'%;background:'+STATUS_COLORS[b.status]+'"></div></div>'+
+        '<div class="book-list-meta">'+
+        '<span class="book-list-pct">'+b.currentPage+(b.totalPages?'/'+b.totalPages+' pág':' pág')+' · '+pct+'%</span>'+
+        '<span class="pill '+pillClass+'">'+STATUS_LABELS[b.status]+'</span>'+
         '</div></div></div>';
-    }).join('') +
+    }).join('')+
   '</div>';
 }
 
 function starsHTML(bookId, rating) {
-  return [1,2,3,4,5].map(n=>
-    '<span class="star'+(n<=rating?' filled':'')+('" onclick="rateBook('+bookId+','+n+')">★</span>')
+  return [1,2,3,4,5].map(n =>
+    '<span class="star'+(n<=rating?' filled':'')+'" onclick="rateBook('+bookId+','+n+')">★</span>'
   ).join('');
 }
 
 function openBookDetail(id) {
-  const b = state.books.find(x=>x.id===id);
-  if (!b) return;
-  const pct = bookPct(b);
-  const bg  = coverBg(b, state.books.indexOf(b));
-  const pillClass = STATUS_PILLS[b.status];
+  const b = state.books.find(x => x.id===id); if (!b) return;
+  const pct = bookPct(b), bg = coverBg(b, state.books.indexOf(b)), pillClass = STATUS_PILLS[b.status];
 
   const learningSection = (label, color, arr, field) =>
-    '<div style="margin-bottom:12px">' +
-    '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:6px">'+label+'</div>' +
-    '<div class="learnings-section">' +
+    '<div style="margin-bottom:12px">'+
+    '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:6px">'+label+'</div>'+
+    '<div class="learnings-section">'+
     (arr.length ? arr.map((item,i)=>
-      '<div class="learning-item">' +
-      '<div class="learning-bullet" style="background:'+color+'"></div>' +
-      '<span class="learning-item-text">'+item+'</span>' +
-      '<span style="font-size:16px;color:var(--text-3);cursor:pointer;padding:0 4px" onclick="removeLearning('+id+',\''+field+'\','+i+')">×</span>' +
+      '<div class="learning-item">'+
+      '<div class="learning-bullet" style="background:'+color+'"></div>'+
+      '<span class="learning-item-text">'+item+'</span>'+
+      '<span style="font-size:16px;color:var(--text-3);cursor:pointer;padding:0 4px" onclick="removeLearning('+id+',\''+field+'\','+i+')">×</span>'+
       '</div>'
-    ).join('') : '<span style="font-size:13px;color:var(--text-3)">Sin entradas aún</span>') +
-    '</div>' +
-    '<div class="add-learning-row">' +
-    '<input id="add-'+field+'-'+id+'" type="text" placeholder="Agregar...">' +
-    '<button class="btn-outline" onclick="addLearning('+id+',\''+field+'\')">+</button>' +
+    ).join('') : '<span style="font-size:13px;color:var(--text-3)">Sin entradas aún</span>')+
+    '</div>'+
+    '<div class="add-learning-row">'+
+    '<input id="add-'+field+'-'+id+'" type="text" placeholder="Agregar...">'+
+    '<button class="btn-outline" onclick="addLearning('+id+',\''+field+'\')">+</button>'+
     '</div></div>';
 
   document.getElementById('book-detail-content').innerHTML =
-    '<div class="modal-handle"></div>' +
-    '<div style="display:flex;gap:14px;margin-bottom:16px">' +
-    '<div class="book-detail-cover" style="background:'+bg+'">' +
-    (b.cover?'<img src="'+b.cover+'" alt="">':'') +
-    '</div>' +
-    '<div style="flex:1;min-width:0">' +
-    '<div style="font-size:17px;font-weight:600;line-height:1.3;margin-bottom:3px">'+b.title+'</div>' +
-    '<div style="font-size:13px;color:var(--text-3);margin-bottom:8px">'+b.author+'</div>' +
-    '<span class="pill '+pillClass+'" style="margin-bottom:8px;display:inline-block">'+STATUS_LABELS[b.status]+'</span><br>' +
-    '<div class="star-row" id="star-row-'+id+'">'+starsHTML(id,b.rating)+'</div>' +
-    '</div></div>' +
-    '<div style="margin-bottom:14px">' +
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
-    '<span style="font-size:12px;color:var(--text-3)">Progreso</span>' +
-    '<span style="font-size:12px;font-weight:600">'+b.currentPage+(b.totalPages?'/'+b.totalPages:'')+'  pág · '+pct+'%</span>' +
-    '</div>' +
-    '<div class="goal-progress-bar" style="height:6px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>' +
-    '<div style="display:flex;gap:8px;margin-top:8px">' +
-    '<input class="form-input" id="page-input-'+id+'" type="number" placeholder="Página actual" value="'+b.currentPage+'" style="flex:1">' +
-    '<button class="btn-outline" onclick="updatePage('+id+')">Actualizar</button>' +
-    '</div></div>' +
-    '<div style="margin-bottom:14px">' +
-    '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:6px">Notas generales</div>' +
-    '<textarea class="form-textarea" id="notes-input-'+id+'" style="height:70px">'+b.freeNotes+'</textarea>' +
-    '<button class="btn-outline" style="margin-top:6px;width:100%" onclick="saveNotes('+id+')">Guardar notas</button>' +
-    '</div>' +
-    learningSection('Citas destacadas',  'var(--gold-dark)',  b.quotes,  'quotes')  +
-    learningSection('Lecciones clave',   'var(--blue)',       b.lessons, 'lessons') +
-    learningSection('Acciones a tomar',  'var(--green)',      b.actions, 'actions') +
-    '<div style="display:flex;gap:8px;margin-top:4px">' +
-    '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteBook('+id+')">Eliminar</button>' +
-    '<button class="btn-gold" style="flex:2" onclick="closeModal(\'book-detail-modal\')">Cerrar</button>' +
+    '<div class="modal-handle"></div>'+
+    '<div style="display:flex;gap:14px;margin-bottom:16px">'+
+    '<div class="book-detail-cover" style="background:'+bg+'">'+(b.cover?'<img src="'+b.cover+'" alt="">':'')+'</div>'+
+    '<div style="flex:1;min-width:0">'+
+    '<div style="font-size:17px;font-weight:600;line-height:1.3;margin-bottom:3px">'+b.title+'</div>'+
+    '<div style="font-size:13px;color:var(--text-3);margin-bottom:8px">'+b.author+'</div>'+
+    '<span class="pill '+pillClass+'" style="margin-bottom:8px;display:inline-block">'+STATUS_LABELS[b.status]+'</span><br>'+
+    '<div class="star-row" id="star-row-'+id+'">'+starsHTML(id,b.rating)+'</div>'+
+    '</div></div>'+
+    '<div style="margin-bottom:14px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
+    '<span style="font-size:12px;color:var(--text-3)">Progreso</span>'+
+    '<span style="font-size:12px;font-weight:600">'+b.currentPage+(b.totalPages?'/'+b.totalPages:'')+'  pág · '+pct+'%</span>'+
+    '</div>'+
+    '<div class="goal-progress-bar" style="height:6px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
+    '<div style="display:flex;gap:8px;margin-top:8px">'+
+    '<input class="form-input" id="page-input-'+id+'" type="number" placeholder="Página actual" value="'+b.currentPage+'" style="flex:1">'+
+    '<button class="btn-outline" onclick="updatePage('+id+')">Actualizar</button>'+
+    '</div></div>'+
+    '<div style="margin-bottom:14px">'+
+    '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:6px">Notas generales</div>'+
+    '<textarea class="form-textarea" id="notes-input-'+id+'" style="height:70px">'+b.freeNotes+'</textarea>'+
+    '<button class="btn-outline" style="margin-top:6px;width:100%" onclick="saveNotes('+id+')">Guardar notas</button>'+
+    '</div>'+
+    learningSection('Citas destacadas',  'var(--gold-dark)',  b.quotes,  'quotes')+
+    learningSection('Lecciones clave',   'var(--blue)',       b.lessons, 'lessons')+
+    learningSection('Acciones a tomar',  'var(--green)',      b.actions, 'actions')+
+    '<div style="display:flex;gap:8px;margin-top:4px">'+
+    '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteBook('+id+')">Eliminar</button>'+
+    '<button class="btn-gold" style="flex:2" onclick="closeModal(\'book-detail-modal\')">Cerrar</button>'+
     '</div>';
 
   openModal('book-detail-modal');
 }
 
 function rateBook(id, rating) {
-  const b = state.books.find(x=>x.id===id);
-  if (!b) return;
+  const b = state.books.find(x=>x.id===id); if (!b) return;
   b.rating = rating;
   document.getElementById('star-row-'+id).innerHTML = starsHTML(id, rating);
-  renderBooks();
-  showToast('Calificación guardada');
+  renderBooks(); showToast('Calificación guardada');
 }
 
 function updatePage(id) {
@@ -2347,33 +2596,26 @@ function updatePage(id) {
   b.currentPage = val;
   if (b.totalPages && val >= b.totalPages) b.status = 'finished';
   else if (val > 0) b.status = 'reading';
-  openBookDetail(id);
-  renderBooks();
-  showToast('Progreso actualizado');
+  openBookDetail(id); renderBooks(); showToast('Progreso actualizado');
 }
 
 function saveNotes(id) {
   const b = state.books.find(x=>x.id===id);
   const inp = document.getElementById('notes-input-'+id);
   if (!b||!inp) return;
-  b.freeNotes = inp.value.trim();
-  showToast('Notas guardadas');
+  b.freeNotes = inp.value.trim(); showToast('Notas guardadas');
 }
 
 function addLearning(id, field) {
   const b = state.books.find(x=>x.id===id);
   const inp = document.getElementById('add-'+field+'-'+id);
   if (!b||!inp||!inp.value.trim()) { showToast('Escribe algo primero'); return; }
-  b[field].push(inp.value.trim());
-  openBookDetail(id);
-  showToast('¡Agregado!');
+  b[field].push(inp.value.trim()); openBookDetail(id); showToast('¡Agregado!');
 }
 
 function removeLearning(id, field, idx) {
-  const b = state.books.find(x=>x.id===id);
-  if (!b) return;
-  b[field].splice(idx,1);
-  openBookDetail(id);
+  const b = state.books.find(x=>x.id===id); if (!b) return;
+  b[field].splice(idx,1); openBookDetail(id);
 }
 
 function addBook() {
@@ -2381,35 +2623,27 @@ function addBook() {
   if (!title) { showToast('Escribe el título del libro'); return; }
   state.books.push({
     id: state.nextBookId++, title,
-    author:       document.getElementById('book-author-input').value.trim(),
-    cover:        null,
-    totalPages:   parseInt(document.getElementById('book-pages-input').value)||0,
-    currentPage:  parseInt(document.getElementById('book-current-input').value)||0,
-    status:       document.getElementById('book-status-input').value,
-    rating: 0, freeNotes:'', quotes:[], lessons:[], actions:[],
+    author:      document.getElementById('book-author-input').value.trim(),
+    cover:       null,
+    totalPages:  parseInt(document.getElementById('book-pages-input').value)||0,
+    currentPage: parseInt(document.getElementById('book-current-input').value)||0,
+    status:      document.getElementById('book-status-input').value,
+    rating:0, freeNotes:'', quotes:[], lessons:[], actions:[],
   });
-  ['book-title-input','book-author-input','book-pages-input','book-current-input'].forEach(i=>document.getElementById(i).value='');
-  closeModal('book-modal');
-  renderBooks();
-  showToast('¡Libro agregado!');
+  ['book-title-input','book-author-input','book-pages-input','book-current-input'].forEach(i => document.getElementById(i).value='');
+  closeModal('book-modal'); renderBooks(); showToast('¡Libro agregado!');
 }
 
 function deleteBook(id) {
   if (!confirm('¿Eliminar este libro?')) return;
   state.books = state.books.filter(b=>b.id!==id);
-  closeModal('book-detail-modal');
-  renderBooks();
-  showToast('Libro eliminado');
+  closeModal('book-detail-modal'); renderBooks(); showToast('Libro eliminado');
 }
 
 /* ================================================================
    AFFIRMATIONS
 ================================================================ */
-const AFF_COLORS = [
-  '#2D3245','#3D4A58','#3C5545','#553C3C',
-  '#4A3C55','#3C4A5A','#55493C','#3C5550',
-  '#4A4535','#3D3D55','#553D4A','#35504A',
-];
+const AFF_COLORS = ['#2D3245','#3D4A58','#3C5545','#553C3C','#4A3C55','#3C4A5A','#55493C','#3C5550','#4A4535','#3D3D55','#553D4A','#35504A'];
 
 let affMediaRecorder = null;
 let affAudioChunks   = [];
@@ -2422,17 +2656,15 @@ function shuffleAffQueue() {
     const j = Math.floor(Math.random()*(i+1));
     [idxs[i],idxs[j]] = [idxs[j],idxs[i]];
   }
-  state.affQueue = idxs;
-  state.affIndex = 0;
+  state.affQueue = idxs; state.affIndex = 0;
 }
 
 function renderAffirmations() {
   if (!state.affQueue.length) shuffleAffQueue();
-  renderAffCard('in');
-  renderAffDots();
+  renderAffCard('in'); renderAffDots();
 }
 
-function currentAffKey() { return 'aff_' + state.affQueue[state.affIndex]; }
+function currentAffKey() { return 'aff_'+state.affQueue[state.affIndex]; }
 
 function renderAffCard(direction) {
   const wrap = document.getElementById('aff-card-wrap');
@@ -2441,43 +2673,41 @@ function renderAffCard(direction) {
   const text = state.affirmations[idx];
   const bg   = AFF_COLORS[idx % AFF_COLORS.length];
   const num  = state.affIndex + 1;
-  const total= state.affirmations.length;
+  const total = state.affirmations.length;
   const hasRec = !!state.affRecordings[currentAffKey()];
 
   const card = document.createElement('div');
-  card.className = 'aff-card ' + (direction==='in-from-right' ? 'slide-from-right' : direction==='in-from-left' ? 'slide-from-left' : 'slide-from-right');
+  card.className = 'aff-card '+(direction==='in-from-right'?'slide-from-right':direction==='in-from-left'?'slide-from-left':'slide-from-right');
   card.style.background = bg;
   card.innerHTML =
-    '<div class="aff-card-number">'+num+' / '+total+'</div>' +
-    '<div class="aff-card-text">"'+text+'"</div>' +
-    '<div class="aff-card-actions">' +
-    '<button class="aff-record-btn" id="aff-rec-btn" onclick="toggleRecording()">' +
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6" fill="currentColor"/></svg>' +
-    '<span id="aff-rec-label">Grabar mi voz</span></button>' +
-    (hasRec ?
-      '<button class="aff-play-btn" id="aff-play-btn" onclick="playRecording()">' +
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>' +
-      'Reproducir</button>' : '') +
+    '<div class="aff-card-number">'+num+' / '+total+'</div>'+
+    '<div class="aff-card-text">"'+text+'"</div>'+
+    '<div class="aff-card-actions">'+
+    '<button class="aff-record-btn" id="aff-rec-btn" onclick="toggleRecording()">'+
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6" fill="currentColor"/></svg>'+
+    '<span id="aff-rec-label">Grabar mi voz</span></button>'+
+    (hasRec?'<button class="aff-play-btn" id="aff-play-btn" onclick="playRecording()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>Reproducir</button>':'')+
     '</div>';
 
   let startX = 0;
-  card.addEventListener('pointerdown', e=>{ startX=e.clientX; card.classList.add('dragging'); });
-  card.addEventListener('pointerup',   e=>{
+  card.addEventListener('pointerdown', e => { startX = e.clientX; card.classList.add('dragging'); });
+  card.addEventListener('pointerup',   e => {
     card.classList.remove('dragging');
     const dx = e.clientX - startX;
     if (Math.abs(dx) > 50) moveAff(dx < 0 ? 1 : -1);
   });
 
   if (old) {
-    old.className = 'aff-card ' + (direction==='in-from-right' ? 'slide-out-left' : 'slide-out-right');
-    setTimeout(()=>old.remove(), 350);
+    old.className = 'aff-card '+(direction==='in-from-right'?'slide-out-left':'slide-out-right');
+    setTimeout(() => old.remove(), 350);
   }
-
   wrap.appendChild(card);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.replace(
-    direction==='in-from-right' ? 'slide-from-right' : 'slide-from-left',
-    'slide-in'
-  )));
+  requestAnimationFrame(() => requestAnimationFrame(() =>
+    card.classList.replace(
+      direction==='in-from-right'?'slide-from-right':'slide-from-left',
+      'slide-in'
+    )
+  ));
 }
 
 function renderAffDots() {
@@ -2487,87 +2717,75 @@ function renderAffDots() {
   let start   = Math.max(0, state.affIndex - half);
   if (start + shown > total) start = total - shown;
   let html = '';
-  for (let i=start; i<start+shown; i++) {
-    html += '<div class="aff-dot'+(i===state.affIndex?' active':'')+'"></div>';
-  }
+  for (let i = start; i < start+shown; i++) html += '<div class="aff-dot'+(i===state.affIndex?' active':'')+'"></div>';
   document.getElementById('aff-dots').innerHTML = html;
 }
 
 function moveAff(dir) {
-  stopRecording(true);
-  stopPlayback();
+  stopRecording(true); stopPlayback();
   const total = state.affirmations.length;
   state.affIndex = (state.affIndex + dir + total) % total;
   if (state.affIndex === 0 && dir === 1) shuffleAffQueue();
-  renderAffCard(dir === 1 ? 'in-from-right' : 'in-from-left');
+  renderAffCard(dir===1?'in-from-right':'in-from-left');
   renderAffDots();
   if (state.affAutoPlay) scheduleAutoPlay();
 }
 
 async function toggleRecording() {
-  if (affMediaRecorder && affMediaRecorder.state === 'recording') {
-    stopRecording(false);
-  } else {
-    await startRecording();
-  }
+  if (affMediaRecorder && affMediaRecorder.state==='recording') stopRecording(false);
+  else await startRecording();
 }
 
 async function startRecording() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
     affAudioChunks = [];
     affMediaRecorder = new MediaRecorder(stream);
     affMediaRecorder.ondataavailable = e => affAudioChunks.push(e.data);
     affMediaRecorder.onstop = () => {
-      const blob = new Blob(affAudioChunks, { type:'audio/webm' });
-      const url  = URL.createObjectURL(blob);
-      state.affRecordings[currentAffKey()] = url;
+      const blob = new Blob(affAudioChunks,{type:'audio/webm'});
+      state.affRecordings[currentAffKey()] = URL.createObjectURL(blob);
       stream.getTracks().forEach(t=>t.stop());
-      renderAffCard('in');
-      renderAffDots();
-      showToast('¡Voz grabada!');
+      renderAffCard('in'); renderAffDots(); showToast('¡Voz grabada!');
     };
     affMediaRecorder.start();
     const btn   = document.getElementById('aff-rec-btn');
     const label = document.getElementById('aff-rec-label');
     if (btn)   btn.classList.add('recording');
     if (label) label.textContent = 'Detener grabación';
-  } catch(e) {
-    showToast('Permiso de micrófono denegado');
-  }
+  } catch(e) { showToast('Permiso de micrófono denegado'); }
 }
 
 function stopRecording(silent) {
-  if (affMediaRecorder && affMediaRecorder.state === 'recording') {
-    if (silent) { affMediaRecorder.stream?.getTracks().forEach(t=>t.stop()); affMediaRecorder = null; }
-    else { affMediaRecorder.stop(); }
+  if (affMediaRecorder && affMediaRecorder.state==='recording') {
+    if (silent) { affMediaRecorder.stream?.getTracks().forEach(t=>t.stop()); affMediaRecorder=null; }
+    else affMediaRecorder.stop();
   }
 }
 
 function playRecording() {
   stopPlayback();
-  const url = state.affRecordings[currentAffKey()];
-  if (!url) return;
+  const url = state.affRecordings[currentAffKey()]; if (!url) return;
   affCurrentAudio = new Audio(url);
   affCurrentAudio.play();
   affCurrentAudio.onended = () => { if (state.affAutoPlay) moveAff(1); };
 }
 
 function stopPlayback() {
-  if (affCurrentAudio) { affCurrentAudio.pause(); affCurrentAudio.onended = null; affCurrentAudio = null; }
+  if (affCurrentAudio) { affCurrentAudio.pause(); affCurrentAudio.onended=null; affCurrentAudio=null; }
 }
 
 function toggleAffAutoplay(on) {
   state.affAutoPlay = on;
   if (on) { showToast('Reproducción automática activada'); scheduleAutoPlay(); }
-  else { clearTimeout(affAutoTimer); stopPlayback(); showToast('Reproducción automática desactivada'); }
+  else    { clearTimeout(affAutoTimer); stopPlayback(); showToast('Reproducción automática desactivada'); }
 }
 
 function scheduleAutoPlay() {
   clearTimeout(affAutoTimer);
   const url = state.affRecordings[currentAffKey()];
   if (url) playRecording();
-  else affAutoTimer = setTimeout(()=>moveAff(1), 4000);
+  else affAutoTimer = setTimeout(() => moveAff(1), 4000);
 }
 
 function addAffirmation() {
@@ -2576,63 +2794,8 @@ function addAffirmation() {
   state.affirmations.push(text);
   document.getElementById('aff-text-input').value = '';
   closeModal('aff-modal');
-  shuffleAffQueue();
-  renderAffirmations();
+  shuffleAffQueue(); renderAffirmations();
   showToast('¡Afirmación agregada!');
-}
-
-/* ================================================================
-   OVERRIDE openModal for settings sub-modals that need pre-population
-================================================================ */
-const _origOpenModal = openModal;
-function openModal(id) {
-  if (id === 'reminder-time-modal') {
-    const grid = document.getElementById('time-options-grid');
-    if (grid) {
-      grid.innerHTML = TIME_OPTIONS.map(t =>
-        '<div class="time-option'+(t===state.settings.reminderTime?' active':'')+'" onclick="selectTimeOption(this,\''+t+'\')">'+formatTime12(t)+'</div>'
-      ).join('');
-      document.getElementById('custom-time-input').value = state.settings.reminderTime;
-    }
-  }
-  if (id === 'week-start-modal') {
-    pendingWeekStart = state.settings.weekStart;
-    setTimeout(()=>{
-      document.querySelectorAll('.week-start-btn').forEach(b=>{
-        b.classList.toggle('active', b.textContent.trim() === state.settings.weekStart);
-      });
-    }, 10);
-  }
-  if (id === 'gemini-modal') {
-    const keyStatus = document.getElementById('gemini-key-status');
-    const savedActions = document.getElementById('gemini-key-saved-actions');
-    if (state.settings.geminiKey) {
-      document.getElementById('gemini-key-input').value = '••••••••••••••••';
-      document.getElementById('gemini-key-input').type = 'password';
-      if (keyStatus) { keyStatus.style.display='block'; keyStatus.innerHTML='<div style="background:var(--green-light);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:#3d7a60;display:flex;align-items:center;gap:8px"><span>✓</span><span>API key ya configurada</span></div>'; }
-      if (savedActions) savedActions.style.display = 'block';
-    } else {
-      document.getElementById('gemini-key-input').value = '';
-      if (keyStatus) keyStatus.style.display='none';
-      if (savedActions) savedActions.style.display = 'none';
-    }
-  }
-  if (id === 'gcal-modal') {
-    document.getElementById('gcal-connected-section').style.display  = state.settings.gcalConnected ? 'block' : 'none';
-    document.getElementById('gcal-disconnected-section').style.display = state.settings.gcalConnected ? 'none' : 'block';
-    if (state.settings.gcalConnected) {
-      document.getElementById('gcal-connected-email').textContent = state.settings.gcalEmail;
-    }
-  }
-  if (id === 'habit-modal') {
-    // Reset the habit form cleanly each open
-    document.getElementById('habit-name-input').value = '';
-    document.getElementById('habit-time-input').value = '';
-    document.getElementById('habit-freq-input').value = 'diario';
-    document.getElementById('custom-days-group').style.display = 'none';
-    document.querySelectorAll('.day-toggle-btn').forEach(b => b.classList.add('selected'));
-  }
-  document.getElementById(id).classList.add('open');
 }
 
 /* ================================================================
