@@ -76,6 +76,10 @@ body {
 }
 .screen-header h2 { font-size: 20px; font-weight: 600; }
 .screen-header p  { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.back-arrow { display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:none;background:transparent;cursor:pointer;color:var(--text-2);transition:background .15s;flex-shrink:0;margin-right:6px;margin-left:-6px; }
+.back-arrow:active { background:var(--surface2); }
+.back-arrow svg { width:20px;height:20px;stroke:var(--text-1);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+.screen-header-row { display:flex;align-items:center; }
 .screen-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
 .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 16px; }
 .card-title { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
@@ -511,8 +515,10 @@ body {
 <!-- SCAN -->
 <div id="screen-scan" class="screen">
   <div class="screen-header">
-    <h2>Escanear página</h2>
-    <p>Importa contenido de tu agenda Vívela365</p>
+    <div class="screen-header-row">
+      <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div><h2>Escanear página</h2><p>Importa contenido de tu agenda Vívela365</p></div>
+    </div>
   </div>
   <div class="screen-body">
     <div class="scan-area" onclick="showToast('Próximamente: cámara con Gemini integrado')">
@@ -562,8 +568,10 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 <!-- HABITS -->
 <div id="screen-habits" class="screen">
   <div class="screen-header">
-    <h2>Rastreador de hábitos</h2>
-    <p id="habits-today-label">Cargando...</p>
+    <div class="screen-header-row">
+      <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div><h2>Rastreador de hábitos</h2><p id="habits-today-label">Cargando...</p></div>
+    </div>
   </div>
   <div class="screen-body" id="habits-body">
     <div class="card">
@@ -609,7 +617,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 <!-- GOALS -->
 <div id="screen-goals" class="screen">
   <div class="screen-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-    <div><h2>Mis Objetivos</h2><p>Define y sigue tus objetivos</p></div>
+    <div class="screen-header-row"><button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><div><h2>Mis Objetivos</h2><p>Define y sigue tus objetivos</p></div></div>
     <button class="btn-outline" style="flex-shrink:0;margin-top:4px" onclick="openModal('goal-modal')">+ Nueva</button>
   </div>
   <div class="screen-body" id="goals-body"></div>
@@ -617,7 +625,12 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 
 <!-- CALENDAR -->
 <div id="screen-calendar" class="screen">
-  <div class="screen-header"><h2>Calendario</h2><p>Tus eventos importados</p></div>
+  <div class="screen-header">
+    <div class="screen-header-row">
+      <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div><h2>Calendario</h2><p>Tus eventos importados</p></div>
+    </div>
+  </div>
   <div class="cal-toggle">
     <button class="cal-tab active" id="tab-month"    onclick="setCalView('month')">Vista mes</button>
     <button class="cal-tab"        id="tab-upcoming" onclick="setCalView('upcoming')">Próximos</button>
@@ -664,7 +677,12 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 
 <!-- SETTINGS -->
 <div id="screen-settings" class="screen">
-  <div class="screen-header"><h2>Configuración</h2><p>Personaliza tu experiencia</p></div>
+  <div class="screen-header">
+    <div class="screen-header-row">
+      <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div><h2>Configuración</h2><p>Personaliza tu experiencia</p></div>
+    </div>
+  </div>
   <div class="screen-body">
 
     <!-- CUENTA -->
@@ -781,6 +799,26 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
 
+    <!-- RESPALDAR -->
+    <div class="settings-section">
+      <span class="settings-section-label">Respaldo</span>
+      <div class="settings-list">
+        <div class="settings-row" onclick="openModal('backup-modal')">
+          <div class="settings-icon si-green"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+          <div class="settings-row-text"><strong>Respaldar y restaurar</strong><span id="auto-backup-status-text">Activo · Cada 7 días</span></div>
+          <span class="settings-chevron">›</span>
+        </div>
+        <div class="settings-row">
+          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+          <div class="settings-row-text"><strong>Respaldo automático</strong><span id="backup-freq-preview">Cada 7 días</span></div>
+          <label class="toggle-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="auto-backup-toggle" checked onchange="toggleAutoBackup(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
     <!-- ACERCA DE -->
     <div class="settings-section">
       <span class="settings-section-label">Acerca de</span>
@@ -831,7 +869,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 <!-- BOOKS -->
 <div id="screen-books" class="screen">
   <div class="screen-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-    <div><h2>Mis lecturas</h2><p id="books-header-sub">Cargando...</p></div>
+    <div class="screen-header-row"><button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><div><h2>Mis lecturas</h2><p id="books-header-sub">Cargando...</p></div></div>
     <button class="btn-outline" style="flex-shrink:0;margin-top:4px" onclick="openModal('book-modal')">+ Agregar</button>
   </div>
   <div class="books-toggle">
@@ -844,7 +882,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 <!-- AFFIRMATIONS -->
 <div id="screen-affirmations" class="screen">
   <div class="screen-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-    <div><h2>Afirmaciones</h2><p id="aff-header-sub">100 afirmaciones · toca para grabar tu voz</p></div>
+    <div class="screen-header-row"><button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button><div><h2>Afirmaciones</h2><p id="aff-header-sub">100 afirmaciones · toca para grabar tu voz</p></div></div>
     <button class="btn-outline" style="flex-shrink:0;margin-top:4px" onclick="openModal('aff-modal')">+ Nueva</button>
   </div>
   <div class="affirmations-page-controls">
@@ -1050,7 +1088,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       <button class="btn-outline" style="flex:1" onclick="closeModal('profile-modal')">Cancelar</button>
       <button class="btn-gold"    style="flex:2" onclick="saveProfile()">Guardar perfil</button>
     </div>
-    <!-- Privacy note in profile modal -->
     <div class="privacy-note" style="margin-top:16px">
       <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <div class="privacy-note-text">
@@ -1197,7 +1234,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     const dragTarget = handle || sheet;
 
     dragTarget.addEventListener('pointerdown', e => {
-      // Only start drag from handle, or from the very top of the sheet if no handle
       startY = e.clientY; currentY = 0; isDragging = true;
       sheet.style.transition = 'none';
       dragTarget.setPointerCapture(e.pointerId);
@@ -1206,7 +1242,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     dragTarget.addEventListener('pointermove', e => {
       if (!isDragging) return;
       const dy = e.clientY - startY;
-      if (dy < 0) return; // don't allow dragging up
+      if (dy < 0) return;
       currentY = dy;
       sheet.style.transform = `translateY(${dy}px)`;
     });
@@ -1229,17 +1265,15 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     });
   }
 
-  // Init after DOM ready
   const MODAL_IDS = [
     'habit-modal','goal-modal','goal-detail-modal','event-modal',
     'book-modal','book-detail-modal','aff-modal','profile-modal',
     'gcal-modal','gemini-modal','reminder-time-modal','week-start-modal',
-    'backup-modal','backup-freq-modal'
+    'backup-modal'
   ];
   document.addEventListener('DOMContentLoaded', () => {
     MODAL_IDS.forEach(id => initSwipeDismiss(id));
   });
-  // Also init immediately for inline scripts
   window.addEventListener('load', () => {
     MODAL_IDS.forEach(id => initSwipeDismiss(id));
   });
@@ -1574,13 +1608,6 @@ function openModal(id) {
         : 'Sin respaldos registrados aún';
     }
   }
-  if (id === 'backup-freq-modal') {
-    setTimeout(() => {
-      document.querySelectorAll('.backup-freq-option').forEach(o => {
-        o.classList.toggle('selected', parseInt(o.dataset.days) === state.settings.autoBackupDays);
-      });
-    }, 10);
-  }
 
   const overlay = document.getElementById(id);
   if (overlay) overlay.classList.add('open');
@@ -1592,7 +1619,6 @@ function closeModal(id) {
   const sheet = overlay.querySelector('.modal-sheet');
   if (sheet) { sheet.style.transform = ''; sheet.style.transition = ''; }
   overlay.classList.remove('open');
-  // Reset edit IDs so next open is a fresh add
   if (id === 'habit-modal') document.getElementById('habit-edit-id').value = '';
   if (id === 'event-modal') document.getElementById('event-edit-id').value = '';
 }
@@ -1718,7 +1744,6 @@ function renderWeekGrid() {
   const dates = getWeekDates(state.weekOffset);
   const isCurrentWeek = state.weekOffset === 0;
 
-  // Update title and date range
   document.getElementById('week-grid-title').textContent = isCurrentWeek ? 'Esta semana' : 'Semana';
   const first = dates[0], last = dates[6];
   let rangeText = '';
@@ -1843,7 +1868,6 @@ function renderStreaks() {
   }).join('');
 }
 
-/* --- Add Habit --- */
 function openAddHabit() {
   document.getElementById('habit-edit-id').value = '';
   openModal('habit-modal');
@@ -1873,7 +1897,6 @@ function addHabit() {
   showToast('¡Hábito agregado!');
 }
 
-/* --- Edit Habit --- */
 function openEditHabit(id) {
   const h = state.habits.find(x => x.id === id);
   if (!h) return;
@@ -1971,7 +1994,6 @@ function goalCardHTML(g, extraClass) {
     '</div>';
 }
 
-// Track collapsed state for archive sections
 const archiveOpen = { logrado: false, espera: false };
 
 function renderGoals() {
@@ -1988,14 +2010,12 @@ function renderGoals() {
     return;
   }
 
-  // Active goals (always visible, not collapsable)
   if (active.length) {
     html += active.map(g => goalCardHTML(g)).join('');
   } else {
     html += '<div style="text-align:center;padding:24px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);color:var(--text-3);font-size:13px">Sin objetivos activos</div>';
   }
 
-  // Logrado section (collapsable)
   html += '<div class="goal-archive-section">'+
     '<div class="goal-archive-toggle" onclick="toggleArchiveSection(\'logrado\')">'+
     '<div class="goal-archive-toggle-label">'+
@@ -2011,7 +2031,6 @@ function renderGoals() {
       '<div style="padding:12px;font-size:13px;color:var(--text-3);text-align:center">Sin objetivos logrados aún</div>')+
     '</div></div>';
 
-  // En espera section (collapsable)
   html += '<div class="goal-archive-section">'+
     '<div class="goal-archive-toggle" onclick="toggleArchiveSection(\'espera\')">'+
     '<div class="goal-archive-toggle-label">'+
@@ -2046,7 +2065,6 @@ function openGoalDetail(id) {
     '<option value="'+c+'"'+(c===g.cat?' selected':'')+'>'+c+'</option>'
   ).join('');
 
-  // Status options
   const statusOptions = [
     {val:'active',   label:'Activo',    color:'var(--blue)'},
     {val:'logrado',  label:'Logrado ✓', color:'var(--green)'},
@@ -2069,17 +2087,14 @@ function openGoalDetail(id) {
     '<textarea class="form-textarea" id="goal-edit-desc-'+id+'" placeholder="Descripción (opcional)" style="height:60px">'+escHtml(g.desc)+'</textarea>'+
     '<button class="btn-outline" style="width:100%;margin-top:8px" onclick="saveGoalEdits('+id+')">Guardar cambios</button>'+
     '</div>'+
-
     '<div style="margin-bottom:14px">'+
     '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Estado del objetivo</div>'+
     '<div style="display:flex;gap:6px">'+statusBtns+'</div>'+
     '</div>'+
-
     '<div style="margin-bottom:14px">'+
     '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-3);font-weight:500">Progreso general</span><span style="font-size:12px;font-weight:600">'+pct+'%</span></div>'+
     '<div class="goal-progress-bar" style="height:7px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
     '</div>'+
-
     '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Hitos ('+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+')</div>'+
     '<div class="milestone-list">'+
     g.milestones.map((m,i) =>
@@ -2201,7 +2216,6 @@ const MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Ago
 const tmrw = new Date(today); tmrw.setDate(tmrw.getDate()+1);
 const tmrwStr = fmt(tmrw);
 
-/* SVG Apple Cal icon */
 function appleCalSVG(size) {
   size = size || 14;
   return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 15l2.5-2.5L13 15l4-4" stroke-linecap="round"/></svg>';
@@ -2372,7 +2386,6 @@ function selectEventColor(el) {
   state.selectedEventColor = el.dataset.color;
 }
 
-/* --- Add Event --- */
 function openAddEvent() {
   document.getElementById('event-edit-id').value = '';
   openModal('event-modal');
@@ -2399,7 +2412,6 @@ function addEvent() {
   showToast('¡Evento guardado!');
 }
 
-/* --- Edit Event --- */
 function openEditEvent(id) {
   const e = state.events.find(x => x.id === id);
   if (!e) return;
@@ -2568,7 +2580,6 @@ function importFullBackup(event) {
       state.books        = d.books        || [];
       state.affirmations = d.affirmations || state.affirmations;
       if (d.settings) {
-        // Merge settings so new keys added later still work
         Object.assign(state.settings, d.settings);
       }
       if (d.counters) {
@@ -2578,7 +2589,6 @@ function importFullBackup(event) {
         state.nextBookId  = d.counters.nextBookId  || 100;
         state.nextAffId   = d.counters.nextAffId   || 200;
       }
-      // Re-render current screen
       if (state.currentScreen === 'habits')       renderHabits();
       if (state.currentScreen === 'goals')        renderGoals();
       if (state.currentScreen === 'calendar')     renderCalendar();
@@ -2594,6 +2604,9 @@ function importFullBackup(event) {
   reader.readAsText(file);
 }
 
+function checkAutoBackup() {
+  // Stub for auto-backup check
+}
 
 function toggleAutoBackup(on) {
   state.settings.autoBackupEnabled = on;
@@ -2623,13 +2636,16 @@ function renderSettings() {
   document.getElementById('week-start-preview').textContent    = s.weekStart;
   document.getElementById('apple-cal-toggle').checked  = s.appleCalEnabled;
   document.getElementById('google-cal-toggle').checked = s.googleCalEnabled;
-  document.getElementById('auto-backup-toggle').checked = s.autoBackupEnabled;
+
+  const autoBackupEl = document.getElementById('auto-backup-toggle');
+  if (autoBackupEl) autoBackupEl.checked = s.autoBackupEnabled;
 
   const freqLabels = {0:'Desactivado',1:'Diario',3:'Cada 3 días',7:'Cada 7 días',14:'Cada 14 días',30:'Mensual'};
   const freqLabel = freqLabels[s.autoBackupDays] || 'Cada '+s.autoBackupDays+' días';
-  document.getElementById('auto-backup-status-text').textContent =
-    s.autoBackupEnabled ? ('Activo · '+freqLabel) : 'Desactivado';
-  document.getElementById('backup-freq-preview').textContent = freqLabel;
+  const autoStatusEl = document.getElementById('auto-backup-status-text');
+  if (autoStatusEl) autoStatusEl.textContent = s.autoBackupEnabled ? ('Activo · '+freqLabel) : 'Desactivado';
+  const backupFreqEl = document.getElementById('backup-freq-preview');
+  if (backupFreqEl) backupFreqEl.textContent = freqLabel;
 
   renderUpcomingBottomBar();
 }
@@ -3045,7 +3061,7 @@ function shuffleAffQueue() {
 
 function renderAffirmations() {
   if (!state.affQueue.length) shuffleAffQueue();
-  renderAffCard('in'); renderAffDots();
+  renderAffCard('no-anim'); renderAffDots();
 }
 
 function currentAffKey() { return 'aff_'+state.affQueue[state.affIndex]; }
@@ -3061,7 +3077,8 @@ function renderAffCard(direction) {
   const hasRec = !!state.affRecordings[currentAffKey()];
 
   const card = document.createElement('div');
-  card.className = 'aff-card '+(direction==='in-from-right'?'slide-from-right':direction==='in-from-left'?'slide-from-left':'slide-from-right');
+  // FIX: 'no-anim' starts immediately visible as slide-in; animated directions start offscreen
+  card.className = 'aff-card '+(direction==='no-anim'?'slide-in':direction==='in-from-right'?'slide-from-right':direction==='in-from-left'?'slide-from-left':'slide-from-right');
   card.style.background = bg;
   card.innerHTML =
     '<div class="aff-card-number">'+num+' / '+total+'</div>'+
@@ -3081,17 +3098,26 @@ function renderAffCard(direction) {
     if (Math.abs(dx) > 50) moveAff(dx < 0 ? 1 : -1);
   });
 
+  // FIX: for 'no-anim', remove old card immediately (no slide-out animation)
   if (old) {
-    old.className = 'aff-card '+(direction==='in-from-right'?'slide-out-left':'slide-out-right');
-    setTimeout(() => old.remove(), 350);
+    if (direction === 'no-anim') {
+      old.remove();
+    } else {
+      old.className = 'aff-card '+(direction==='in-from-right'?'slide-out-left':'slide-out-right');
+      setTimeout(() => old.remove(), 350);
+    }
   }
   wrap.appendChild(card);
-  requestAnimationFrame(() => requestAnimationFrame(() =>
-    card.classList.replace(
-      direction==='in-from-right'?'slide-from-right':'slide-from-left',
-      'slide-in'
-    )
-  ));
+
+  // FIX: only run the rAF animation for directional slides, not 'no-anim'
+  if (direction !== 'no-anim') {
+    requestAnimationFrame(() => requestAnimationFrame(() =>
+      card.classList.replace(
+        direction==='in-from-right'?'slide-from-right':'slide-from-left',
+        'slide-in'
+      )
+    ));
+  }
 }
 
 function renderAffDots() {
@@ -3130,7 +3156,8 @@ async function startRecording() {
       const blob = new Blob(affAudioChunks,{type:'audio/webm'});
       state.affRecordings[currentAffKey()] = URL.createObjectURL(blob);
       stream.getTracks().forEach(t=>t.stop());
-      renderAffCard('in'); renderAffDots(); showToast('¡Voz grabada!');
+      // FIX: use 'no-anim' so the card refreshes in place without disappearing
+      renderAffCard('no-anim'); renderAffDots(); showToast('¡Voz grabada!');
     };
     affMediaRecorder.start();
     const btn   = document.getElementById('aff-rec-btn');
