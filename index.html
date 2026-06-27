@@ -96,6 +96,7 @@ body {
 .btn-gold:active { opacity:.75; }
 .btn-outline { display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:transparent;color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s; }
 .btn-outline:active { background:var(--surface2); }
+.btn-outline.active { background:var(--dark);color:#fff;border-color:var(--dark); }
 
 /* MODAL — swipe-to-dismiss */
 .modal-overlay { display:none;position:fixed;inset:0;z-index:200;background:rgba(26,30,42,.5);align-items:flex-end;justify-content:center; }
@@ -178,6 +179,32 @@ body {
 .parsed-item::before { content:'·';position:absolute;left:0;color:var(--green); }
 .parsed-actions { display:flex;gap:8px;flex-wrap:wrap; }
 
+/*MEDITATION*/
+.meditation-pill { background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:20px;display:flex;flex-direction:column;gap:12px;flex:1;min-height:0; }
+.meditation-pill-header { font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px; }
+.meditation-pill-content { flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;min-height:0; }
+.meditation-nav-btn { width:36px;height:36px;border-radius:50%;border:0.5px solid var(--border-mid);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-2);font-size:18px;transition:all .15s;flex-shrink:0; }
+.meditation-nav-btn:active { background:var(--gold-light);transform:scale(.9); }
+.meditation-prompt-text { font-size:16px;font-weight:500;color:var(--text-1);line-height:1.5;margin:0 12px;flex:1;display:flex;align-items:center;justify-content:center;min-height:0; }
+.meditation-timer-display { font-size:48px;font-weight:300;font-variant-numeric:tabular-nums;color:var(--dark);letter-spacing:-1px; }
+.meditation-timer-input { width:100%;padding:8px;border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--bg);color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:13px;text-align:center;outline:none; }
+.meditation-timer-input:focus { border-color:var(--gold); }
+.meditation-timer-controls { display:flex;gap:8px;justify-content:center;width:100%; }
+.meditation-timer-btn { padding:8px 16px;border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--surface2);color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;flex-shrink:0; }
+.meditation-timer-btn:active { background:var(--gold-light); }
+.meditation-timer-btn.active { background:var(--dark);color:#fff;border-color:var(--dark); }
+.meditation-toggle-mode { display:flex;gap:6px;justify-content:center;width:100%;flex-wrap:wrap;margin:8px 0; }
+.meditation-mode-btn { padding:6px 12px;border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--bg);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;flex:1;min-width:120px; }
+.meditation-mode-btn.active { background:var(--dark);color:#fff;border-color:var(--dark); }
+.meditation-add-btn { width:32px;height:32px;border-radius:50%;border:none;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all .15s;flex-shrink:0; }
+.meditation-add-btn:active { transform:scale(.9);opacity:.8; }
+.meditation-audio-label { font-size:13px;font-weight:500;color:var(--text-1);margin-top:8px; }
+
+.meditation-habit-option { padding:12px 16px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-md);cursor:pointer;transition:all .15s;margin-bottom:8px; }
+.meditation-habit-option:active { background:var(--gold-light); }
+.meditation-habit-name { font-size:14px;font-weight:500;color:var(--text-1); }
+.meditation-habit-meta { font-size:11px;color:var(--text-3);margin-top:2px; }
+
 /* HABITS */
 .week-grid-header { display:grid;grid-template-columns:1fr repeat(7, 28px);gap:4px;align-items:center;margin-bottom:6px; }
 .week-grid-header span { font-size:10px;font-weight:500;color:var(--text-3);text-align:center; }
@@ -214,7 +241,25 @@ body {
 .check-box.checked + .check-label { color:var(--text-3);text-decoration:line-through; }
 .check-streak-pill { font-size:11px;font-weight:600;color:var(--gold-dark);background:var(--gold-light);padding:2px 8px;border-radius:10px; }
 .check-time-pill { font-size:11px;color:var(--text-3);background:var(--surface2);padding:2px 8px;border-radius:10px;margin-right:2px; }
-.fab { position:sticky;bottom:12px;right:20px;align-self:flex-end;width:46px;height:46px;min-width:46px;min-height:46px;border-radius:50%;background:var(--dark);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(26,30,42,.25);margin-top:auto;transition:transform .15s; }
+.fab { 
+  position:fixed;
+  bottom:calc(var(--nav-h) + 20px);
+  right:40px;
+  width:46px;
+  height:46px;
+  min-width:46px;
+  min-height:46px;
+  border-radius:50%;
+  background:var(--dark);
+  border:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 4px 16px rgba(26,30,42,.25);
+  transition:transform .15s;
+  z-index:10;
+}
 .fab:active { transform:scale(.92); }
 .fab svg { width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round; }
 
@@ -465,6 +510,63 @@ body {
 
 /* SVG CAL ICONS */
 .apple-cal-icon { display:inline-flex;align-items:center;justify-content:center; }
+
+/* GRATITUDE */
+.gratitude-day-section { 
+  display: flex; 
+  flex-direction: column; 
+  background: var(--surface); 
+  border: 0.5px solid var(--border); 
+  border-radius: var(--r-lg); 
+  overflow: hidden;
+}
+
+.gratitude-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  border-bottom: 0.5px solid var(--border);
+  transition: background .15s;
+}
+
+.gratitude-day-header:active {
+  background: var(--gold-light);
+}
+
+.gratitude-day-toggle {
+  display: inline-block;
+  font-size: 18px;
+  color: var(--text-2);
+  transition: transform .2s ease;
+}
+
+.gratitude-day-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg);
+}
+
+.gratitude-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--gold-dark);
+}
+
+.gratitude-entry-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-1);
+}
 </style>
 </head>
 <body>
@@ -503,6 +605,14 @@ body {
         <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
         <div class="ft-text"><strong>Afirmaciones</strong><span>100 afirmaciones de voz</span></div>
       </div>
+      <div class="feature-tile" onclick="navigateTo('gratitude')">
+        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="ft-text"><strong>Gratitud</strong><span>Diario de gratitud</span></div>
+      </div>
+      <div class="feature-tile" onclick="navigateTo('meditation')">
+        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke-width="1.5"/></svg></div>
+        <div class="ft-text"><strong>Meditación</strong><span>Meditación guiada</span></div>
+      </div>
       <div class="feature-tile" onclick="navigateTo('settings')" style="grid-column:span 2;aspect-ratio:auto;flex-direction:row;justify-content:flex-start;padding:16px 20px;text-align:left;gap:14px;">
         <div class="ft-icon ft-dark" style="flex-shrink:0"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
         <div class="ft-text" style="text-align:left"><strong>Configuración</strong><span>Perfil, integraciones y preferencias</span></div>
@@ -511,6 +621,64 @@ body {
     </div>
   </div>
 </div>
+
+<!-- MEDITATION -->
+<div id="screen-meditation" class="screen">
+  <div class="screen-header">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+      <div class="screen-header-row">
+        <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div><h2>Meditación</h2><p id="meditation-header-sub">Enfócate y respira</p></div>
+      </div>
+      <div class="screen-header-controls">
+        <button class="btn-outline" style="padding:6px 10px;font-size:11px;gap:4px" id="meditation-link-habit-btn" onclick="openMeditationHabitLink()">🔗</button>
+      </div>
+    </div>
+  </div>
+  <div class="screen-body" id="meditation-body" style="gap:12px;padding:12px 16px">
+    <div class="meditation-pill">
+      <div class="meditation-pill-header">Reflexión del momento</div>
+      <div class="meditation-pill-content" style="flex-direction:row;gap:12px;">
+        <button class="meditation-nav-btn" onclick="prevMeditationPrompt()">‹</button>
+        <div class="meditation-prompt-text" id="meditation-prompt-display"></div>
+        <button class="meditation-nav-btn" onclick="nextMeditationPrompt()">›</button>
+      </div>
+      <button class="meditation-add-btn" style="align-self:center;margin-top:4px" onclick="openMeditationAddPrompt()">+</button>
+    </div>
+    <div class="meditation-pill">
+      <div class="meditation-pill-header">Temporizador</div>
+      <div class="meditation-pill-content" style="gap:8px;">
+        <input type="text" class="meditation-timer-display" id="meditation-time-input" placeholder="5:00" maxlength="5" style="border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--bg);color:var(--text-1);font-size:32px;font-weight:300;text-align:center;padding:12px 8px;outline:none;font-family:'DM Sans',sans-serif;cursor:text;" value="5:00">
+        <div class="meditation-toggle-mode">
+          <button class="meditation-mode-btn active" id="meditation-countdown-btn" onclick="setMeditationCountdown()">Hacia atrás</button>
+          <button class="meditation-mode-btn" id="meditation-countup-btn" onclick="setMeditationCountup()">Hacia adelante</button>
+        </div>
+        <div class="meditation-timer-controls" style="margin-top:8px;padding-bottom:8px;">
+          <button class="meditation-timer-btn" id="meditation-play-btn" onclick="toggleMeditationTimer()">▶ Iniciar</button>
+          <button class="meditation-timer-btn" onclick="stopMeditationTimer()">⏹ Detener</button>
+        </div>
+      </div>
+    </div>
+  
+
+    <div class="meditation-pill">
+      <div class="meditation-pill-header">Sonidos de meditación</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-width:0;">
+        <button class="meditation-nav-btn" onclick="prevMeditationSound()">‹</button>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;min-width:0;text-align:center;">
+          <div class="meditation-audio-label" id="meditation-sound-name">Lluvia</div>
+        </div>
+        <button class="meditation-nav-btn" onclick="nextMeditationSound()">›</button>
+      </div>
+      <div class="meditation-timer-controls" style="margin-top:8px;padding-bottom:8px">
+        <button class="meditation-timer-btn" id="meditation-audio-play-btn" onclick="toggleMeditationAudio()">▶ Reproducir</button>
+        <button class="meditation-timer-btn" onclick="stopMeditationAudio()">⏹ Detener</button>
+      </div>
+      <audio id="meditation-audio-element" style="display:none"></audio>
+    </div>
+  </div>
+</div>
+
 
 <!-- SCAN -->
 <div id="screen-scan" class="screen">
@@ -652,9 +820,15 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         <h4 id="day-events-title" style="margin:0">Selecciona un día</h4>
         <div style="display:flex;gap:6px;flex-wrap:wrap" id="day-header-cal-btns"></div>
       </div>
-      <div id="day-events-list"><p class="no-events-msg">—</p></div>
+      <div id="day-events-list" style="padding-bottom:80px"><p class="no-events-msg">—</p></div>
     </div>
   </div>
+
+  <!-- FAB for month view only -->
+  <button class="fab" id="cal-month-fab" onclick="openAddEvent()">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
 
   <!-- UPCOMING VIEW -->
   <div id="cal-upcoming-view" style="display:none;flex:1;flex-direction:column;overflow:hidden">
@@ -671,6 +845,21 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 
   <!-- FAB for month view only -->
   <button class="fab" id="cal-month-fab" onclick="openAddEvent()">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+</div>
+
+<!-- GRATITUDE -->
+<div id="screen-gratitude" class="screen">
+  <div class="screen-header">
+    <div class="screen-header-row">
+      <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div><h2>Gratitud</h2><p id="gratitude-header-sub">Cargando...</p></div>
+    </div>
+  </div>
+  <div class="screen-body" id="gratitude-body" style="gap:8px">
+  </div>
+  <button class="fab" onclick="openAddGratitude()">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
 </div>
@@ -791,6 +980,11 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
           <div class="settings-row-text"><strong>Exportar lecturas</strong><span>Biblioteca y notas en CSV</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">CSV ⬇</span>
         </div>
+        <div class="settings-row" onclick="exportGratitudeCSV()">
+          <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div class="settings-row-text"><strong>Exportar gratitud</strong><span>Historial de gratitud en CSV</span></div>
+          <span style="font-size:12px;color:var(--text-3);font-weight:500">CSV ⬇</span>
+        </div>
         <div class="settings-row" onclick="exportAllToICS()">
           <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
           <div class="settings-row-text"><strong>Exportar eventos</strong><span>Todos los eventos para Apple/Google Cal</span></div>
@@ -815,6 +1009,11 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
             <input type="checkbox" id="auto-backup-toggle" checked onchange="toggleAutoBackup(this.checked)">
             <span class="toggle-slider"></span>
           </label>
+        </div>
+        <div class="settings-row" onclick="openModal('backup-reminder-modal')">
+          <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="settings-row-text"><strong>Recordatorio de respaldo</strong><span id="backup-reminder-freq-preview">Cada 7 días</span></div>
+          <span class="settings-chevron">›</span>
         </div>
       </div>
     </div>
@@ -862,6 +1061,22 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     <div class="app-footer">
       <div class="app-logo-sm">Vívela<em>365</em></div>
       <div class="app-version">Una relación más profunda contigo mismo.<br>Un día, una página, una intención a la vez.</div>
+    </div>
+  </div>
+
+  <!-- MODAL: Backup Reminder Frequency -->
+  <div class="modal-overlay" id="backup-reminder-modal" onclick="modalOverlayClick(event,'backup-reminder-modal')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Recordatorio de respaldo</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Recibirás un recordatorio para hacer un respaldo en tu dispositivo con la frecuencia que elijas.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <button class="btn-outline" id="reminder-weekly-btn"    onclick="setBackupReminderFreq(7, this)">Cada semana</button>
+        <button class="btn-outline" id="reminder-biweekly-btn"  onclick="setBackupReminderFreq(14, this)">Cada 2 semanas</button>
+        <button class="btn-outline" id="reminder-monthly-btn"   onclick="setBackupReminderFreq(30, this)">Mensual</button>
+        <button class="btn-outline" id="reminder-never-btn"     onclick="setBackupReminderFreq(0, this)">Nunca</button>
+      </div>
+      <button class="btn-gold" onclick="closeModal('backup-reminder-modal')">Guardar</button>
     </div>
   </div>
 </div>
@@ -920,6 +1135,84 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
 </nav>
 
 <!-- ===== MODALS ===== -->
+<!-- MODAL: Meditation - Link to Habit -->
+<div class="modal-overlay" id="meditation-link-modal" onclick="modalOverlayClick(event,'meditation-link-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Vincular meditación a hábito</div>
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Selecciona un hábito para registrar tu sesión de meditación cuando termines.</p>
+    <div id="meditation-habit-list-container" style="max-height:60vh;overflow-y:auto;margin-bottom:16px"></div>
+    <button class="btn-outline" style="width:100%" onclick="closeModal('meditation-link-modal')">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL: Meditation - Log Session -->
+<div class="modal-overlay" id="meditation-log-modal" onclick="modalOverlayClick(event,'meditation-log-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Registrar meditación</div>
+    <p style="font-size:14px;color:var(--text-1);margin-bottom:16px;font-weight:500">¿Deseas registrar esta meditación en tu hábito?</p>
+    <div style="background:var(--gold-light);border:0.5px solid rgba(196,184,142,.3);border-radius:var(--r-md);padding:12px;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:600;color:var(--gold-dark);margin-bottom:4px">Hábito vinculado:</div>
+      <div id="meditation-log-habit-name" style="font-size:13px;color:var(--text-1)">—</div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-outline" style="flex:1" onclick="closeMeditationLogModal()">No</button>
+      <button class="btn-gold" style="flex:1" onclick="confirmMeditationLog()">Sí</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Meditation - Add Custom Prompt -->
+<div class="modal-overlay" id="meditation-add-prompt-modal" onclick="modalOverlayClick(event,'meditation-add-prompt-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nueva reflexión</div>
+    <div class="form-group">
+      <label class="form-label">Tu pregunta o reflexión de meditación</label>
+      <textarea class="form-textarea" id="meditation-new-prompt-input" placeholder="Ej. ¿Qué lecciones aprendí hoy?" style="height:100px"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('meditation-add-prompt-modal')">Cancelar</button>
+      <button class="btn-gold" style="flex:2" onclick="addMeditationPrompt()">Agregar reflexión</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Add Habit -->
+<div class="modal-overlay" id="habit-modal" onclick="modalOverlayClick(event,'habit-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="habit-modal-title">Nuevo hábito</div>
+    <div class="form-group"><label class="form-label">Nombre del hábito</label><input class="form-input" id="habit-name-input" type="text" placeholder="Ej. Meditar 10 min"></div>
+    <div class="form-group">
+      <label class="form-label">Frecuencia</label>
+      <select class="form-select" id="habit-freq-input" onchange="onFreqChange(this.value)">
+        <option value="diario">Diario</option>
+        <option value="lunes-viernes">Lunes a viernes</option>
+        <option value="semanal">Semanal</option>
+        <option value="personalizado">Personalizado</option>
+      </select>
+    </div>
+    <div class="form-group" id="custom-days-group" style="display:none">
+      <label class="form-label">Días de la semana</label>
+      <div class="custom-days-picker">
+        <button type="button" class="day-toggle-btn" data-day="0" onclick="toggleDay(this)">Dom</button>
+        <button type="button" class="day-toggle-btn" data-day="1" onclick="toggleDay(this)">Lun</button>
+        <button type="button" class="day-toggle-btn" data-day="2" onclick="toggleDay(this)">Mar</button>
+        <button type="button" class="day-toggle-btn" data-day="3" onclick="toggleDay(this)">Mié</button>
+        <button type="button" class="day-toggle-btn" data-day="4" onclick="toggleDay(this)">Jue</button>
+        <button type="button" class="day-toggle-btn" data-day="5" onclick="toggleDay(this)">Vie</button>
+        <button type="button" class="day-toggle-btn" data-day="6" onclick="toggleDay(this)">Sáb</button>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="habit-cat-input"><option value="salud">Salud</option><option value="mente">Mente</option><option value="productividad">Productividad</option><option value="relaciones">Relaciones</option><option value="otro">Otro</option></select></div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('habit-modal')">Cancelar</button>
+      <button class="btn-gold" id="habit-save-btn" style="flex:2" onclick="addHabit()">Guardar hábito</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL: Add / Edit Habit -->
 <div class="modal-overlay" id="habit-modal" onclick="modalOverlayClick(event,'habit-modal')">
@@ -1061,6 +1354,27 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('aff-modal')">Cancelar</button>
       <button class="btn-gold"    style="flex:2" onclick="addAffirmation()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Add/Edit Gratitude Entry -->
+<div class="modal-overlay" id="gratitude-modal" onclick="modalOverlayClick(event,'gratitude-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Agregar gratitud</div>
+    <input type="hidden" id="gratitude-edit-id" value="">
+    <div class="form-group">
+      <label class="form-label">¿Por qué estoy agradecido hoy?</label>
+      <textarea class="form-textarea" id="gratitude-text-input" placeholder="Escribe lo que aprecia o valora hoy..." style="height:100px"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Fecha</label>
+      <input class="form-input" id="gratitude-date-input" type="date" value="">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('gratitude-modal')">Cancelar</button>
+      <button class="btn-gold" id="gratitude-save-btn" style="flex:2" onclick="addGratitudeEntry()">Guardar gratitud</button>
     </div>
   </div>
 </div>
@@ -1269,7 +1583,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     'habit-modal','goal-modal','goal-detail-modal','event-modal',
     'book-modal','book-detail-modal','aff-modal','profile-modal',
     'gcal-modal','gemini-modal','reminder-time-modal','week-start-modal',
-    'backup-modal'
+    'backup-modal','gratitude-modal'
   ];
   document.addEventListener('DOMContentLoaded', () => {
     MODAL_IDS.forEach(id => initSwipeDismiss(id));
@@ -1335,6 +1649,39 @@ const state = {
   calDate: new Date(today.getFullYear(), today.getMonth(), 1),
   selectedDay: todayStr,
   weekOffset: 0,
+  meditation: {
+    linkedHabitId: null,
+    lastLinkPromptDate: null,
+    customPrompts: [],
+    promptIndex: 0,
+    soundIndex: 0,
+    timerMinutes: 5,
+    timerSeconds: 0,
+    timerRunning: false,
+    timerCountingUp: false,
+    timerIntervalId: null,
+    audioPlaying: false,
+    savedTimerMinutes: 5,      
+    savedTimerSeconds: 0,   
+  },
+  meditationPrompts: [
+    "¿Quién soy realmente más allá de mis roles y responsabilidades?",
+    "¿Qué estoy agradecido en este momento?",
+    "¿Cuál es mi propósito verdadero en la vida?",
+    "¿Cómo puedo ser más compasivo conmigo mismo hoy?",
+    "¿Qué creencias limitantes me están frenando?",
+    "¿Cuál es la lección que necesito aprender ahora?",
+    "¿Cómo me gustaría sentirme en este momento?",
+    "¿Qué es lo que realmente me importa?",
+    "¿De qué tengo miedo y por qué?",
+    "¿Cómo puedo ser más auténtico en mis relaciones?",
+  ],
+  meditationSounds: [
+    { name: 'Lluvia', file: './sounds/rain.mp3' },
+    { name: 'Ruido blanco', file: './sounds/white-noise.mp3' },
+    { name: 'Olas oceánicas',  file: './sounds/ocean-waves.mp3' },
+    { name: 'Ruido rosa', file: './sounds/pink-noise.mp3' },
+  ],
   selectedEventColor: '#C4B88E',
   nextHabitId: 20,
   nextGoalId:  20,
@@ -1452,7 +1799,7 @@ const state = {
     { id:2, title:'El poder del ahora', author:'Eckhart Tolle', cover:null, totalPages:240, currentPage:240, status:'finished', rating:5, freeNotes:'', quotes:['"El momento presente es lo único que siempre será."'], lessons:['La mente es una herramienta, no quien eres.'], actions:['Practicar presencia consciente 5 min al día.'] },
     { id:3, title:'Ikigai', author:'Héctor García', cover:null, totalPages:208, currentPage:0, status:'not-started', rating:0, freeNotes:'', quotes:[], lessons:[], actions:[] },
   ],
-  settings: {
+settings: {
     profile: { name:'', tagline:'', email:'', avatarDataUrl:null },
     geminiKey: '',
     gcalConnected: false,
@@ -1465,7 +1812,11 @@ const state = {
     autoBackupEnabled: true,
     autoBackupDays: 7,
     lastBackupDate: null,
+    autoBackupReminderFreq: 7,
+    autoBackupReminderLastShown: null,
   },
+  gratitudeEntries: [],
+    nextGratitudeId: 1,
 };
 
 /* Seed habit completions */
@@ -1478,6 +1829,12 @@ state.habits.forEach((h, hi) => {
     if (Math.random() > threshold) h.completions[fmt(d)] = true;
   }
 });
+
+function navigateTo(name) {
+  if (state.currentScreen === 'meditation' && name !== 'meditation') {
+    stopMeditationTimer();
+    stopMeditationAudio();
+  }}
 
 /* Seed events */
 (function(){
@@ -1519,6 +1876,8 @@ function navigateTo(name) {
   if (name==='books')        renderBooks();
   if (name==='affirmations') renderAffirmations();
   if (name==='settings')     renderSettings();
+  if (name==='gratitude')    renderGratitude();
+  if (name==='meditation')   renderMeditation();
 }
 
 /* ================================================================
@@ -1572,6 +1931,14 @@ function openModal(id) {
       ).join('');
       document.getElementById('custom-time-input').value = state.settings.reminderTime;
     }
+  }
+  if (id === 'backup-reminder-modal') {
+    const freqVal = state.settings.autoBackupReminderFreq;
+    document.querySelectorAll('#reminder-weekly-btn, #reminder-biweekly-btn, #reminder-monthly-btn, #reminder-never-btn').forEach(b => b.classList.remove('active'));
+    if (freqVal === 7) document.getElementById('reminder-weekly-btn').classList.add('active');
+    else if (freqVal === 14) document.getElementById('reminder-biweekly-btn').classList.add('active');
+    else if (freqVal === 30) document.getElementById('reminder-monthly-btn').classList.add('active');
+    else if (freqVal === 0) document.getElementById('reminder-never-btn').classList.add('active');
   }
   if (id === 'week-start-modal') {
     pendingWeekStart = state.settings.weekStart;
@@ -2209,6 +2576,156 @@ function addGoal() {
   showToast('¡Objetivo creado!');
 }
 
+function renderMeditation() {
+  const prompt = state.meditationPrompts[state.meditation.promptIndex];
+  document.getElementById('meditation-prompt-display').textContent = prompt;
+  
+  const sound = state.meditationSounds[state.meditation.soundIndex];
+  document.getElementById('meditation-sound-name').textContent = sound.name;
+  
+  document.getElementById('meditation-timer-display').textContent = 
+    String(state.meditation.timerMinutes).padStart(2,'0')+':'+
+    String(state.meditation.timerSeconds).padStart(2,'0');
+}
+
+function prevMeditationPrompt() {
+  state.meditation.promptIndex = (state.meditation.promptIndex - 1 + state.meditationPrompts.length) % state.meditationPrompts.length;
+  renderMeditation();
+}
+
+function nextMeditationPrompt() {
+  state.meditation.promptIndex = (state.meditation.promptIndex + 1) % state.meditationPrompts.length;
+  renderMeditation();
+}
+
+function prevMeditationSound() {
+  state.meditation.soundIndex = (state.meditation.soundIndex - 1 + state.meditationSounds.length) % state.meditationSounds.length;
+  renderMeditation();
+}
+
+function nextMeditationSound() {
+  state.meditation.soundIndex = (state.meditation.soundIndex + 1) % state.meditationSounds.length;
+  renderMeditation();
+}
+
+function toggleMeditationTimer() {
+  if (state.meditation.timerRunning) {
+    state.meditation.timerRunning = false;
+    if (state.meditation.timerIntervalId) clearInterval(state.meditation.timerIntervalId);
+    document.getElementById('meditation-play-btn').textContent = '▶ Iniciar';
+  } else {
+    // Save the current timer values before starting
+    state.meditation.savedTimerMinutes = state.meditation.timerMinutes;
+    state.meditation.savedTimerSeconds = state.meditation.timerSeconds;
+    
+    // Only read the input value if in countdown mode
+    if (!state.meditation.timerCountingUp) {
+      const timeStr = document.getElementById('meditation-time-input').value || '5:00';
+      const parts = timeStr.split(':');
+      state.meditation.timerMinutes = parseInt(parts[0] || '5');
+      state.meditation.timerSeconds = parseInt(parts[1] || '0');
+      // Update saved values for reset
+      state.meditation.savedTimerMinutes = state.meditation.timerMinutes;
+      state.meditation.savedTimerSeconds = state.meditation.timerSeconds;
+    }
+    
+    startMeditationTimer();
+  }
+}
+
+function startMeditationTimer() {
+  state.meditation.timerRunning = true;
+  document.getElementById('meditation-play-btn').textContent = '⏸ Pausar';
+  state.meditation.timerIntervalId = setInterval(() => {
+    if (state.meditation.timerCountingUp) {
+      state.meditation.timerSeconds++;
+      if (state.meditation.timerSeconds >= 60) {
+        state.meditation.timerMinutes++;
+        state.meditation.timerSeconds = 0;
+      }
+    } else {
+      if (state.meditation.timerSeconds === 0) {
+        if (state.meditation.timerMinutes === 0) {
+          stopMeditationTimer();
+          showToast('¡Meditación completada!');
+          return;
+        }
+        state.meditation.timerMinutes--;
+        state.meditation.timerSeconds = 59;
+      } else {
+        state.meditation.timerSeconds--;
+      }
+    }
+    const display = document.getElementById('meditation-time-input');
+    display.value = String(state.meditation.timerMinutes).padStart(2,'0')+':'+String(state.meditation.timerSeconds).padStart(2,'0');
+  }, 1000);
+}
+
+
+function stopMeditationTimer() {
+  state.meditation.timerRunning = false;
+  if (state.meditation.timerIntervalId) clearInterval(state.meditation.timerIntervalId);
+  document.getElementById('meditation-play-btn').textContent = '▶ Iniciar';
+  
+  if (!state.meditation.timerCountingUp) {
+    state.meditation.timerMinutes = state.meditation.savedTimerMinutes;
+    state.meditation.timerSeconds = state.meditation.savedTimerSeconds;
+    document.getElementById('meditation-time-input').value = 
+      String(state.meditation.timerMinutes).padStart(2,'0') + ':' + 
+      String(state.meditation.timerSeconds).padStart(2,'0');
+  } else {
+    state.meditation.timerMinutes = 0;
+    state.meditation.timerSeconds = 0;
+    document.getElementById('meditation-time-input').value = '0:00';
+  }
+}
+
+function setMeditationCountdown() {
+  state.meditation.timerCountingUp = false;
+  document.getElementById('meditation-countdown-btn').classList.add('active');
+  document.getElementById('meditation-countup-btn').classList.remove('active');
+  // If timer is at 0:00, set to 5:00 for countdown mode
+  if (state.meditation.timerMinutes === 0 && state.meditation.timerSeconds === 0) {
+    state.meditation.timerMinutes = 5;
+    state.meditation.timerSeconds = 0;
+    document.getElementById('meditation-time-input').value = '5:00';
+  }
+}
+
+function setMeditationCountup() {
+  state.meditation.timerCountingUp = true;
+  document.getElementById('meditation-countdown-btn').classList.remove('active');
+  document.getElementById('meditation-countup-btn').classList.add('active');
+  // When switching to countup mode, set time to 0:00
+  state.meditation.timerMinutes = 0;
+  state.meditation.timerSeconds = 0;
+  document.getElementById('meditation-time-input').value = '0:00';
+}
+
+function stopMeditationAudio() {
+  const audio = document.getElementById('meditation-audio-element');
+  audio.pause();
+  document.getElementById('meditation-audio-play-btn').textContent = '▶ Reproducir';
+}
+
+function toggleMeditationAudio() {
+  const audio = document.getElementById('meditation-audio-element');
+  if (audio.paused) { audio.play(); document.getElementById('meditation-audio-play-btn').textContent = '⏸ Detener'; }
+  else { audio.pause(); document.getElementById('meditation-audio-play-btn').textContent = '▶ Reproducir'; }
+}
+
+function openMeditationAddPrompt() { openModal('meditation-add-prompt-modal'); }
+function openMeditationHabitLink() { openModal('meditation-link-modal'); }
+
+function addMeditationPrompt() {
+  const text = document.getElementById('meditation-new-prompt-input').value.trim();
+  if (!text) { showToast('Escribe tu reflexión'); return; }
+  state.meditation.customPrompts.push(text);
+  state.meditationPrompts.push(text);
+  document.getElementById('meditation-new-prompt-input').value = '';
+  closeModal('meditation-add-prompt-modal');
+  showToast('¡Reflexión agregada!');
+}
 /* ================================================================
    CALENDAR
 ================================================================ */
@@ -2217,8 +2734,7 @@ const tmrw = new Date(today); tmrw.setDate(tmrw.getDate()+1);
 const tmrwStr = fmt(tmrw);
 
 function appleCalSVG(size) {
-  size = size || 14;
-  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 15l2.5-2.5L13 15l4-4" stroke-linecap="round"/></svg>';
+  return '🍎';
 }
 
 function setCalView(v) {
@@ -2614,6 +3130,76 @@ function toggleAutoBackup(on) {
   showToast('Respaldo automático '+(on?'activado':'desactivado'));
 }
 
+function setBackupReminderFreq(days, btn) {
+  state.settings.autoBackupReminderFreq = days;
+  document.querySelectorAll('#reminder-weekly-btn, #reminder-biweekly-btn, #reminder-monthly-btn, #reminder-never-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  
+  // Update the preview immediately
+  const reminderFreqLabels = {0:'Nunca',7:'Cada semana',14:'Cada 2 semanas',30:'Mensual'};
+  const reminderFreqLabel = reminderFreqLabels[days] || 'Nunca';
+  const reminderFreqEl = document.getElementById('backup-reminder-freq-preview');
+  if (reminderFreqEl) reminderFreqEl.textContent = reminderFreqLabel;
+}
+
+function checkAndShowBackupReminder() {
+  const freq = state.settings.autoBackupReminderFreq;
+  if (freq === 0) return; // Never show reminders
+  
+  const lastShown = state.settings.autoBackupReminderLastShown;
+  if (!lastShown) return; // Don't show on first app startup
+  
+  const now = Date.now();
+  const freqMs = freq * 24 * 60 * 60 * 1000;
+  
+  // Show reminder only if interval has passed since last shown
+  if ((now - lastShown) >= freqMs) {
+    state.settings.autoBackupReminderLastShown = now;
+    showBackupReminderModal();
+  }
+}
+
+function showBackupReminderModal() {
+  const freqLabels = {7:'semanal',14:'bisemanal',30:'mensual'};
+  const freqLabel = freqLabels[state.settings.autoBackupReminderFreq] || 'regular';
+  
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay open';
+  overlay.id = 'backup-reminder-popup';
+  overlay.onclick = (e) => { if (e.target === overlay) closeBackupReminderPopup(); };
+  
+  overlay.innerHTML = `
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:40px;margin-bottom:12px">💾</div>
+        <div class="modal-title">Hora de hacer respaldo</div>
+        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin-top:8px">
+          Haz un respaldo de tus datos en caso de que cambies de dispositivo.<br>
+          <span style="font-size:11px;color:var(--text-3)">Este recordatorio aparecerá cada ${freqLabel}</span>
+        </p>
+      </div>
+      <div style="background:var(--gold-light);border-radius:var(--r-md);padding:12px;margin-bottom:16px;font-size:12px;color:var(--gold-dark);line-height:1.5">
+        <strong>¿Cómo hacer respaldo?</strong><br>
+        1. Toca "Respaldar y restaurar" en ajustes<br>
+        2. Haz clic en "Exportar respaldo completo"<br>
+        3. Guarda el archivo en un lugar seguro
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-outline" style="flex:1" onclick="closeBackupReminderPopup()">Recordar después</button>
+        <button class="btn-gold" style="flex:1" onclick="exportFullBackup(true); closeBackupReminderPopup()">Hacer respaldo ahora</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+function closeBackupReminderPopup() {
+  const el = document.getElementById('backup-reminder-popup');
+  if (el) el.remove();
+}
+
 /* ================================================================
    SETTINGS
 ================================================================ */
@@ -2646,6 +3232,22 @@ function renderSettings() {
   if (autoStatusEl) autoStatusEl.textContent = s.autoBackupEnabled ? ('Activo · '+freqLabel) : 'Desactivado';
   const backupFreqEl = document.getElementById('backup-freq-preview');
   if (backupFreqEl) backupFreqEl.textContent = freqLabel;
+
+  // Backup reminder frequency display
+  const reminderFreqLabels = {0:'Nunca',7:'Cada semana',14:'Cada 2 semanas',30:'Mensual'};
+  const reminderFreqLabel = reminderFreqLabels[s.autoBackupReminderFreq] || 'Nunca';
+  const reminderFreqEl = document.getElementById('backup-reminder-freq-preview');
+  if (reminderFreqEl) reminderFreqEl.textContent = reminderFreqLabel;
+
+  // Update modal buttons when it opens
+  setTimeout(() => {
+    const freqVal = s.autoBackupReminderFreq;
+    document.querySelectorAll('#reminder-weekly-btn, #reminder-biweekly-btn, #reminder-monthly-btn, #reminder-never-btn').forEach(b => b.classList.remove('active'));
+    if (freqVal === 7) document.getElementById('reminder-weekly-btn').classList.add('active');
+    else if (freqVal === 14) document.getElementById('reminder-biweekly-btn').classList.add('active');
+    else if (freqVal === 30) document.getElementById('reminder-monthly-btn').classList.add('active');
+    else if (freqVal === 0) document.getElementById('reminder-never-btn').classList.add('active');
+  }, 10);
 
   renderUpcomingBottomBar();
 }
@@ -3196,7 +3798,7 @@ function scheduleAutoPlay() {
   clearTimeout(affAutoTimer);
   const url = state.affRecordings[currentAffKey()];
   if (url) playRecording();
-  else affAutoTimer = setTimeout(() => moveAff(1), 4000);
+  else affAutoTimer = setTimeout(() => moveAff(1), 6000);
 }
 
 function addAffirmation() {
@@ -3210,6 +3812,168 @@ function addAffirmation() {
 }
 
 /* ================================================================
+   GRATITUDE
+================================================================ */
+
+function renderGratitude() {
+  window.gratitudeExpandedDates = {};
+  const body = document.getElementById('gratitude-body');
+  
+  if (!state.gratitudeEntries.length) {
+    document.getElementById('gratitude-header-sub').textContent = 'Sin entradas aún';
+    body.innerHTML = '<div style="text-align:center;padding:60px 24px;flex:1"><div style="font-size:48px;opacity:.2;margin-bottom:14px"></div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin entradas de gratitud</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca el + para agregar tu primer momento de gratitud</p></div>';
+    return;
+  }
+
+  // Group entries by date
+  const groupedByDate = {};
+  state.gratitudeEntries.forEach(entry => {
+    if (!groupedByDate[entry.date]) groupedByDate[entry.date] = [];
+    groupedByDate[entry.date].push(entry);
+  });
+
+  // Sort dates in reverse (newest first)
+  const sortedDates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a));
+  
+  // Update header with count
+  document.getElementById('gratitude-header-sub').textContent = 
+    state.gratitudeEntries.length + ' entrada' + (state.gratitudeEntries.length !== 1 ? 's' : '') + ' · ' + 
+    sortedDates.length + ' día' + (sortedDates.length !== 1 ? 's' : '');
+
+  // Render collapsible sections for each day
+  let html = '';
+  sortedDates.forEach(dateStr => {
+    const entries = groupedByDate[dateStr];
+    const d = new Date(dateStr + 'T12:00:00');
+    let dateLabel = d.toLocaleDateString('es-MX', {weekday: 'long', day: 'numeric', month: 'long'});
+
+dateLabel = dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1);
+    const isExpanded = window.gratitudeExpandedDates && window.gratitudeExpandedDates[dateStr];
+
+    html += '<div class="gratitude-day-section" data-date="' + dateStr + '">' +
+      '<div class="gratitude-day-header" onclick="toggleGratitudeDay(\'' + dateStr + '\')">' +
+      '<div style="display:flex;align-items:center;gap:10px;flex:1">' +
+      '<span class="gratitude-day-toggle" style="transform:rotate(' + (isExpanded ? '90' : '0') + 'deg)">›</span>' +
+      '<div>' +
+      '<div style="font-size:14px;font-weight:600">' + dateLabel + '</div>' +
+      '<div style="font-size:11px;color:var(--text-3);margin-top:2px">' + entries.length + ' entrada' + (entries.length !== 1 ? 's' : '') + '</div>' +
+      '</div></div>' +
+      '<button class="btn-outline" style="padding:5px 10px;font-size:11px;flex-shrink:0" onclick="event.stopPropagation();openEditGratitude(' + entries[0].id + ')">✏️</button>' +
+      '</div>' +
+      '<div class="gratitude-day-entries" style="display:' + (isExpanded ? 'block' : 'none') + '">';
+
+    entries.forEach((entry, idx) => {
+      html += '<div class="gratitude-entry">' +
+        '<div class="gratitude-entry-text">' + escHtml(entry.text) + '</div>' +
+        '<div style="display:flex;gap:6px;margin-top:6px">' +
+        '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1" onclick="openEditGratitude(' + entry.id + ')">Editar</button>' +
+        '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteGratitudeEntry(' + entry.id + ')">Eliminar</button>' +
+        '</div>' +
+        '</div>';
+    });
+
+    html += '</div></div>';
+  });
+
+  body.innerHTML = html;
+}
+
+function toggleGratitudeDay(dateStr) {
+  if (!window.gratitudeExpandedDates) window.gratitudeExpandedDates = {};
+  window.gratitudeExpandedDates[dateStr] = !window.gratitudeExpandedDates[dateStr];
+  
+  const section = document.querySelector('[data-date="' + dateStr + '"]');
+  if (!section) return;
+  
+  const toggle = section.querySelector('.gratitude-day-toggle');
+  const entries = section.querySelector('.gratitude-day-entries');
+  const isExp = window.gratitudeExpandedDates[dateStr];
+  
+  if (toggle) toggle.style.transform = 'rotate(' + (isExp ? '90' : '0') + 'deg)';
+  if (entries) entries.style.display = isExp ? 'block' : 'none';
+}
+
+function openAddGratitude() {
+  document.getElementById('gratitude-edit-id').value = '';
+  document.getElementById('gratitude-text-input').value = '';
+  document.getElementById('gratitude-date-input').value = todayStr;
+  document.querySelector('#gratitude-modal .modal-title').textContent = 'Agregar gratitud';
+  document.getElementById('gratitude-save-btn').textContent = 'Guardar gratitud';
+  document.getElementById('gratitude-save-btn').setAttribute('onclick', 'addGratitudeEntry()');
+  openModal('gratitude-modal');
+}
+
+function openEditGratitude(id) {
+  const entry = state.gratitudeEntries.find(e => e.id === id);
+  if (!entry) return;
+  document.getElementById('gratitude-edit-id').value = id;
+  document.getElementById('gratitude-text-input').value = entry.text;
+  document.getElementById('gratitude-date-input').value = entry.date;
+  document.querySelector('#gratitude-modal .modal-title').textContent = 'Editar entrada';
+  document.getElementById('gratitude-save-btn').textContent = 'Guardar cambios';
+  document.getElementById('gratitude-save-btn').setAttribute('onclick', 'saveGratitudeEdit(' + id + ')');
+  openModal('gratitude-modal');
+}
+
+function addGratitudeEntry() {
+  const text = document.getElementById('gratitude-text-input').value.trim();
+  const date = document.getElementById('gratitude-date-input').value;
+  
+  if (!text) { showToast('Escribe lo que aprecia hoy'); return; }
+  if (!date) { showToast('Selecciona una fecha'); return; }
+  
+  state.gratitudeEntries.push({
+    id: state.nextGratitudeId++,
+    date,
+    text,
+    timestamp: Date.now(),
+  });
+
+  closeModal('gratitude-modal');
+  renderGratitude();
+  showToast('¡Gratitud guardada!');
+}
+
+function saveGratitudeEdit(id) {
+  const entry = state.gratitudeEntries.find(e => e.id === id);
+  if (!entry) return;
+  
+  const text = document.getElementById('gratitude-text-input').value.trim();
+  const date = document.getElementById('gratitude-date-input').value;
+  
+  if (!text) { showToast('Escribe lo que aprecia'); return; }
+  if (!date) { showToast('Selecciona una fecha'); return; }
+  
+  entry.text = text;
+  entry.date = date;
+  
+  closeModal('gratitude-modal');
+  renderGratitude();
+  showToast('¡Entrada actualizada!');
+}
+
+function deleteGratitudeEntry(id) {
+  if (!confirm('¿Eliminar esta entrada de gratitud?')) return;
+  state.gratitudeEntries = state.gratitudeEntries.filter(e => e.id !== id);
+  renderGratitude();
+  showToast('Entrada eliminada');
+}
+
+function exportGratitudeCSV() {
+  if (!state.gratitudeEntries.length) { showToast('No hay entradas de gratitud para exportar'); return; }
+  const rows = [['Fecha', 'Día', 'Entrada de gratitud']];
+  const sortedEntries = [...state.gratitudeEntries].sort((a, b) => b.date.localeCompare(a.date));
+  sortedEntries.forEach(e => {
+    const d = new Date(e.date + 'T12:00:00');
+    const dayName = d.toLocaleDateString('es-MX', { weekday: 'long' });
+    const dateFormatted = d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+    rows.push([dateFormatted, dayName, e.text]);
+  });
+  downloadCSV('vivela365-gratitud.csv', rows);
+  showToast('Gratitud exportada ✓');
+}
+
+/* ================================================================
    INIT
 ================================================================ */
 document.getElementById('event-date-input').value = todayStr;
@@ -3217,6 +3981,7 @@ renderHabits();
 renderGoals();
 renderSettings();
 checkAutoBackup();
+checkAndShowBackupReminder();
 </script>
 </body>
 </html>
