@@ -666,6 +666,7 @@ body {
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-width:0;">
         <button class="meditation-nav-btn" onclick="prevMeditationSound()">‹</button>
         <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;min-width:0;text-align:center;">
+          <div style="font-size:32px;margin-bottom:8px;" id="meditation-sound-emoji">🌧️</div>
           <div class="meditation-audio-label" id="meditation-sound-name">Lluvia</div>
         </div>
         <button class="meditation-nav-btn" onclick="nextMeditationSound()">›</button>
@@ -843,10 +844,6 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     </div>
   </div>
 
-  <!-- FAB for month view only -->
-  <button class="fab" id="cal-month-fab" onclick="openAddEvent()">
-    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-  </button>
 </div>
 
 <!-- GRATITUDE -->
@@ -1547,22 +1544,36 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     const handle = sheet.querySelector('.modal-handle');
     const dragTarget = handle || sheet;
 
+    let startY = 0, currentY = 0, isDragging = false;
+    let capturedPointerId = null;
+
     dragTarget.addEventListener('pointerdown', e => {
-      startY = e.clientY; currentY = 0; isDragging = true;
+      // Only capture if the target is the drag target itself (the handle or sheet)
+      // Don't interfere with clicks on child elements
+      if (e.target !== dragTarget && !e.target.closest('.modal-handle')) return;
+      
+      startY = e.clientY; 
+      currentY = 0; 
+      isDragging = true;
       sheet.style.transition = 'none';
       dragTarget.setPointerCapture(e.pointerId);
+      capturedPointerId = e.pointerId;
     });
 
     dragTarget.addEventListener('pointermove', e => {
-      if (!isDragging) return;
+      if (!isDragging || !capturedPointerId) return;
       const dy = e.clientY - startY;
       if (dy < 0) return;
       currentY = dy;
       sheet.style.transform = `translateY(${dy}px)`;
     });
 
-    dragTarget.addEventListener('pointerup', () => {
+    dragTarget.addEventListener('pointerup', e => {
       isDragging = false;
+      if (capturedPointerId && dragTarget.hasPointerCapture) {
+        dragTarget.releasePointerCapture(capturedPointerId);
+        capturedPointerId = null;
+      }
       sheet.style.transition = 'transform 0.3s cubic-bezier(.4,0,.2,1)';
       if (currentY > 100) {
         sheet.style.transform = 'translateY(110%)';
@@ -1795,9 +1806,9 @@ const state = {
   ],
   bookView: 'shelf',
   books: [
-    { id:1, title:'Hábitos atómicos', author:'James Clear', cover:null, totalPages:320, currentPage:280, status:'reading', rating:0, freeNotes:'Un libro transformador sobre sistemas vs metas.', quotes:['Pequeños cambios, resultados extraordinarios.'], lessons:['Los hábitos son el compound interest de la superación personal.'], actions:['Rediseñar mi entorno para que los buenos hábitos sean obvios.'] },
-    { id:2, title:'El poder del ahora', author:'Eckhart Tolle', cover:null, totalPages:240, currentPage:240, status:'finished', rating:5, freeNotes:'', quotes:['"El momento presente es lo único que siempre será."'], lessons:['La mente es una herramienta, no quien eres.'], actions:['Practicar presencia consciente 5 min al día.'] },
-    { id:3, title:'Ikigai', author:'Héctor García', cover:null, totalPages:208, currentPage:0, status:'not-started', rating:0, freeNotes:'', quotes:[], lessons:[], actions:[] },
+    { id:1, title:'Hábitos atómicos', author:'James Clear', color: null, cover:null, totalPages:320, currentPage:280, status:'reading', rating:0, freeNotes:'Un libro transformador sobre sistemas vs metas.', quotes:['Pequeños cambios, resultados extraordinarios.'], lessons:['Los hábitos son el compound interest de la superación personal.'], actions:['Rediseñar mi entorno para que los buenos hábitos sean obvios.'] },
+    { id:2, title:'El poder del ahora', author:'Eckhart Tolle', color: null, cover:null, totalPages:240, currentPage:240, status:'finished', rating:5, freeNotes:'', quotes:['"El momento presente es lo único que siempre será."'], lessons:['La mente es una herramienta, no quien eres.'], actions:['Practicar presencia consciente 5 min al día.'] },
+    { id:3, title:'Ikigai', author:'Héctor García', color: null, cover:null, totalPages:208, currentPage:0, status:'not-started', rating:0, freeNotes:'', quotes:[], lessons:[], actions:[] },
   ],
 settings: {
     profile: { name:'', tagline:'', email:'', avatarDataUrl:null },
@@ -2667,6 +2678,13 @@ function stopMeditationTimer() {
   if (state.meditation.timerIntervalId) clearInterval(state.meditation.timerIntervalId);
   document.getElementById('meditation-play-btn').textContent = '▶ Iniciar';
   
+  // If a habit is linked, show logging prompt
+  if (state.meditation.linkedHabitId && state.meditation.timerMinutes === 0 && state.meditation.timerSeconds === 0 && state.meditation.timerCountingUp) {
+    // Only prompt if timer finished naturally (countdown reached 0 or countup was running)
+    openMeditationLogModal();
+    return;
+  }
+  
   if (!state.meditation.timerCountingUp) {
     state.meditation.timerMinutes = state.meditation.savedTimerMinutes;
     state.meditation.timerSeconds = state.meditation.savedTimerSeconds;
@@ -2725,6 +2743,34 @@ function addMeditationPrompt() {
   document.getElementById('meditation-new-prompt-input').value = '';
   closeModal('meditation-add-prompt-modal');
   showToast('¡Reflexión agregada!');
+}
+
+function openMeditationLogModal() {
+  const habit = state.habits.find(h => h.id === state.meditation.linkedHabitId);
+  if (!habit) return;
+  document.getElementById('meditation-log-habit-name').textContent = habit.name;
+  openModal('meditation-log-modal');
+}
+
+function closeMeditationLogModal() {
+  closeModal('meditation-log-modal');
+  // Reset timer
+  state.meditation.timerMinutes = state.meditation.savedTimerMinutes;
+  state.meditation.timerSeconds = state.meditation.savedTimerSeconds;
+  document.getElementById('meditation-time-input').value = 
+    String(state.meditation.timerMinutes).padStart(2,'0') + ':' + 
+    String(state.meditation.timerSeconds).padStart(2,'0');
+}
+
+function confirmMeditationLog() {
+  const habit = state.habits.find(h => h.id === state.meditation.linkedHabitId);
+  if (!habit) return;
+  // Log today's meditation
+  habit.completions[todayStr] = true;
+  habit.streak++;
+  closeMeditationLogModal();
+  renderHabits();
+  showToast('¡Meditación registrada en ' + habit.name + '! 🧘');
 }
 /* ================================================================
    CALENDAR
@@ -3474,7 +3520,9 @@ function renderBooksContent() {
   else renderBookList(el);
 }
 
-function coverBg(b, idx) { return COVER_COLORS[idx % COVER_COLORS.length]; }
+const BOOK_COLORS = ['#C4B88E','#6BAA8E','#5B82B4','#C4645A','#1A1E2A','#D4A847','#9CA3AF'];
+
+function coverBg(b, idx) { return b.color || COVER_COLORS[idx % COVER_COLORS.length]; }
 
 function renderShelf(el) {
   const byStatus = s => state.books.filter(b => b.status===s);
@@ -3558,6 +3606,13 @@ function openBookDetail(id) {
     '<div class="star-row" id="star-row-'+id+'">'+starsHTML(id,b.rating)+'</div>'+
     '</div></div>'+
     '<div style="margin-bottom:14px">'+
+    '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:6px">Color de portada</div>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap" id="book-color-picker-'+id+'">'+
+    BOOK_COLORS.map(color =>
+      '<div class="ecswatch" data-color="'+color+'" style="width:32px;height:32px;border-radius:8px;background:'+color+';cursor:pointer;border:2px solid '+(color===b.color?'#1A1E2A':'transparent')+';transition:all .15s" onclick="setBookColor('+id+',\''+color+'\')"></div>'
+    ).join('')+
+    '</div></div>'+
+    '<div style="margin-bottom:14px">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
     '<span style="font-size:12px;color:var(--text-3)">Progreso</span>'+
     '<span style="font-size:12px;font-weight:600">'+b.currentPage+(b.totalPages?'/'+b.totalPages:'')+'  pág · '+pct+'%</span>'+
@@ -3620,6 +3675,17 @@ function removeLearning(id, field, idx) {
   b[field].splice(idx,1); openBookDetail(id);
 }
 
+function setBookColor(id, color) {
+  const b = state.books.find(x => x.id === id);
+  if (!b) return;
+  b.color = color;
+  document.querySelectorAll('#book-color-picker-'+id+' .ecswatch').forEach(s => {
+    s.style.borderColor = s.dataset.color === color ? '#1A1E2A' : 'transparent';
+  });
+  renderBooks();
+  showToast('Color actualizado');
+}
+
 function addBook() {
   const title = document.getElementById('book-title-input').value.trim();
   if (!title) { showToast('Escribe el título del libro'); return; }
@@ -3634,6 +3700,17 @@ function addBook() {
   });
   ['book-title-input','book-author-input','book-pages-input','book-current-input'].forEach(i => document.getElementById(i).value='');
   closeModal('book-modal'); renderBooks(); showToast('¡Libro agregado!');
+}
+
+function setBookColor(id, color) {
+  const b = state.books.find(x => x.id === id);
+  if (!b) return;
+  b.color = color;
+  document.querySelectorAll('#book-color-picker-'+id+' .ecswatch').forEach(s => {
+    s.style.borderColor = s.dataset.color === color ? '#1A1E2A' : 'transparent';
+  });
+  renderBooks();
+  showToast('Color actualizado');
 }
 
 function deleteBook(id) {
@@ -3971,6 +4048,41 @@ function exportGratitudeCSV() {
   });
   downloadCSV('vivela365-gratitud.csv', rows);
   showToast('Gratitud exportada ✓');
+}
+/* ================================================================
+   MEDITATION
+================================================================ */
+function openMeditationHabitLink() {
+  const container = document.getElementById('meditation-habit-list-container');
+  if (!state.habits.length) {
+    container.innerHTML = '<p style="font-size:13px;color:var(--text-3);text-align:center;padding:20px">Sin hábitos creados aún. Crea uno en la sección de Hábitos.</p>';
+  } else {
+    const currentLinked = state.meditation.linkedHabitId;
+    container.innerHTML = '<div style="display:flex;flex-direction:column;gap:8px">' +
+      state.habits.map(h =>
+        '<div class="meditation-habit-option'+(h.id===currentLinked?' active':'')+'" onclick="linkMeditationHabit('+h.id+')">'+
+        '<div class="meditation-habit-name">'+h.name+'</div>'+
+        '<div class="meditation-habit-meta">'+h.cat+' · '+h.freq+(h.id===currentLinked?' ✓ Vinculado':'')+' </div>'+
+        '</div>'
+      ).join('') +
+      '<div style="margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border)">'+
+      '<button class="btn-outline" style="width:100%;font-size:12px;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="unlinkMeditationHabit()">Desvincular hábito</button>'+
+      '</div>'+
+      '</div>';
+  }
+  openModal('meditation-link-modal');
+}
+function linkMeditationHabit(habitId) {
+  state.meditation.linkedHabitId = habitId;
+  const habit = state.habits.find(h => h.id === habitId);
+  showToast('Meditación vinculada a: ' + habit.name);
+  openMeditationHabitLink(); // Refresh to show checkmark
+}
+
+function unlinkMeditationHabit() {
+  state.meditation.linkedHabitId = null;
+  showToast('Hábito desvinculado');
+  openMeditationHabitLink(); // Refresh
 }
 
 /* ================================================================
