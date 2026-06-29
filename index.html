@@ -567,6 +567,33 @@ body {
   line-height: 1.6;
   color: var(--text-1);
 }
+
+/* HABIT TIME PICKER */
+.habit-picker-item {
+  flex-shrink: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-3);
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all .15s;
+}
+
+.habit-picker-item.active {
+  background: var(--dark);
+  color: #fff;
+  font-weight: 600;
+}
+
+.habit-picker-item:hover {
+  background: var(--surface2);
+}
 </style>
 </head>
 <body>
@@ -648,7 +675,7 @@ body {
     <div class="meditation-pill">
       <div class="meditation-pill-header">Temporizador</div>
       <div class="meditation-pill-content" style="gap:8px;">
-        <input type="text" class="meditation-timer-display" id="meditation-time-input" placeholder="5:00" maxlength="5" style="border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--bg);color:var(--text-1);font-size:32px;font-weight:300;text-align:center;padding:12px 8px;outline:none;font-family:'DM Sans',sans-serif;cursor:text;" value="5:00">
+        <input type="text" class="meditation-timer-display" id="meditation-time-input" placeholder="5:00" maxlength="5" style="border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--bg);color:var(--text-1);font-size:32px;font-weight:300;text-align:center;padding:12px 8px;outline:none;font-family:'DM Sans',sans-serif;cursor:text;max-width:min(200px,calc(100% - 40px));width:100%;box-sizing:border-box;" value="5:00">
         <div class="meditation-toggle-mode">
           <button class="meditation-mode-btn active" id="meditation-countdown-btn" onclick="setMeditationCountdown()">Hacia atrás</button>
           <button class="meditation-mode-btn" id="meditation-countup-btn" onclick="setMeditationCountup()">Hacia adelante</button>
@@ -1251,6 +1278,46 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('habit-modal')">Cancelar</button>
       <button class="btn-gold" id="habit-save-btn" style="flex:2" onclick="addHabit()">Guardar hábito</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Edit Habit Reminder Time (Scrollable Picker) -->
+<div class="modal-overlay" id="habit-time-modal" onclick="modalOverlayClick(event,'habit-time-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="habit-time-modal-title">Hora de recordatorio</div>
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Ajusta la hora de notificación para este hábito.</p>
+    
+    <input type="hidden" id="habit-time-edit-id" value="">
+    
+    <!-- Time Picker -->
+    <div style="background:var(--surface2);border-radius:var(--r-lg);padding:16px;margin-bottom:16px;display:flex;gap:12px;align-items:center;justify-content:center">
+      
+      <!-- Hours -->
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center">
+        <div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:8px;text-transform:uppercase">Hora</div>
+        <div id="habit-hour-picker" style="height:120px;overflow-y:scroll;scroll-snap-type:y mandatory;border-radius:var(--r-sm);background:var(--surface);border:0.5px solid var(--border-mid);padding:12px 8px;text-align:center;display:flex;flex-direction:column;gap:0">
+          <!-- Hours will be populated by JS -->
+        </div>
+      </div>
+
+      <!-- Minutes -->
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center">
+        <div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:8px;text-transform:uppercase">Min</div>
+        <div id="habit-minute-picker" style="height:120px;overflow-y:scroll;scroll-snap-type:y mandatory;border-radius:var(--r-sm);background:var(--surface);border:0.5px solid var(--border-mid);padding:12px 8px;text-align:center;display:flex;flex-direction:column;gap:0">
+          <!-- Minutes will be populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--gold-light);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:16px;font-size:12px;color:var(--gold-dark);text-align:center">
+      <span id="habit-time-preview">Hora global: 8:00 AM</span>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <button class="btn-outline" style="flex:1" onclick="clearHabitCustomTime()">Usar global</button>
+      <button class="btn-gold" style="flex:2" onclick="saveHabitCustomTime()">Guardar</button>
     </div>
   </div>
 </div>
@@ -2183,7 +2250,7 @@ function renderDailyChecklist() {
   el.innerHTML = todayHabits.map(h => {
     const done = h.completions[todayStr];
     const notifTime = getEffectiveNotifTime(h);
-    const timeLabel = notifTime ? '<span class="check-time-pill">🔔 '+formatTime12(notifTime)+'</span>' : '';
+    const timeLabel = notifTime ? '<span class="check-time-pill" onclick="openHabitTimeEditor('+h.id+',event)" style="cursor:pointer">🔔 '+formatTime12(notifTime)+'</span>' : '';
     return '<div class="checklist-item">'+
       '<div class="check-box'+(done?' checked':'')+'" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')"></div>'+
       '<span class="check-label" onclick="openEditHabit('+h.id+')">'+h.name+'</span>'+
@@ -2325,6 +2392,90 @@ function deleteHabit(id) {
   closeModal('habit-modal');
   renderHabits();
   showToast('Hábito eliminado');
+}
+
+function openHabitTimeEditor(habitId, event) {
+  event.stopPropagation();
+  const h = state.habits.find(x => x.id === habitId);
+  if (!h) return;
+  
+  document.getElementById('habit-time-edit-id').value = habitId;
+  document.getElementById('habit-time-modal-title').textContent = 'Recordatorio: ' + h.name;
+  document.getElementById('habit-time-preview').textContent = 
+    'Hora global: ' + formatTime12(state.settings.reminderTime);
+  
+  // Populate hour picker
+  const hourPicker = document.getElementById('habit-hour-picker');
+  hourPicker.innerHTML = Array.from({length: 24}, (_, i) => 
+    '<div class="habit-picker-item" data-hour="'+i+'" onclick="selectHabitHour('+i+')">'+
+    String(i).padStart(2,'0')+'</div>'
+  ).join('');
+  
+  // Populate minute picker
+  const minPicker = document.getElementById('habit-minute-picker');
+  minPicker.innerHTML = [0, 15, 30, 45].map(m =>
+    '<div class="habit-picker-item" data-minute="'+m+'" onclick="selectHabitMinute('+m+')">'+
+    String(m).padStart(2,'0')+'</div>'
+  ).join('');
+  
+  // Set current values
+  const [curH, curM] = h.notifTime ? h.notifTime.split(':').map(Number) : [8, 0];
+  window.habitTimePickerH = curH;
+  window.habitTimePickerM = curM;
+  updateHabitTimePickerDisplay();
+  
+  openModal('habit-time-modal');
+}
+
+function selectHabitHour(h) {
+  window.habitTimePickerH = h;
+  updateHabitTimePickerDisplay();
+}
+
+function selectHabitMinute(m) {
+  window.habitTimePickerM = m;
+  updateHabitTimePickerDisplay();
+}
+
+function updateHabitTimePickerDisplay() {
+  // Update active states
+  document.querySelectorAll('#habit-hour-picker .habit-picker-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.hour) === window.habitTimePickerH);
+  });
+  document.querySelectorAll('#habit-minute-picker .habit-picker-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.minute) === window.habitTimePickerM);
+  });
+  
+  // Scroll to active
+  const activeHour = document.querySelector('#habit-hour-picker .habit-picker-item.active');
+  const activeMin = document.querySelector('#habit-minute-picker .habit-picker-item.active');
+  if (activeHour) activeHour.scrollIntoView({block: 'center', behavior: 'smooth'});
+  if (activeMin) activeMin.scrollIntoView({block: 'center', behavior: 'smooth'});
+}
+
+function saveHabitCustomTime() {
+  const habitId = parseInt(document.getElementById('habit-time-edit-id').value);
+  const h = state.habits.find(x => x.id === habitId);
+  if (!h) return;
+  
+  const timeStr = String(window.habitTimePickerH).padStart(2,'0') + ':' + 
+                  String(window.habitTimePickerM).padStart(2,'0');
+  h.notifTime = timeStr;
+  
+  closeModal('habit-time-modal');
+  renderDailyChecklist();
+  showToast('Recordatorio: ' + formatTime12(timeStr));
+}
+
+function clearHabitCustomTime() {
+  const habitId = parseInt(document.getElementById('habit-time-edit-id').value);
+  const h = state.habits.find(x => x.id === habitId);
+  if (!h) return;
+  
+  h.notifTime = '';
+  closeModal('habit-time-modal');
+  renderDailyChecklist();
+  showToast('Usando hora global de recordatorio');
 }
 
 function onFreqChange(val) {
