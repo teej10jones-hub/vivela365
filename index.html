@@ -571,28 +571,23 @@ body {
 /* HABIT TIME PICKER */
 .habit-picker-item {
   flex-shrink: 0;
-  height: 32px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
-  color: var(--text-3);
+  color: var(--text-2);
   scroll-snap-align: center;
   scroll-snap-stop: always;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all .15s;
+  transition: all .2s;
+  border-radius: 8px;
 }
 
 .habit-picker-item.active {
-  background: var(--dark);
-  color: #fff;
+  background: rgba(196, 184, 142, 0.15);
+  color: var(--text-1);
   font-weight: 600;
-}
-
-.habit-picker-item:hover {
-  background: var(--surface2);
 }
 </style>
 </head>
@@ -2407,14 +2402,14 @@ function openHabitTimeEditor(habitId, event) {
   // Populate hour picker
   const hourPicker = document.getElementById('habit-hour-picker');
   hourPicker.innerHTML = Array.from({length: 24}, (_, i) => 
-    '<div class="habit-picker-item" data-hour="'+i+'" onclick="selectHabitHour('+i+')">'+
+    '<div class="habit-picker-item" data-hour="'+i+'">'+
     String(i).padStart(2,'0')+'</div>'
   ).join('');
   
   // Populate minute picker
   const minPicker = document.getElementById('habit-minute-picker');
   minPicker.innerHTML = [0, 15, 30, 45].map(m =>
-    '<div class="habit-picker-item" data-minute="'+m+'" onclick="selectHabitMinute('+m+')">'+
+    '<div class="habit-picker-item" data-minute="'+m+'">'+
     String(m).padStart(2,'0')+'</div>'
   ).join('');
   
@@ -2422,18 +2417,62 @@ function openHabitTimeEditor(habitId, event) {
   const [curH, curM] = h.notifTime ? h.notifTime.split(':').map(Number) : [8, 0];
   window.habitTimePickerH = curH;
   window.habitTimePickerM = curM;
-  updateHabitTimePickerDisplay();
+  
+  // Setup scroll behavior
+  setupHabitPickerScroll();
   
   openModal('habit-time-modal');
 }
 
-function selectHabitHour(h) {
-  window.habitTimePickerH = h;
-  updateHabitTimePickerDisplay();
+function setupHabitPickerScroll() {
+  const hourPicker = document.getElementById('habit-hour-picker');
+  const minPicker = document.getElementById('habit-minute-picker');
+  
+  // Scroll to initial position
+  setTimeout(() => {
+    const activeHour = hourPicker.querySelector('[data-hour="'+window.habitTimePickerH+'"]');
+    const activeMin = minPicker.querySelector('[data-minute="'+window.habitTimePickerM+'"]');
+    if (activeHour) activeHour.scrollIntoView({block: 'center'});
+    if (activeMin) activeMin.scrollIntoView({block: 'center'});
+    updateHabitTimePickerDisplay();
+  }, 100);
+  
+  // Setup scroll listeners
+  hourPicker.addEventListener('scroll', () => detectHabitPickerCenter('hour'), {passive: true});
+  minPicker.addEventListener('scroll', () => detectHabitPickerCenter('minute'), {passive: true});
 }
 
-function selectHabitMinute(m) {
-  window.habitTimePickerM = m;
+function detectHabitPickerCenter(type) {
+  const picker = type === 'hour' 
+    ? document.getElementById('habit-hour-picker')
+    : document.getElementById('habit-minute-picker');
+  
+  if (!picker) return;
+  
+  const pickerRect = picker.getBoundingClientRect();
+  const centerY = pickerRect.top + pickerRect.height / 2;
+  
+  const items = picker.querySelectorAll('.habit-picker-item');
+  let closestItem = items[0];
+  let closestDistance = Math.abs(items[0].getBoundingClientRect().top + items[0].getBoundingClientRect().height / 2 - centerY);
+  
+  items.forEach(item => {
+    const itemRect = item.getBoundingClientRect();
+    const itemCenter = itemRect.top + itemRect.height / 2;
+    const distance = Math.abs(itemCenter - centerY);
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestItem = item;
+    }
+  });
+  
+  // Update the value
+  if (type === 'hour') {
+    window.habitTimePickerH = parseInt(closestItem.dataset.hour);
+  } else {
+    window.habitTimePickerM = parseInt(closestItem.dataset.minute);
+  }
+  
   updateHabitTimePickerDisplay();
 }
 
@@ -2445,12 +2484,6 @@ function updateHabitTimePickerDisplay() {
   document.querySelectorAll('#habit-minute-picker .habit-picker-item').forEach(el => {
     el.classList.toggle('active', parseInt(el.dataset.minute) === window.habitTimePickerM);
   });
-  
-  // Scroll to active
-  const activeHour = document.querySelector('#habit-hour-picker .habit-picker-item.active');
-  const activeMin = document.querySelector('#habit-minute-picker .habit-picker-item.active');
-  if (activeHour) activeHour.scrollIntoView({block: 'center', behavior: 'smooth'});
-  if (activeMin) activeMin.scrollIntoView({block: 'center', behavior: 'smooth'});
 }
 
 function saveHabitCustomTime() {
