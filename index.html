@@ -635,6 +635,10 @@ body {
         <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke-width="1.5"/></svg></div>
         <div class="ft-text"><strong>Meditación</strong><span>Meditación guiada</span></div>
       </div>
+      <div class="feature-tile" onclick="navigateTo('notes')">
+        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="ft-text"><strong>Notas</strong><span>Diario rápido · Texto y voz</span></div>
+      </div>
       <div class="feature-tile" onclick="navigateTo('settings')" style="grid-column:span 2;aspect-ratio:auto;flex-direction:row;justify-content:flex-start;padding:16px 20px;text-align:left;gap:14px;">
         <div class="ft-icon ft-dark" style="flex-shrink:0"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
         <div class="ft-text" style="text-align:left"><strong>Configuración</strong><span>Perfil, integraciones y preferencias</span></div>
@@ -676,8 +680,8 @@ body {
           <button class="meditation-mode-btn" id="meditation-countup-btn" onclick="setMeditationCountup()">Hacia adelante</button>
         </div>
         <div class="meditation-timer-controls" style="margin-top:8px;padding-bottom:8px;">
-          <button class="meditation-timer-btn" id="meditation-play-btn" onclick="toggleMeditationTimer()">▶ Iniciar</button>
-          <button class="meditation-timer-btn" onclick="stopMeditationTimer()">⏹ Detener</button>
+          <button class="meditation-timer-btn" id="meditation-play-btn" onclick="toggleMeditationTimer()"><span id="play-icon">▶</span> Iniciar</button>
+          <button class="meditation-timer-btn" onclick="stopMeditationTimer()"><span id="stop-icon">⏹</span> Detener</button>
         </div>
       </div>
     </div>
@@ -761,7 +765,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   <div class="screen-header">
     <div class="screen-header-row">
       <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-      <div><h2>Rastreador de hábitos</h2><p id="habits-today-label">Cargando...</p></div>
+      <div><h2>Rastreador de hábitos</h2><p id="habits-today-label">Sin notas</p></div>
     </div>
   </div>
   <div class="screen-body" id="habits-body">
@@ -879,6 +883,28 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   <div class="screen-body" id="gratitude-body" style="gap:8px">
   </div>
   <button class="fab" onclick="openAddGratitude()">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+</div>
+
+<!-- NOTES JOURNAL -->
+<div id="screen-notes" class="screen">
+  <div class="screen-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+    <div class="screen-header-row">
+      <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div><h2>Notas</h2><p id="notes-header-sub">Sin notas aún</p></div>
+    </div>
+  </div>
+  
+  <!-- SEARCH BAR -->
+  <div style="padding:12px 16px;background:var(--surface);border-bottom:0.5px solid var(--border);flex-shrink:0">
+    <input type="text" id="notes-search-input" placeholder="Buscar en notas..." class="form-input" style="font-size:14px" oninput="filterNotes()">
+  </div>
+
+  <div class="screen-body" id="notes-body" style="gap:8px">
+  </div>
+
+  <button class="fab" onclick="openAddNote()">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
 </div>
@@ -1008,6 +1034,11 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
           <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
           <div class="settings-row-text"><strong>Exportar eventos</strong><span>Todos los eventos para Apple/Google Cal</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">.ics ⬇</span>
+        </div>
+        <div class="settings-row" onclick="exportNotesCSV()">
+          <div class="settings-icon si-blue"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+          <div class="settings-row-text"><strong>Exportar notas</strong><span>Diario y grabaciones en CSV</span></div>
+          <span style="font-size:12px;color:var(--text-3);font-weight:500">CSV ⬇</span>
         </div>
       </div>
     </div>
@@ -1213,6 +1244,9 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
         <option value="personalizado">Personalizado</option>
       </select>
     </div>
+    <div class="form-group" id="habit-improvement-strategy-group" style="display:none">
+      <div id="habit-strategy-display"></div>
+    </div>
     <div class="form-group" id="custom-days-group" style="display:none">
       <label class="form-label">Días de la semana</label>
       <div class="custom-days-picker">
@@ -1226,6 +1260,11 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       </div>
     </div>
     <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="habit-cat-input"><option value="salud">Salud</option><option value="mente">Mente</option><option value="productividad">Productividad</option><option value="relaciones">Relaciones</option><option value="otro">Otro</option></select></div>
+    <div class="form-group">
+      <label class="form-label">¿Por qué quiero este hábito? <span style="color:var(--text-3);font-weight:400">(opcional)</span></label>
+      <input class="form-input" id="habit-why-input" type="text" placeholder="Ej. Para tener mejor salud mental, mejorar mi energía...">
+      <span style="font-size:11px;color:var(--text-3);margin-top:3px">Esto se usará en tus recordatorios para motivarte</span>
+    </div>
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('habit-modal')">Cancelar</button>
       <button class="btn-gold" id="habit-save-btn" style="flex:2" onclick="addHabit()">Guardar hábito</button>
@@ -1438,6 +1477,70 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   </div>
 </div>
 
+<!-- MODAL: Add/Edit Note -->
+<div class="modal-overlay" id="note-modal" onclick="modalOverlayClick(event,'note-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <input type="hidden" id="note-edit-id" value="">
+    <div class="modal-title" id="note-modal-title">Nueva nota</div>
+    
+    <!-- TYPE TOGGLE -->
+    <div class="meditation-toggle-mode" style="margin-bottom:16px">
+      <button class="meditation-mode-btn active" id="note-text-mode-btn" onclick="setNoteMode('text')">✍️ Texto</button>
+      <button class="meditation-mode-btn" id="note-voice-mode-btn" onclick="setNoteMode('voice')">🎤 Voz</button>
+    </div>
+
+    <!-- TEXT MODE -->
+    <div id="note-text-mode" style="display:flex;flex-direction:column;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Título (opcional)</label>
+        <input class="form-input" id="note-title-input" type="text" placeholder="Ej. Reflexión matinal">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tu nota</label>
+        <textarea class="form-textarea" id="note-text-input" placeholder="Escribe tu nota aquí..." style="height:120px"></textarea>
+      </div>
+    </div>
+
+    <!-- VOICE MODE -->
+    <div id="note-voice-mode" style="display:none;flex-direction:column;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Título de la grabación (opcional)</label>
+        <input class="form-input" id="note-voice-title-input" type="text" placeholder="Ej. Nota rápida">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción (opcional)</label>
+        <input class="form-input" id="note-voice-desc-input" type="text" placeholder="Ej. Pensamiento importante del día">
+      </div>
+      
+      <!-- RECORDING CONTROLS -->
+      <div style="background:var(--gold-light);border-radius:var(--r-md);padding:14px;display:flex;flex-direction:column;gap:10px;align-items:center">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dark)">Grabadora de voz</div>
+        <div id="note-recorder-display" style="font-size:18px;font-weight:300;font-family:monospace;color:var(--text-1)">0:00</div>
+        <div style="display:flex;gap:8px">
+          <button class="meditation-timer-btn" id="note-rec-start-btn" onclick="startNoteRecording()">⏺ Grabar</button>
+          <button class="meditation-timer-btn" id="note-rec-stop-btn" onclick="stopNoteRecording()" style="display:none">⏹ Detener</button>
+        </div>
+      </div>
+      <div id="note-recorded-status" style="display:none;background:var(--green-light);border-radius:var(--r-md);padding:10px;text-align:center;font-size:12px;color:#3d7a60">✓ Grabación guardada</div>
+    </div>
+
+    <div class="form-group" style="margin-top:4px">
+      <label class="form-label">Fecha</label>
+      <input class="form-input" id="note-date-input" type="date" value="">
+    </div>
+
+    <div id="note-delete-row" style="display:none;margin-bottom:12px">
+      <button class="btn-outline" id="note-delete-btn" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)">Eliminar nota</button>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('note-modal')">Cancelar</button>
+      <button class="btn-gold" id="note-save-btn" style="flex:2" onclick="addNote()">Guardar nota</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: Profile -->
 <div class="modal-overlay" id="profile-modal" onclick="modalOverlayClick(event,'profile-modal')">
   <div class="modal-sheet">
@@ -1589,6 +1692,37 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
   </div>
 </div>
 
+<!-- MODAL: Habit Statistics -->
+<div class="modal-overlay" id="habit-stats-modal" onclick="modalOverlayClick(event,'habit-stats-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="habit-stats-title">Estadísticas del hábito</div>
+    <input type="hidden" id="habit-stats-id" value="">
+    
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">Últimas 12 semanas</div>
+      
+      <div style="margin-bottom:16px">
+        <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:8px">🔥 Días más disciplinados</div>
+        <div id="habit-stats-best" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:8px">⚠️ Días con mayor dificultad</div>
+        <div id="habit-stats-worst" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+    </div>
+
+    <div style="border-top:0.5px solid var(--border);padding-top:16px;margin-bottom:16px">
+      <label class="form-label">¿Cómo puedes mejorar en esos días?</label>
+      <textarea class="form-textarea" id="habit-stats-improvement-input" placeholder="Ej. Recordatorio a las 7am, preparar lo que necesito la noche anterior..." style="height:80px;margin-bottom:10px"></textarea>
+      <button class="btn-gold" onclick="saveHabitImprovement()" style="width:100%">Guardar estrategia</button>
+    </div>
+
+    <button class="btn-outline" style="width:100%" onclick="closeModal('habit-stats-modal')">Cerrar</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1656,7 +1790,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     'habit-modal','goal-modal','goal-detail-modal','event-modal',
     'book-modal','book-detail-modal','aff-modal','profile-modal',
     'gcal-modal','gemini-modal','reminder-time-modal','week-start-modal',
-    'backup-modal','gratitude-modal'
+    'backup-modal','gratitude-modal', 'habit-stats-modal'
   ];
   document.addEventListener('DOMContentLoaded', () => {
     MODAL_IDS.forEach(id => initSwipeDismiss(id));
@@ -1693,11 +1827,11 @@ function isScheduled(habit, dateObj) {
 const state = {
   currentScreen: 'home',
   habits: [
-    { id:1, name:'Meditar',      freq:'diario',        cat:'mente',         notifTime:'', customDays:null, streak:7,  completions:{} },
-    { id:2, name:'Ejercicio',    freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:14, completions:{} },
-    { id:3, name:'Leer 30 min',  freq:'lunes-viernes', cat:'mente',         notifTime:'', customDays:null, streak:3,  completions:{} },
-    { id:4, name:'Agua 2L',      freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:21, completions:{} },
-    { id:5, name:'Journaling',   freq:'personalizado', cat:'productividad', notifTime:'09:00', customDays:[false,true,true,false,true,true,false], streak:5, completions:{} },
+    { id:1, name:'Meditar',      freq:'diario',        cat:'mente',         notifTime:'', customDays:null, streak:7,  completions:{}, improvementStrategy:'', why:''  },
+    { id:2, name:'Ejercicio',    freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:14, completions:{}, improvementStrategy:'', why:''  },
+    { id:3, name:'Leer 30 min',  freq:'lunes-viernes', cat:'mente',         notifTime:'', customDays:null, streak:3,  completions:{}, improvementStrategy:'', why:''  },
+    { id:4, name:'Agua 2L',      freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:21, completions:{}, improvementStrategy:'', why:''  },
+    { id:5, name:'Journaling',   freq:'personalizado', cat:'productividad', notifTime:'09:00', customDays:[false,true,true,false,true,true,false], streak:5, completions:{}, improvementStrategy:''  },
   ],
   goals: [
     { id:1, title:'Leer 12 libros este año', cat:'Aprendizaje', desc:'Un libro por mes para crecer personal y profesionalmente.', status:'active', milestones:[
@@ -1750,8 +1884,8 @@ const state = {
     "¿Cómo puedo ser más auténtico en mis relaciones?",
   ],
   meditationSounds: [
-    { name: 'Lluvia', file: './sounds/rain.mp3' },
-    { name: 'Ruido blanco', file: './sounds/white-noise.mp3' },
+    { name: 'Lluvia', file: './sounds/lluvia.wav' },
+    { name: 'Ruido blanco', file: './sounds/sonido blanco.wav' },
     { name: 'Olas oceánicas',  file: './sounds/ocean-waves.mp3' },
     { name: 'Ruido rosa', file: './sounds/pink-noise.mp3' },
   ],
@@ -1868,9 +2002,9 @@ const state = {
   ],
   bookView: 'shelf',
   books: [
-    { id:1, title:'Hábitos atómicos', author:'James Clear', color: null, cover:null, totalPages:320, currentPage:280, status:'reading', rating:0, freeNotes:'Un libro transformador sobre sistemas vs metas.', quotes:['Pequeños cambios, resultados extraordinarios.'], lessons:['Los hábitos son el compound interest de la superación personal.'], actions:['Rediseñar mi entorno para que los buenos hábitos sean obvios.'] },
-    { id:2, title:'El poder del ahora', author:'Eckhart Tolle', color: null, cover:null, totalPages:240, currentPage:240, status:'finished', rating:5, freeNotes:'', quotes:['"El momento presente es lo único que siempre será."'], lessons:['La mente es una herramienta, no quien eres.'], actions:['Practicar presencia consciente 5 min al día.'] },
-    { id:3, title:'Ikigai', author:'Héctor García', color: null, cover:null, totalPages:208, currentPage:0, status:'not-started', rating:0, freeNotes:'', quotes:[], lessons:[], actions:[] },
+    { id:1, title:'Hábitos atómicos', author:'James Clear',dateStarted: null, color: null, cover:null, totalPages:320, currentPage:280, status:'reading', rating:0, freeNotes:'Un libro transformador sobre sistemas vs metas.', quotes:['Pequeños cambios, resultados extraordinarios.'], lessons:['Los hábitos son el compound interest de la superación personal.'], actions:['Rediseñar mi entorno para que los buenos hábitos sean obvios.'] },
+    { id:2, title:'El poder del ahora', author:'Eckhart Tolle',dateStarted: null, color: null, cover:null, totalPages:240, currentPage:240, status:'finished', rating:5, freeNotes:'', quotes:['"El momento presente es lo único que siempre será."'], lessons:['La mente es una herramienta, no quien eres.'], actions:['Practicar presencia consciente 5 min al día.'] },
+    { id:3, title:'Ikigai', author:'Héctor García',dateStarted: null, color: null, cover:null, totalPages:208, currentPage:0, status:'not-started', rating:0, freeNotes:'', quotes:[], lessons:[], actions:[] },
   ],
 settings: {
     profile: { name:'', tagline:'', email:'', avatarDataUrl:null },
@@ -1890,6 +2024,11 @@ settings: {
   },
   gratitudeEntries: [],
     nextGratitudeId: 1,
+  notes: [],
+  nextNoteId: 1,
+  noteSearch: '',
+  noteVoiceChunks: [],
+  noteRecordings: {},  // { 'note_123': ObjectURL, ... }
 };
 
 /* Seed habit completions */
@@ -2049,6 +2188,30 @@ function openModal(id) {
     }
   }
 
+  if (id === 'habit-stats-modal') {
+    const habitId = parseInt(document.getElementById('habit-stats-id').value);
+    const analysis = analyzeHabitByDayOfWeek(habitId);
+    if (!analysis) return;
+    
+    const h = state.habits.find(x => x.id === habitId);
+    document.getElementById('habit-stats-title').textContent = 'Estadísticas: ' + h.name;
+    
+    document.getElementById('habit-stats-best').innerHTML = analysis.best.map(stat =>
+      '<div style="background:var(--green-light);border-radius:var(--r-sm);padding:10px;display:flex;justify-content:space-between;align-items:center">'+
+      '<span style="font-size:13px;font-weight:500;color:var(--text-1)">'+stat.dayName+'</span>'+
+      '<span style="font-size:13px;font-weight:600;color:#3d7a60">'+stat.pct+'%</span>'+
+      '</div>'
+    ).join('');
+    
+    document.getElementById('habit-stats-worst').innerHTML = analysis.worst.map(stat =>
+      '<div style="background:var(--red-light);border-radius:var(--r-sm);padding:10px;display:flex;justify-content:space-between;align-items:center">'+
+      '<span style="font-size:13px;font-weight:500;color:var(--text-1)">'+stat.dayName+'</span>'+
+      '<span style="font-size:13px;font-weight:600;color:#8a3d35">'+stat.pct+'%</span>'+
+      '</div>'
+    ).join('');
+    
+    document.getElementById('habit-stats-improvement-input').value = h.improvementStrategy || '';
+  }
   const overlay = document.getElementById(id);
   if (overlay) overlay.classList.add('open');
 }
@@ -2135,7 +2298,7 @@ function parseGeminiResponse() {
     btn.className = 'btn-outline'; btn.style.flex = '1';
     btn.textContent = 'Importar hábitos';
     btn.onclick = () => {
-      data.habitos.forEach(h => state.habits.push({id:state.nextHabitId++,name:h.nombre,freq:'diario',cat:'otro',notifTime:'',customDays:null,streak:0,completions:{}}));
+      data.habitos.forEach(h => state.habits.push({id:state.nextHabitId++,name:h.nombre,freq:'diario',cat:'otro',notifTime:'',customDays:null,streak:0,completions:{},why:null}));
       showToast(data.habitos.length+' hábito(s) importados');
     };
     actions.appendChild(btn);
@@ -2159,6 +2322,7 @@ function parseGeminiResponse() {
    HABITS
 ================================================================ */
 const DAYS_ES = ['D','L','M','M','J','V','S'];
+const DAYS_ES_FULL = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const CAT_COLORS = { salud:'pill-green', mente:'pill-blue', productividad:'pill-gold', relaciones:'pill-amber', otro:'pill-gray' };
 
@@ -2226,7 +2390,10 @@ function toggleHabitDay(id, dateStr) {
   const h = state.habits.find(x => x.id === id);
   if (!h) return;
   h.completions[dateStr] = !h.completions[dateStr];
-  if (dateStr === todayStr) h.streak = h.completions[dateStr] ? h.streak+1 : Math.max(0, h.streak-1);
+  
+  // Recalculate streak based on actual history
+  h.streak = calculateHabitStreak(h);
+  
   renderWeekGrid();
   renderDailyChecklist();
   renderStreaks();
@@ -2246,9 +2413,11 @@ function renderDailyChecklist() {
     const done = h.completions[todayStr];
     const notifTime = getEffectiveNotifTime(h);
     const timeLabel = notifTime ? '<span class="check-time-pill" onclick="openHabitTimeEditor('+h.id+',event)" style="cursor:pointer">🔔 '+formatTime12(notifTime)+'</span>' : '';
+    const statsBtn = '<button class="btn-outline" style="padding:4px 6px;font-size:11px;gap:3px;flex-shrink:0" onclick="openHabitStats('+h.id+',event)">📊</button>';
     return '<div class="checklist-item">'+
       '<div class="check-box'+(done?' checked':'')+'" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')"></div>'+
       '<span class="check-label" onclick="openEditHabit('+h.id+')">'+h.name+'</span>'+
+      statsBtn+
       timeLabel+
       '<span class="check-streak-pill">🔥 '+h.streak+'</span>'+
       '</div>';
@@ -2286,6 +2455,89 @@ function renderHeatmap() {
   document.getElementById('heatmap-months').innerHTML = monthLabels;
 }
 
+function analyzeHabitByDayOfWeek(habitId) {
+  const h = state.habits.find(x => x.id === habitId);
+  if (!h) return null;
+
+  // Analyze last 12 weeks
+  const dayStats = [0,1,2,3,4,5,6].map(dow => ({
+    dow,
+    dayName: DAYS_ES_FULL[dow],
+    scheduled: 0,
+    completed: 0,
+    pct: 0
+  }));
+
+  const startDate = new Date(today);
+  startDate.setDate(startDate.getDate() - 84);
+
+  for (let i = 0; i < 84; i++) {
+    const d = new Date(startDate);
+    d.setDate(startDate.getDate() + i);
+    const dow = d.getDay();
+    const ds = fmt(d);
+
+    if (isScheduled(h, d)) {
+      dayStats[dow].scheduled++;
+      if (h.completions[ds]) dayStats[dow].completed++;
+    }
+  }
+
+  // Calculate percentages (only for scheduled days)
+  dayStats.forEach(stat => {
+    stat.pct = stat.scheduled > 0 ? Math.round(stat.completed / stat.scheduled * 100) : 0;
+  });
+
+  // Get top 2 and bottom 2
+  const sorted = [...dayStats].sort((a, b) => b.pct - a.pct);
+  const best = sorted.slice(0, 2);
+  const worst = sorted.slice(-2).reverse();
+
+  return { best, worst, all: dayStats };
+}
+
+function openHabitStats(habitId, event) {
+  if (event) event.stopPropagation();
+  document.getElementById('habit-stats-id').value = habitId;
+  openModal('habit-stats-modal');
+}
+
+function saveHabitImprovement() {
+  const habitId = parseInt(document.getElementById('habit-stats-id').value);
+  const strategy = document.getElementById('habit-stats-improvement-input').value.trim();
+  const h = state.habits.find(x => x.id === habitId);
+  if (!h) return;
+  h.improvementStrategy = strategy;
+  closeModal('habit-stats-modal');
+  showToast('¡Estrategia guardada!');
+}
+
+function calculateHabitStreak(habit) {
+  let streak = 0;
+  let currentDate = new Date(today);
+  
+  // Go backwards from today to find consecutive completed days
+  for (let i = 0; i < 365; i++) {
+    const ds = fmt(currentDate);
+    
+    if (isScheduled(habit, currentDate)) {
+      // This day is scheduled for this habit
+      if (habit.completions[ds]) {
+        // Completed - increment streak
+        streak++;
+      } else {
+        // Scheduled but not completed - streak is broken
+        break;
+      }
+    }
+    // If not scheduled for this day, skip it and keep looking back
+    
+    currentDate.setDate(currentDate.getDate() - 1);
+  }
+  
+  return streak;
+}
+
 function renderStreaks() {
   const el = document.getElementById('streaks-list');
   if (!state.habits.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text-3);text-align:center;padding:12px 0">Sin hábitos aún</p>'; return; }
@@ -2303,9 +2555,21 @@ function renderStreaks() {
       '</div></div>'+
       '<div style="display:flex;align-items:center;gap:8px">'+
       '<div class="streak-count"><span class="num">'+h.streak+'</span><span style="font-size:16px">🔥</span></div>'+
+      '<button class="btn-outline" style="padding:5px 8px;font-size:11px;flex-shrink:0;margin-right:6px" onclick="openHabitStats('+h.id+',event)">📊</button>'+
       '<span style="font-size:16px;color:var(--text-3)">›</span>'+
       '</div></div>';
   }).join('');
+}
+
+function getHabitNotificationText(habit) {
+  const hasWhy = habit.why && habit.why.trim().length > 0;
+  const notificationOptions = [
+    hasWhy ? `Ya es hora de ${habit.name} para ${habit.why}` : `Ya es hora de ${habit.name}`,
+    hasWhy ? `Cumple con tu hábito de ${habit.name} para ${habit.why}` : `Cumple con tu hábito de ${habit.name}`,
+    hasWhy ? `Tu racha de ${habit.name}: ${habit.streak} días 🔥 Continúa para ${habit.why}` : `Tu racha de ${habit.name}: ${habit.streak} días 🔥`,
+  ];
+  // Return a random notification option
+  return notificationOptions[Math.floor(Math.random() * notificationOptions.length)];
 }
 
 function openAddHabit() {
@@ -2331,6 +2595,8 @@ function addHabit() {
     customDays,
     streak:   0,
     completions: {},
+    improvementStrategy: '',
+    why: '',
   });
   closeModal('habit-modal');
   renderHabits();
@@ -2349,12 +2615,23 @@ function openEditHabit(id) {
   document.getElementById('habit-name-input').value = h.name;
   document.getElementById('habit-freq-input').value = h.freq;
   document.getElementById('habit-cat-input').value  = h.cat;
+  document.getElementById('habit-why-input').value = h.why || '';
   document.getElementById('habit-time-input').value = h.notifTime || '';
   onFreqChange(h.freq);
   if (h.freq === 'personalizado' && h.customDays) {
     document.querySelectorAll('.day-toggle-btn').forEach(b => {
       b.classList.toggle('selected', !!h.customDays[parseInt(b.dataset.day)]);
     });
+  }
+  // Show improvement strategy if it exists
+  const strategyGroup = document.getElementById('habit-improvement-strategy-group');
+  if (strategyGroup && h.improvementStrategy) {
+    strategyGroup.style.display = 'block';
+    document.getElementById('habit-strategy-display').innerHTML = 
+      '<div style="background:var(--gold-light);border-radius:var(--r-md);padding:12px;margin-bottom:12px">'+
+      '<div style="font-size:11px;font-weight:600;color:var(--gold-dark);margin-bottom:4px">📊 Tu estrategia de mejora:</div>'+
+      '<div style="font-size:12px;color:var(--text-1)">'+escHtml(h.improvementStrategy)+'</div>'+
+      '</div>';
   }
   document.getElementById('habit-modal').classList.add('open');
 }
@@ -2374,6 +2651,7 @@ function saveEditHabit() {
   h.name      = name;
   h.freq      = freq;
   h.cat       = document.getElementById('habit-cat-input').value;
+  h.why       = document.getElementById('habit-why-input').value.trim();
   h.notifTime = document.getElementById('habit-time-input').value;
   h.customDays = customDays;
   closeModal('habit-modal');
@@ -2542,7 +2820,26 @@ const GOAL_CATS = ['Personal','Salud','Profesional','Finanzas','Relaciones','Apr
 
 function goalProgress(g) {
   if (!g.milestones.length) return 0;
+  // For the reading goal, count up to 12 finished books
+  if (g.id === getReadingGoal()?.id) {
+    const finished = Math.min(12, g.milestones.filter(m => m.done).length);
+    return Math.round(finished / 12 * 100);
+  }
   return Math.round(g.milestones.filter(m => m.done).length / g.milestones.length * 100);
+}
+
+function getReadingGoal() {
+  return state.goals.find(g => g.title === 'Leer 12 libros este año');
+}
+
+function getBookMilestoneByTitle(goal, bookTitle) {
+  if (!goal) return null;
+  return goal.milestones.find(m => {
+    // Extract book title from milestone text (format: "Libro N: Title" or just "Title")
+    const parts = m.text.split(': ');
+    const msTitle = parts.length > 1 ? parts[1] : parts[0];
+    return msTitle.trim() === bookTitle.trim();
+  });
 }
 
 function goalCardHTML(g, extraClass) {
@@ -2729,7 +3026,35 @@ function addMilestone(goalId) {
   const g   = state.goals.find(x => x.id === goalId);
   const inp = document.getElementById('ms-add-input-'+goalId);
   if (!inp || !inp.value.trim()) { showToast('Escribe el nombre del hito'); return; }
-  g.milestones.push({ text:inp.value.trim(), done:false });
+  
+  const milestoneText = inp.value.trim();
+  g.milestones.push({ text:milestoneText, done:false });
+  
+  // SYNC: If this is the reading goal, auto-add a book to lecturas
+  const readingGoal = getReadingGoal();
+  if (g.id === readingGoal?.id) {
+    // Check if book already exists
+    const bookExists = state.books.find(b => b.title === milestoneText);
+    if (!bookExists) {
+      state.books.push({
+        id: state.nextBookId++,
+        title: milestoneText,
+        author: '',
+        cover: null,
+        totalPages: 0,
+        currentPage: 0,
+        status: 'not-started',
+        rating: 0,
+        freeNotes: '',
+        quotes: [],
+        lessons: [],
+        actions: [],
+        dateStarted: null,
+      });
+      renderBooks();
+    }
+  }
+  
   openGoalDetail(goalId);
   renderGoals();
   showToast('¡Hito agregado!');
@@ -2774,13 +3099,84 @@ function addGoal() {
 function renderMeditation() {
   const prompt = state.meditationPrompts[state.meditation.promptIndex];
   document.getElementById('meditation-prompt-display').textContent = prompt;
-  
+
   const sound = state.meditationSounds[state.meditation.soundIndex];
   document.getElementById('meditation-sound-name').textContent = sound.name;
+
+  const audio = document.getElementById('meditation-audio-element');
+
+  if (!audio.src || !audio.src.endsWith(sound.file.replace('./', ''))) {
+    audio.pause();
+    audio.src = sound.file;
+    audio.load();
+    updateMeditationAudioBtn();
+  }
+
+  document.getElementById('meditation-time-input').value =
+      String(state.meditation.timerMinutes).padStart(2,'0') +
+      ':' +
+      String(state.meditation.timerSeconds).padStart(2,'0');
+}
+
+// Helper function to create SVG buttons
+function createSVGIcon(type) {
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("width", "14");
+  svg.setAttribute("height", "14");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "2");
+  svg.setAttribute("stroke-linecap", "round");
   
-  document.getElementById('meditation-timer-display').textContent = 
-    String(state.meditation.timerMinutes).padStart(2,'0')+':'+
-    String(state.meditation.timerSeconds).padStart(2,'0');
+  if (type === 'play') {
+    const polygon = document.createElementNS(svgNS, "polygon");
+    polygon.setAttribute("points", "5 3 19 12 5 21 5 3");
+    polygon.setAttribute("fill", "currentColor");
+    svg.appendChild(polygon);
+  } else if (type === 'pause') {
+    const line1 = document.createElementNS(svgNS, "line");
+    line1.setAttribute("x1", "6");
+    line1.setAttribute("y1", "4");
+    line1.setAttribute("x2", "6");
+    line1.setAttribute("y2", "20");
+    line1.setAttribute("stroke-width", "4.5");  // Add this line
+    
+    const line2 = document.createElementNS(svgNS, "line");
+    line2.setAttribute("x1", "18");
+    line2.setAttribute("y1", "4");
+    line2.setAttribute("x2", "18");
+    line2.setAttribute("y2", "20");
+    line2.setAttribute("stroke-width", "4.5");  // Add this line
+    
+    svg.appendChild(line1);
+    svg.appendChild(line2);
+  } else if (type === 'stop') {
+    const rect = document.createElementNS(svgNS, "rect");
+    rect.setAttribute("x", "6");
+    rect.setAttribute("y", "6");
+    rect.setAttribute("width", "12");
+    rect.setAttribute("height", "12");
+    rect.setAttribute("fill", "currentColor");
+    svg.appendChild(rect);
+  } else if (type === 'check') {
+    const polyline = document.createElementNS(svgNS, "polyline");
+    polyline.setAttribute("points", "20 6 9 17 4 12");
+    polyline.setAttribute("fill", "none");
+    polyline.setAttribute("stroke-width", "2");
+    svg.appendChild(polyline);
+  }
+  
+  return svg;
+}
+
+function updateMeditationAudioBtn() {
+  const btn = document.getElementById('meditation-audio-play-btn');
+  if (!btn) return;
+  btn.innerHTML = '';
+  btn.appendChild(createSVGIcon('play'));
+  btn.appendChild(document.createTextNode(' Reproducir'));
 }
 
 function prevMeditationPrompt() {
@@ -2807,24 +3203,54 @@ function toggleMeditationTimer() {
   if (state.meditation.timerRunning) {
     state.meditation.timerRunning = false;
     if (state.meditation.timerIntervalId) clearInterval(state.meditation.timerIntervalId);
-    document.getElementById('meditation-play-btn').textContent = '▶ Iniciar';
+    const btn = document.getElementById('meditation-play-btn');
+    btn.innerHTML = '';
+    btn.appendChild(createSVGIcon('play'));
+    btn.appendChild(document.createTextNode(' Iniciar'));
   } else {
-    // Save the current timer values before starting
     state.meditation.savedTimerMinutes = state.meditation.timerMinutes;
     state.meditation.savedTimerSeconds = state.meditation.timerSeconds;
     
-    // Only read the input value if in countdown mode
     if (!state.meditation.timerCountingUp) {
       const timeStr = document.getElementById('meditation-time-input').value || '5:00';
       const parts = timeStr.split(':');
       state.meditation.timerMinutes = parseInt(parts[0] || '5');
       state.meditation.timerSeconds = parseInt(parts[1] || '0');
-      // Update saved values for reset
       state.meditation.savedTimerMinutes = state.meditation.timerMinutes;
       state.meditation.savedTimerSeconds = state.meditation.timerSeconds;
     }
     
     startMeditationTimer();
+    const btn = document.getElementById('meditation-play-btn');
+    btn.innerHTML = '';
+    btn.appendChild(createSVGIcon('pause'));
+    btn.appendChild(document.createTextNode(' Pausar'));
+  }
+}
+
+function stopMeditationTimer() {
+  state.meditation.timerRunning = false;
+  if (state.meditation.timerIntervalId) clearInterval(state.meditation.timerIntervalId);
+  const btn = document.getElementById('meditation-play-btn');
+  btn.innerHTML = '';
+  btn.appendChild(createSVGIcon('play'));
+  btn.appendChild(document.createTextNode(' Iniciar'));
+  
+  if (state.meditation.linkedHabitId && state.meditation.timerMinutes === 0 && state.meditation.timerSeconds === 0 && state.meditation.timerCountingUp) {
+    openMeditationLogModal();
+    return;
+  }
+  
+  if (!state.meditation.timerCountingUp) {
+    state.meditation.timerMinutes = state.meditation.savedTimerMinutes;
+    state.meditation.timerSeconds = state.meditation.savedTimerSeconds;
+    document.getElementById('meditation-time-input').value = 
+      String(state.meditation.timerMinutes).padStart(2,'0') + ':' + 
+      String(state.meditation.timerSeconds).padStart(2,'0');
+  } else {
+    state.meditation.timerMinutes = 0;
+    state.meditation.timerSeconds = 0;
+    document.getElementById('meditation-time-input').value = '0:00';
   }
 }
 
@@ -2856,32 +3282,6 @@ function startMeditationTimer() {
   }, 1000);
 }
 
-
-function stopMeditationTimer() {
-  state.meditation.timerRunning = false;
-  if (state.meditation.timerIntervalId) clearInterval(state.meditation.timerIntervalId);
-  document.getElementById('meditation-play-btn').textContent = '▶ Iniciar';
-  
-  // If a habit is linked, show logging prompt
-  if (state.meditation.linkedHabitId && state.meditation.timerMinutes === 0 && state.meditation.timerSeconds === 0 && state.meditation.timerCountingUp) {
-    // Only prompt if timer finished naturally (countdown reached 0 or countup was running)
-    openMeditationLogModal();
-    return;
-  }
-  
-  if (!state.meditation.timerCountingUp) {
-    state.meditation.timerMinutes = state.meditation.savedTimerMinutes;
-    state.meditation.timerSeconds = state.meditation.savedTimerSeconds;
-    document.getElementById('meditation-time-input').value = 
-      String(state.meditation.timerMinutes).padStart(2,'0') + ':' + 
-      String(state.meditation.timerSeconds).padStart(2,'0');
-  } else {
-    state.meditation.timerMinutes = 0;
-    state.meditation.timerSeconds = 0;
-    document.getElementById('meditation-time-input').value = '0:00';
-  }
-}
-
 function setMeditationCountdown() {
   state.meditation.timerCountingUp = false;
   document.getElementById('meditation-countdown-btn').classList.add('active');
@@ -2904,18 +3304,31 @@ function setMeditationCountup() {
   document.getElementById('meditation-time-input').value = '0:00';
 }
 
+async function toggleMeditationAudio() {
+    const audio = document.getElementById('meditation-audio-element');
+    const btn = document.getElementById('meditation-audio-play-btn');
+
+    if (audio.paused) {
+        try {
+            await audio.play();
+            btn.innerHTML = '';
+            btn.appendChild(createSVGIcon('pause'));
+            btn.appendChild(document.createTextNode(' Pausar'));
+        } catch (e) {
+            console.error(e);
+            showToast('No se pudo reproducir el audio');
+        }
+    } else {
+        audio.pause();
+        updateMeditationAudioBtn();
+    }
+}
+
 function stopMeditationAudio() {
   const audio = document.getElementById('meditation-audio-element');
   audio.pause();
-  document.getElementById('meditation-audio-play-btn').textContent = '▶ Reproducir';
+  updateMeditationAudioBtn();
 }
-
-function toggleMeditationAudio() {
-  const audio = document.getElementById('meditation-audio-element');
-  if (audio.paused) { audio.play(); document.getElementById('meditation-audio-play-btn').textContent = '⏸ Detener'; }
-  else { audio.pause(); document.getElementById('meditation-audio-play-btn').textContent = '▶ Reproducir'; }
-}
-
 function openMeditationAddPrompt() { openModal('meditation-add-prompt-modal'); }
 function openMeditationHabitLink() { openModal('meditation-link-modal'); }
 
@@ -3676,6 +4089,54 @@ const STATUS_LABELS = { 'not-started':'No iniciado', 'reading':'Leyendo', 'finis
 const STATUS_PILLS  = { 'not-started':'pill-gray',   'reading':'pill-blue', 'finished':'pill-green' };
 const STATUS_COLORS = { 'not-started':'var(--surface2)', 'reading':'var(--blue)', 'finished':'var(--green)' };
 const COVER_COLORS  = ['#2D3245','#3D4358','#4A5568','#553C3C','#3C5545','#3C4A5A'];
+function bookProjectedCompletion(b) {
+  if (b.status !== 'reading' || !b.dateStarted) return null;
+  if (b.currentPage === 0) return 'reminder'; // Show reminder instead of projection
+  
+  const startDate = new Date(b.dateStarted + 'T12:00:00');
+  const today_obj = new Date(todayStr + 'T12:00:00');
+  const daysElapsed = Math.max(1, Math.floor((today_obj - startDate) / (1000*60*60*24)));
+  
+  const pagesPerDay = b.currentPage / daysElapsed;
+  const pagesRemaining = Math.max(0, b.totalPages - b.currentPage);
+  const daysRemaining = pagesRemaining / pagesPerDay;
+  
+  const projectedDate = new Date(today_obj);
+  projectedDate.setDate(projectedDate.getDate() + Math.ceil(daysRemaining));
+  
+  return projectedDate;
+}
+
+function isFinishingByYearEnd(b) {
+  if (b.status === 'finished') return true;
+  const projected = bookProjectedCompletion(b);
+  if (!projected || projected === 'reminder') return false;
+  return projected.getFullYear() === today.getFullYear() && projected <= new Date(today.getFullYear(), 11, 31);
+}
+
+function getBookProgress(b) {
+  if (!b.totalPages) return 0;
+  return Math.min(1, b.currentPage / b.totalPages);
+}
+
+function calculateYearPaceProjection() {
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000/60/60/24);
+  
+  let effectiveBooks = state.books.filter(b => b.status === 'finished').length;
+  
+  state.books.forEach(b => {
+    if (b.status === 'reading' && isFinishingByYearEnd(b)) {
+      effectiveBooks += getBookProgress(b);
+    }
+  });
+  
+  if (effectiveBooks === 0 || dayOfYear < 1) return null;
+  
+  const ratePerDay = effectiveBooks / dayOfYear;
+  const projectedYearEnd = Math.round(ratePerDay * 365);
+  
+  return projectedYearEnd;
+}
 
 function bookPct(b) { return !b.totalPages ? 0 : Math.min(100, Math.round(b.currentPage/b.totalPages*100)); }
 
@@ -3689,8 +4150,12 @@ function setBooksView(v) {
 function renderBooks() {
   const finished = state.books.filter(b=>b.status==='finished').length;
   const reading  = state.books.filter(b=>b.status==='reading').length;
-  document.getElementById('books-header-sub').textContent =
-    finished+' terminados · '+reading+' en progreso · '+state.books.length+' total';
+  const paceProjection = calculateYearPaceProjection();
+  let headerText = finished+' terminados · '+reading+' en progreso · '+state.books.length+' total';
+  if (paceProjection) {
+    headerText += '<br><span style="font-size:12px;color:var(--gold-dark);font-weight:500;margin-top:4px;display:block">En ritmo de completar ' + paceProjection + ' libros este año</span>';
+  }
+  document.getElementById('books-header-sub').innerHTML = headerText;
   renderBooksContent();
 }
 
@@ -3782,7 +4247,7 @@ function openBookDetail(id) {
   document.getElementById('book-detail-content').innerHTML =
     '<div class="modal-handle"></div>'+
     '<div style="display:flex;gap:14px;margin-bottom:16px">'+
-    '<div class="book-detail-cover" style="background:'+bg+'">'+(b.cover?'<img src="'+b.cover+'" alt="">':'')+'</div>'+
+    '<div class="book-detail-cover" id="book-cover-display-'+id+'" style="background:'+bg+'">'+(b.cover?'<img src="'+b.cover+'" alt="">':'')+'</div>'+
     '<div style="flex:1;min-width:0">'+
     '<div style="font-size:17px;font-weight:600;line-height:1.3;margin-bottom:3px">'+b.title+'</div>'+
     '<div style="font-size:13px;color:var(--text-3);margin-bottom:8px">'+b.author+'</div>'+
@@ -3797,15 +4262,39 @@ function openBookDetail(id) {
     ).join('')+
     '</div></div>'+
     '<div style="margin-bottom:14px">'+
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
-    '<span style="font-size:12px;color:var(--text-3)">Progreso</span>'+
-    '<span style="font-size:12px;font-weight:600">'+b.currentPage+(b.totalPages?'/'+b.totalPages:'')+'  pág · '+pct+'%</span>'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
+        '<span style="font-size:12px;color:var(--text-3)">Progreso</span>'+
+        '<span style="font-size:12px;font-weight:600">'+pct+'%</span>'+
+      '</div>'+
+      '<div class="goal-progress-bar" style="height:6px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
+      '<div style="display:flex;gap:8px;margin-top:8px;align-items:flex-end">'+
+        '<div style="flex:1;display:flex;gap:4px;align-items:center">'+
+          '<input class="form-input" id="page-input-current-'+id+'" type="number" placeholder="Actual" value="'+b.currentPage+'" onchange="updateBookPages('+id+')" style="flex:1">'+
+          '<span style="font-size:14px;color:var(--text-2);font-weight:500">/</span>'+
+          '<input class="form-input" id="page-input-total-'+id+'" type="number" placeholder="Total" value="'+(b.totalPages||'')+'" onchange="updateBookPages('+id+')" style="flex:1">'+
+        '</div>'+
+        '<span style="font-size:11px;color:var(--text-3);white-space:nowrap">pág</span>'+
+      '</div>'+
     '</div>'+
-    '<div class="goal-progress-bar" style="height:6px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
-    '<div style="display:flex;gap:8px;margin-top:8px">'+
-    '<input class="form-input" id="page-input-'+id+'" type="number" placeholder="Página actual" value="'+b.currentPage+'" style="flex:1">'+
-    '<button class="btn-outline" onclick="updatePage('+id+')">Actualizar</button>'+
-    '</div></div>'+
+    (() => {
+      const projected = bookProjectedCompletion(b);
+      if (!projected) return '';
+      if (projected === 'reminder') {
+        return '<div style="background:var(--amber-light);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:#9a7018;display:flex;align-items:center;gap:8px">'+
+          '<span>⚠️</span>'+
+          '<span>Actualiza el progreso de páginas para ver la fecha proyectada de finalización</span>'+
+        '</div>';
+      }
+      const projectedStr = projected.toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'});
+      const isAfterYear = projected.getFullYear() > today.getFullYear();
+      return '<div style="background:var(--gold-light);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">'+
+        '<span style="font-size:12px;color:var(--gold-dark);font-weight:500">Fecha proyectada:</span>'+
+        '<span style="font-size:12px;font-weight:600;color:var(--text-1)">'+projectedStr+(isAfterYear?' *':'')+
+        (b.dateStarted?'<br><button class="btn-outline" style="font-size:10px;padding:3px 6px;margin-top:6px" onclick="openDateStartedEditor('+id+')">Ajustar fecha de inicio</button>':'')+
+        '</span>'+
+      '</div>';
+    })() +
+    '<div style="font-size:11px;color:var(--text-3);text-align:center;margin-bottom:14px">* Si se extiende más allá de este año</div>'+
     '<div style="margin-bottom:14px">'+
     '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:6px">Notas generales</div>'+
     '<textarea class="form-textarea" id="notes-input-'+id+'" style="height:70px">'+b.freeNotes+'</textarea>'+
@@ -3822,6 +4311,25 @@ function openBookDetail(id) {
   openModal('book-detail-modal');
 }
 
+function openDateStartedEditor(bookId) {
+  const b = state.books.find(x => x.id === bookId);
+  if (!b) return;
+  
+  const newDate = prompt('Ingresa la fecha en que empezaste a leer este libro (YYYY-MM-DD):', b.dateStarted || todayStr);
+  if (!newDate) return;
+  
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(newDate)) {
+    showToast('Formato de fecha inválido. Usa YYYY-MM-DD');
+    return;
+  }
+  
+  b.dateStarted = newDate;
+  openBookDetail(bookId);
+  renderBooks();
+  showToast('Fecha de inicio actualizada');
+}
+
 function rateBook(id, rating) {
   const b = state.books.find(x=>x.id===id); if (!b) return;
   b.rating = rating;
@@ -3829,15 +4337,49 @@ function rateBook(id, rating) {
   renderBooks(); showToast('Calificación guardada');
 }
 
-function updatePage(id) {
-  const b = state.books.find(x=>x.id===id);
-  const inp = document.getElementById('page-input-'+id);
-  if (!b||!inp) return;
-  const val = parseInt(inp.value)||0;
-  b.currentPage = val;
-  if (b.totalPages && val >= b.totalPages) b.status = 'finished';
-  else if (val > 0) b.status = 'reading';
-  openBookDetail(id); renderBooks(); showToast('Progreso actualizado');
+function updateBookPages(id) {
+  const b = state.books.find(x => x.id === id);
+  const currentInp = document.getElementById('page-input-current-' + id);
+  const totalInp = document.getElementById('page-input-total-' + id);
+  
+  if (!b || !currentInp || !totalInp) return;
+  
+  const currentVal = parseInt(currentInp.value) || 0;
+  const totalVal = parseInt(totalInp.value) || 0;
+  
+  b.currentPage = currentVal;
+  b.totalPages = totalVal;
+  
+  // Auto-set dateStarted when first pages are entered
+  if (currentVal > 0 && !b.dateStarted) {
+    b.dateStarted = todayStr;
+    b.status = 'reading';
+  } else if (currentVal > 0 && b.status === 'not-started') {
+    b.dateStarted = todayStr;
+    b.status = 'reading';
+  }
+  
+  // Mark as finished if pages equal/exceed total
+  if (totalVal > 0 && currentVal >= totalVal) {
+    b.status = 'finished';
+  } else if (currentVal > 0 && b.status === 'not-started') {
+    b.status = 'reading';
+  }
+  
+  // SYNC: Mark corresponding goal milestone as done
+  const readingGoal = getReadingGoal();
+  if (readingGoal && b.status === 'finished') {
+    const milestone = getBookMilestoneByTitle(readingGoal, b.title);
+    if (milestone) milestone.done = true;
+  } else if (readingGoal && b.status !== 'finished') {
+    const milestone = getBookMilestoneByTitle(readingGoal, b.title);
+    if (milestone) milestone.done = false;
+  }
+  
+  openBookDetail(id);
+  renderBooks();
+  renderGoals();
+  showToast('Progreso actualizado');
 }
 
 function saveNotes(id) {
@@ -3863,9 +4405,18 @@ function setBookColor(id, color) {
   const b = state.books.find(x => x.id === id);
   if (!b) return;
   b.color = color;
+  
+  // Update the color picker borders
   document.querySelectorAll('#book-color-picker-'+id+' .ecswatch').forEach(s => {
     s.style.borderColor = s.dataset.color === color ? '#1A1E2A' : 'transparent';
   });
+  
+  // LIVE UPDATE: Change the cover in the modal immediately
+  const coverEl = document.getElementById('book-cover-display-'+id);
+  if (coverEl) {
+    coverEl.style.background = color;
+  }
+  
   renderBooks();
   showToast('Color actualizado');
 }
@@ -3873,17 +4424,36 @@ function setBookColor(id, color) {
 function addBook() {
   const title = document.getElementById('book-title-input').value.trim();
   if (!title) { showToast('Escribe el título del libro'); return; }
-  state.books.push({
-    id: state.nextBookId++, title,
-    author:      document.getElementById('book-author-input').value.trim(),
-    cover:       null,
-    totalPages:  parseInt(document.getElementById('book-pages-input').value)||0,
+  
+  const newBook = {
+    id: state.nextBookId++, 
+    title,
+    author: document.getElementById('book-author-input').value.trim(),
+    cover: null,
+    totalPages: parseInt(document.getElementById('book-pages-input').value)||0,
     currentPage: parseInt(document.getElementById('book-current-input').value)||0,
-    status:      document.getElementById('book-status-input').value,
-    rating:0, freeNotes:'', quotes:[], lessons:[], actions:[],
-  });
+    status: document.getElementById('book-status-input').value,
+    rating: 0, 
+    freeNotes: '', 
+    quotes: [], 
+    lessons: [], 
+    actions: [],
+    dateStarted: null,
+  };
+  
+  state.books.push(newBook);
+  
+  // Sync with reading goal
+  const readingGoal = getReadingGoal();
+  if (readingGoal) {
+    readingGoal.milestones.push({ text: title, done: false });
+  }
+  
   ['book-title-input','book-author-input','book-pages-input','book-current-input'].forEach(i => document.getElementById(i).value='');
-  closeModal('book-modal'); renderBooks(); showToast('¡Libro agregado!');
+  closeModal('book-modal'); 
+  renderBooks(); 
+  renderGoals();
+  showToast('¡Libro agregado!');
 }
 
 function setBookColor(id, color) {
@@ -3899,8 +4469,11 @@ function setBookColor(id, color) {
 
 function deleteBook(id) {
   if (!confirm('¿Eliminar este libro?')) return;
-  state.books = state.books.filter(b=>b.id!==id);
-  closeModal('book-detail-modal'); renderBooks(); showToast('Libro eliminado');
+  const book = state.books.find(b => b.id === id);
+  state.books = state.books.filter(b => b.id !== id);
+  closeModal('book-detail-modal'); 
+  renderBooks(); 
+  showToast('Libro eliminado');
 }
 
 /* ================================================================
@@ -4267,6 +4840,464 @@ function unlinkMeditationHabit() {
   state.meditation.linkedHabitId = null;
   showToast('Hábito desvinculado');
   openMeditationHabitLink(); // Refresh
+}
+
+/* ================================================================
+   NOTES JOURNAL
+================================================================ */
+let noteMediaRecorder    = null;
+let noteAudioChunks      = [];
+let noteRecordingTime    = 0;
+let noteRecordingTimer   = null;
+let noteCurrentPlayback  = null;
+
+function setNoteMode(mode) {
+  const textMode = document.getElementById('note-text-mode');
+  const voiceMode = document.getElementById('note-voice-mode');
+  const textBtn = document.getElementById('note-text-mode-btn');
+  const voiceBtn = document.getElementById('note-voice-mode-btn');
+  
+  if (mode === 'text') {
+    textMode.style.display = 'flex';
+    voiceMode.style.display = 'none';
+    textBtn.classList.add('active');
+    voiceBtn.classList.remove('active');
+  } else {
+    textMode.style.display = 'none';
+    voiceMode.style.display = 'flex';
+    textBtn.classList.remove('active');
+    voiceBtn.classList.add('active');
+  }
+  window.noteCurrentMode = mode;
+}
+
+function renderNotes() {
+  window.noteExpandedDates = {};
+  const body = document.getElementById('notes-body');
+  
+  if (!state.notes.length) {
+    document.getElementById('notes-header-sub').textContent = 'Sin notas aún';
+    body.innerHTML = '<div style="text-align:center;padding:60px 24px;flex:1"><div style="font-size:48px;opacity:.2;margin-bottom:14px">📝</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin notas aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca el + para crear tu primera nota rápida</p></div>';
+    return;
+  }
+
+  // Group by date
+  const groupedByDate = {};
+  state.notes.forEach(note => {
+    if (!groupedByDate[note.date]) groupedByDate[note.date] = [];
+    groupedByDate[note.date].push(note);
+  });
+
+  // Sort dates newest first
+  const sortedDates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a));
+  
+  document.getElementById('notes-header-sub').textContent = 
+    state.notes.length + ' nota' + (state.notes.length !== 1 ? 's' : '') + ' · ' + 
+    sortedDates.length + ' día' + (sortedDates.length !== 1 ? 's' : '');
+
+  let html = '';
+  sortedDates.forEach(dateStr => {
+    const notes = groupedByDate[dateStr].sort((a, b) => b.timestamp - a.timestamp); // Newest first
+    const d = new Date(dateStr + 'T12:00:00');
+    let dateLabel = d.toLocaleDateString('es-MX', {weekday: 'long', day: 'numeric', month: 'long'});
+    dateLabel = dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1);
+    const isExpanded = window.noteExpandedDates && window.noteExpandedDates[dateStr];
+
+    html += '<div class="gratitude-day-section" data-date="' + dateStr + '">' +
+      '<div class="gratitude-day-header" onclick="toggleNoteDay(\'' + dateStr + '\')">' +
+      '<div style="display:flex;align-items:center;gap:10px;flex:1">' +
+      '<span class="gratitude-day-toggle" style="transform:rotate(' + (isExpanded ? '90' : '0') + 'deg)">›</span>' +
+      '<div>' +
+      '<div style="font-size:14px;font-weight:600">' + dateLabel + '</div>' +
+      '<div style="font-size:11px;color:var(--text-3);margin-top:2px">' + notes.length + ' nota' + (notes.length !== 1 ? 's' : '') + '</div>' +
+      '</div></div>' +
+      '</div>' +
+      '<div class="gratitude-day-entries" style="display:' + (isExpanded ? 'block' : 'none') + '">';
+
+    notes.forEach(note => {
+      const time = new Date(note.timestamp).toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+      const isVoice = note.type === 'voice';
+      
+      if (isVoice) {
+        // Voice entry
+        const hasRec = !!state.noteRecordings['note_' + note.id];
+        html += '<div class="gratitude-entry">' +
+          '<div style="font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:4px">🎤 ' + (note.title || 'Sin título') + '</div>' +
+          (note.description ? '<div style="font-size:12px;color:var(--text-2);margin-bottom:6px;font-style:italic">' + escHtml(note.description) + '</div>' : '') +
+          (hasRec ? '<div style="background:var(--surface2);border-radius:var(--r-sm);padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px">' +
+            '<div id="note-duration-' + note.id + '" style="font-size:11px;color:var(--text-3);text-align:center">0:00</div>' +
+            '<div style="background:var(--bg);border-radius:var(--r-sm);height:24px;position:relative;overflow:hidden">' +
+            '<div id="note-progress-' + note.id + '" style="height:100%;background:var(--gold);width:0%;transition:width .1s linear"></div>' +
+            '</div>' +
+            '<button class="btn-outline" style="padding:6px 10px;font-size:11px" onclick="playNoteRecording(' + note.id + ')">▶ Reproducir</button>' +
+            '</div>' : '') +
+          '<div style="font-size:10px;color:var(--text-3);margin-bottom:6px">' + time + '</div>' +
+          '<div style="display:flex;gap:6px">' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1" onclick="openEditNote(' + note.id + ')">Editar</button>' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteNote(' + note.id + ')">Eliminar</button>' +
+          '</div>' +
+          '</div>';
+      } else {
+        // Text entry
+        const isTruncated = note.content.length > 150;
+        const displayText = isTruncated ? note.content.slice(0, 150) + '...' : note.content;
+        
+        html += '<div class="gratitude-entry">' +
+          (note.title ? '<div style="font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:4px">✍️ ' + escHtml(note.title) + '</div>' : '') +
+          '<div class="gratitude-entry-text" id="note-text-display-' + note.id + '">' + escHtml(displayText) + '</div>' +
+          (isTruncated ? '<button class="btn-outline" style="margin-top:6px;padding:3px 8px;font-size:10px;width:100%" onclick="expandNoteText(' + note.id + ')">Leer más</button>' : '') +
+          '<div style="font-size:10px;color:var(--text-3);margin-top:6px">' + time + '</div>' +
+          '<div style="display:flex;gap:6px;margin-top:6px">' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1" onclick="openEditNote(' + note.id + ')">Editar</button>' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteNote(' + note.id + ')">Eliminar</button>' +
+          '</div>' +
+          '</div>';
+      }
+    });
+
+    html += '</div></div>';
+  });
+
+  body.innerHTML = html;
+}
+
+function filterNotes() {
+  const query = document.getElementById('notes-search-input').value.toLowerCase().trim();
+  state.noteSearch = query;
+  
+  if (!query) {
+    renderNotes();
+    return;
+  }
+
+  // Filter notes
+  const filtered = state.notes.filter(note => {
+    const titleMatch = (note.title && note.title.toLowerCase().includes(query));
+    const contentMatch = (note.content && note.content.toLowerCase().includes(query));
+    const descMatch = (note.description && note.description.toLowerCase().includes(query));
+    return titleMatch || contentMatch || descMatch;
+  });
+
+  // Group filtered notes by date
+  const groupedByDate = {};
+  filtered.forEach(note => {
+    if (!groupedByDate[note.date]) groupedByDate[note.date] = [];
+    groupedByDate[note.date].push(note);
+  });
+
+  const sortedDates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a));
+  const body = document.getElementById('notes-body');
+
+  if (!filtered.length) {
+    document.getElementById('notes-header-sub').textContent = 'Sin resultados';
+    body.innerHTML = '<div style="text-align:center;padding:40px 24px;color:var(--text-3);font-size:13px">No hay notas que coincidan con "' + escHtml(query) + '"</div>';
+    return;
+  }
+
+  document.getElementById('notes-header-sub').textContent = 
+    filtered.length + ' nota' + (filtered.length !== 1 ? 's' : '') + ' encontrada' + (filtered.length !== 1 ? 's' : '');
+
+  let html = '';
+  sortedDates.forEach(dateStr => {
+    const notes = groupedByDate[dateStr].sort((a, b) => b.timestamp - a.timestamp);
+    const d = new Date(dateStr + 'T12:00:00');
+    let dateLabel = d.toLocaleDateString('es-MX', {weekday: 'long', day: 'numeric', month: 'long'});
+    dateLabel = dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1);
+
+    html += '<div class="gratitude-day-section">' +
+      '<div class="gratitude-day-header" style="cursor:default">' +
+      '<div style="display:flex;align-items:center;gap:10px">' +
+      '<div style="font-size:14px;font-weight:600">' + dateLabel + '</div>' +
+      '</div></div>' +
+      '<div class="gratitude-day-entries" style="display:block">';
+
+    notes.forEach(note => {
+      const time = new Date(note.timestamp).toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+      const isVoice = note.type === 'voice';
+      
+      if (isVoice) {
+        const hasRec = !!state.noteRecordings['note_' + note.id];
+        html += '<div class="gratitude-entry">' +
+          '<div style="font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:4px">🎤 ' + (note.title || 'Sin título') + '</div>' +
+          (note.description ? '<div style="font-size:12px;color:var(--text-2);margin-bottom:6px;font-style:italic">' + escHtml(note.description) + '</div>' : '') +
+          (hasRec ? '<button class="btn-outline" style="padding:6px 10px;font-size:11px;width:100%;margin-bottom:8px" onclick="playNoteRecording(' + note.id + ')">▶ Reproducir</button>' : '') +
+          '<div style="font-size:10px;color:var(--text-3);margin-bottom:6px">' + time + '</div>' +
+          '<div style="display:flex;gap:6px">' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1" onclick="openEditNote(' + note.id + ')">Editar</button>' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteNote(' + note.id + ')">Eliminar</button>' +
+          '</div></div>';
+      } else {
+        const isTruncated = note.content.length > 150;
+        const displayText = isTruncated ? note.content.slice(0, 150) + '...' : note.content;
+        
+        html += '<div class="gratitude-entry">' +
+          (note.title ? '<div style="font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:4px">✍️ ' + escHtml(note.title) + '</div>' : '') +
+          '<div class="gratitude-entry-text">' + escHtml(displayText) + '</div>' +
+          (isTruncated ? '<button class="btn-outline" style="margin-top:6px;padding:3px 8px;font-size:10px;width:100%" onclick="expandNoteText(' + note.id + ')">Leer más</button>' : '') +
+          '<div style="font-size:10px;color:var(--text-3);margin-top:6px">' + time + '</div>' +
+          '<div style="display:flex;gap:6px;margin-top:6px">' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1" onclick="openEditNote(' + note.id + ')">Editar</button>' +
+          '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteNote(' + note.id + ')">Eliminar</button>' +
+          '</div></div>';
+      }
+    });
+
+    html += '</div></div>';
+  });
+
+  body.innerHTML = html;
+}
+
+function expandNoteText(noteId) {
+  const note = state.notes.find(n => n.id === noteId);
+  if (!note) return;
+  const display = document.getElementById('note-text-display-' + noteId);
+  if (display) display.textContent = note.content;
+  // Hide the "read more" button
+  const btn = display.parentElement.querySelector('button');
+  if (btn) btn.remove();
+}
+
+function toggleNoteDay(dateStr) {
+  if (!window.noteExpandedDates) window.noteExpandedDates = {};
+  window.noteExpandedDates[dateStr] = !window.noteExpandedDates[dateStr];
+  
+  const section = document.querySelector('[data-date="' + dateStr + '"]');
+  if (!section) return;
+  
+  const toggle = section.querySelector('.gratitude-day-toggle');
+  const entries = section.querySelector('.gratitude-day-entries');
+  const isExp = window.noteExpandedDates[dateStr];
+  
+  if (toggle) toggle.style.transform = 'rotate(' + (isExp ? '90' : '0') + 'deg)';
+  if (entries) entries.style.display = isExp ? 'block' : 'none';
+}
+
+function openAddNote() {
+  document.getElementById('note-edit-id').value = '';
+  document.getElementById('note-title-input').value = '';
+  document.getElementById('note-text-input').value = '';
+  document.getElementById('note-voice-title-input').value = '';
+  document.getElementById('note-voice-desc-input').value = '';
+  document.getElementById('note-date-input').value = todayStr;
+  document.getElementById('note-recorder-display').textContent = '0:00';
+  document.getElementById('note-recorded-status').style.display = 'none';
+  document.getElementById('note-rec-start-btn').style.display = 'block';
+  document.getElementById('note-rec-stop-btn').style.display = 'none';
+  document.getElementById('note-delete-row').style.display = 'none';
+  window.noteCurrentMode = 'text';
+  setNoteMode('text');
+  document.querySelector('#note-modal .modal-title').textContent = 'Nueva nota';
+  document.getElementById('note-save-btn').textContent = 'Guardar nota';
+  document.getElementById('note-save-btn').setAttribute('onclick', 'addNote()');
+  openModal('note-modal');
+}
+
+function openEditNote(noteId) {
+  const note = state.notes.find(n => n.id === noteId);
+  if (!note) return;
+  
+  document.getElementById('note-edit-id').value = noteId;
+  document.getElementById('note-date-input').value = note.date;
+  document.getElementById('note-delete-row').style.display = 'block';
+  document.getElementById('note-delete-btn').setAttribute('onclick', 'deleteNote(' + noteId + ');closeModal("note-modal")');
+  document.querySelector('#note-modal .modal-title').textContent = 'Editar nota';
+  document.getElementById('note-save-btn').textContent = 'Guardar cambios';
+  document.getElementById('note-save-btn').setAttribute('onclick', 'saveNoteEdit(' + noteId + ')');
+  
+  window.noteCurrentMode = note.type;
+  
+  if (note.type === 'text') {
+    setNoteMode('text');
+    document.getElementById('note-title-input').value = note.title || '';
+    document.getElementById('note-text-input').value = note.content;
+  } else {
+    setNoteMode('voice');
+    document.getElementById('note-voice-title-input').value = note.title || '';
+    document.getElementById('note-voice-desc-input').value = note.description || '';
+    const hasRec = !!state.noteRecordings['note_' + noteId];
+    document.getElementById('note-recorded-status').style.display = hasRec ? 'block' : 'none';
+    document.getElementById('note-rec-start-btn').style.display = hasRec ? 'none' : 'block';
+    document.getElementById('note-rec-stop-btn').style.display = 'none';
+  }
+  
+  openModal('note-modal');
+}
+
+async function startNoteRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    noteAudioChunks = [];
+    noteMediaRecorder = new MediaRecorder(stream);
+    noteRecordingTime = 0;
+    
+    noteMediaRecorder.ondataavailable = e => noteAudioChunks.push(e.data);
+    noteMediaRecorder.onstop = () => {
+      const blob = new Blob(noteAudioChunks, {type: 'audio/webm'});
+      const url = URL.createObjectURL(blob);
+      window.noteCurrentRecordingUrl = url;
+      stream.getTracks().forEach(t => t.stop());
+      document.getElementById('note-recorded-status').style.display = 'block';
+      document.getElementById('note-rec-start-btn').style.display = 'none';
+      document.getElementById('note-rec-stop-btn').style.display = 'none';
+      clearInterval(noteRecordingTimer);
+      showToast('Grabación lista');
+    };
+    
+    noteMediaRecorder.start();
+    document.getElementById('note-rec-start-btn').style.display = 'none';
+    document.getElementById('note-rec-stop-btn').style.display = 'block';
+    
+    noteRecordingTimer = setInterval(() => {
+      noteRecordingTime++;
+      const mins = Math.floor(noteRecordingTime / 60);
+      const secs = noteRecordingTime % 60;
+      document.getElementById('note-recorder-display').textContent = 
+        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    }, 1000);
+  } catch(e) {
+    showToast('Permiso de micrófono denegado');
+  }
+}
+
+function stopNoteRecording() {
+  if (noteMediaRecorder && noteMediaRecorder.state === 'recording') {
+    noteMediaRecorder.stop();
+  }
+}
+
+async function playNoteRecording(noteId) {
+  if (noteCurrentPlayback) noteCurrentPlayback.pause();
+  
+  const url = state.noteRecordings['note_' + noteId];
+  if (!url) { showToast('Grabación no encontrada'); return; }
+  
+  noteCurrentPlayback = new Audio(url);
+  const progressBar = document.getElementById('note-progress-' + noteId);
+  const durationDisplay = document.getElementById('note-duration-' + noteId);
+  
+  if (progressBar) {
+    noteCurrentPlayback.addEventListener('timeupdate', () => {
+      if (noteCurrentPlayback.duration) {
+        const pct = (noteCurrentPlayback.currentTime / noteCurrentPlayback.duration) * 100;
+        progressBar.style.width = pct + '%';
+        const mins = Math.floor(noteCurrentPlayback.currentTime / 60);
+        const secs = Math.floor(noteCurrentPlayback.currentTime % 60);
+        if (durationDisplay) {
+          durationDisplay.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
+      }
+    });
+    
+    noteCurrentPlayback.addEventListener('loadedmetadata', () => {
+      if (durationDisplay) {
+        const mins = Math.floor(noteCurrentPlayback.duration / 60);
+        const secs = Math.floor(noteCurrentPlayback.duration % 60);
+        durationDisplay.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+      }
+    });
+  }
+  
+  noteCurrentPlayback.play();
+}
+
+function addNote() {
+  const mode = window.noteCurrentMode;
+  const date = document.getElementById('note-date-input').value;
+  
+  if (!date) { showToast('Selecciona una fecha'); return; }
+  
+  if (mode === 'text') {
+    const title = document.getElementById('note-title-input').value.trim();
+    const content = document.getElementById('note-text-input').value.trim();
+    if (!content) { showToast('Escribe tu nota'); return; }
+    
+    state.notes.push({
+      id: state.nextNoteId++,
+      date,
+      timestamp: Date.now(),
+      type: 'text',
+      title,
+      content,
+    });
+  } else {
+    const title = document.getElementById('note-voice-title-input').value.trim();
+    const description = document.getElementById('note-voice-desc-input').value.trim();
+    const url = window.noteCurrentRecordingUrl;
+    
+    if (!url) { showToast('Graba una nota primero'); return; }
+    
+    const noteId = state.nextNoteId++;
+    state.notes.push({
+      id: noteId,
+      date,
+      timestamp: Date.now(),
+      type: 'voice',
+      title,
+      description,
+    });
+    
+    state.noteRecordings['note_' + noteId] = url;
+    window.noteCurrentRecordingUrl = null;
+  }
+  
+  closeModal('note-modal');
+  renderNotes();
+  showToast('¡Nota guardada!');
+}
+
+function saveNoteEdit(noteId) {
+  const note = state.notes.find(n => n.id === noteId);
+  if (!note) return;
+  
+  const date = document.getElementById('note-date-input').value;
+  if (!date) { showToast('Selecciona una fecha'); return; }
+  
+  note.date = date;
+  
+  if (note.type === 'text') {
+    const title = document.getElementById('note-title-input').value.trim();
+    const content = document.getElementById('note-text-input').value.trim();
+    if (!content) { showToast('Escribe tu nota'); return; }
+    note.title = title;
+    note.content = content;
+  } else {
+    note.title = document.getElementById('note-voice-title-input').value.trim();
+    note.description = document.getElementById('note-voice-desc-input').value.trim();
+  }
+  
+  closeModal('note-modal');
+  renderNotes();
+  showToast('¡Nota actualizada!');
+}
+
+function deleteNote(noteId) {
+  if (!confirm('¿Eliminar esta nota?')) return;
+  const note = state.notes.find(n => n.id === noteId);
+  if (note && note.type === 'voice') {
+    delete state.noteRecordings['note_' + noteId];
+  }
+  state.notes = state.notes.filter(n => n.id !== noteId);
+  renderNotes();
+  showToast('Nota eliminada');
+}
+
+function exportNotesCSV() {
+  if (!state.notes.length) { showToast('No hay notas para exportar'); return; }
+  const rows = [['Fecha', 'Hora', 'Tipo', 'Título', 'Contenido/Descripción']];
+  const sorted = [...state.notes].sort((a, b) => b.timestamp - a.timestamp);
+  
+  sorted.forEach(n => {
+    const d = new Date(n.timestamp);
+    const dateStr = d.toLocaleDateString('es-MX', {year:'numeric', month:'2-digit', day:'2-digit'});
+    const timeStr = d.toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+    const type = n.type === 'voice' ? 'Voz' : 'Texto';
+    const content = n.type === 'voice' ? (n.description || '') : n.content;
+    rows.push([dateStr, timeStr, type, n.title || '—', content]);
+  });
+  
+  downloadCSV('vivela365-notas.csv', rows);
+  showToast('Notas exportadas ✓');
 }
 
 /* ================================================================
