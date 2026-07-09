@@ -1885,9 +1885,9 @@ const state = {
   ],
   meditationSounds: [
     { name: 'Lluvia', file: './sounds/lluvia.wav' },
-    { name: 'Ruido blanco', file: './sounds/sonido blanco.wav' },
+    { name: 'Ruido blanco', file: './sounds/white noise.wav' },
     { name: 'Olas oceánicas',  file: './sounds/ocean-waves.mp3' },
-    { name: 'Ruido rosa', file: './sounds/pink-noise.mp3' },
+    { name: 'Ruido rosa', file: './sounds/pink noise.wav' },
   ],
   selectedEventColor: '#C4B88E',
   nextHabitId: 20,
@@ -2488,8 +2488,9 @@ function analyzeHabitByDayOfWeek(habitId) {
     stat.pct = stat.scheduled > 0 ? Math.round(stat.completed / stat.scheduled * 100) : 0;
   });
 
-  // Get top 2 and bottom 2
-  const sorted = [...dayStats].sort((a, b) => b.pct - a.pct);
+// Get top 2 and bottom 2 (only from scheduled days)
+  const scheduledDays = dayStats.filter(stat => stat.scheduled > 0);
+  const sorted = [...scheduledDays].sort((a, b) => b.pct - a.pct);
   const best = sorted.slice(0, 2);
   const worst = sorted.slice(-2).reverse();
 
