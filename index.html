@@ -589,7 +589,203 @@ body {
   color: var(--text-1);
   font-weight: 600;
 }
+
+/* CAMERA SCANNER */
+#camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#camera-overlay-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.camera-scanner-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.camera-scanner-top {
+  padding: 16px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  z-index: 5;
+  flex-shrink: 0;
+}
+
+.camera-scanner-top h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.camera-scanner-top p { font-size: 12px; opacity: 0.8; line-height: 1.4; }
+
+.camera-scanner-video-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.camera-scanner-bottom {
+  padding: 16px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  z-index: 5;
+  flex-shrink: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.camera-scanner-bottom button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: var(--r-md);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.btn-capture {
+  background: var(--gold);
+  color: var(--dark);
+}
+
+.btn-capture:active { opacity: 0.8; }
+
+.btn-cancel {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-cancel:active { background: rgba(255,255,255,0.3); }
+
+/* PAGE NUMBER CONFIRMATION MODAL */
+.page-number-confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: var(--safe-b);
+}
+
+.page-number-confirm-sheet {
+  background: var(--surface);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: 24px;
+  width: 100%;
+  max-width: 430px;
+  animation: slideUp .3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.page-number-preview {
+  background: var(--gold-light);
+  border: 2px solid var(--gold);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.page-number-preview-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 8px; }
+
+.page-number-preview-value { font-size: 48px; font-weight: 300; font-variant-numeric: tabular-nums; color: var(--dark); }
+
+.page-number-confirm-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.page-number-confirm-actions button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: var(--r-md);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.btn-confirm-yes {
+  background: var(--dark);
+  color: #fff;
+}
+
+.btn-confirm-yes:active { opacity: 0.8; }
+
+.btn-confirm-edit {
+  background: var(--surface2);
+  color: var(--text-1);
+}
+
+.btn-confirm-edit:active { background: var(--gold-light); }
+
+.page-number-edit-section {
+  display: none;
+  margin-top: 12px;
+}
+
+.page-number-edit-section.show {
+  display: block;
+}
+
+.page-number-edit-input {
+  width: 100%;
+  padding: 12px;
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--r-md);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: .1em;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+.page-number-edit-input:focus {
+  border-color: var(--gold);
+  background: var(--gold-light);
+}
+
+.page-number-edit-section button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: var(--dark);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.page-number-edit-section button:active { opacity: 0.8; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 
@@ -605,7 +801,7 @@ body {
     <div class="feature-grid-2">
       <div class="feature-tile" onclick="navigateTo('scan')">
         <div class="ft-icon ft-dark"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-        <div class="ft-text"><strong>Escanear</strong><span>Importa páginas de tu agenda</span></div>
+        <div class="ft-text"><strong>Escanear</strong><span>Escanea y importa</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('habits')">
         <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
@@ -716,7 +912,7 @@ body {
     </div>
   </div>
   <div class="screen-body">
-    <div class="scan-area" onclick="showToast('Próximamente: cámara con Gemini integrado')">
+    <div class="scan-area" onclick="openCameraScanner()">
       <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
       <h3>Fotografiar página</h3>
       <p>Próximamente con Gemini integrado.<br>Por ahora usa el prompt de abajo con Gemini.google.com</p>
@@ -1409,7 +1605,53 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     </div>
   </div>
 </div>
+<!-- MODAL: Camera Scanner for Page Number -->
+<div class="modal-overlay" id="camera-scanner-modal" onclick="closeCameraScanner()" style="align-items: stretch; justify-content: stretch;">
+  <div class="camera-scanner-container" onclick="event.stopPropagation()">
+    <div class="camera-scanner-top">
+      <h3>Escanear página</h3>
+      <p>Alinea el número de página en el centro del rectángulo inferior</p>
+    </div>
+    <div class="camera-scanner-video-wrap">
+      <video id="camera-video" playsinline></video>
+      <canvas id="camera-overlay-canvas"></canvas>
+    </div>
+    <div class="camera-scanner-bottom">
+      <button class="btn-capture" onclick="capturePage()">📸 Capturar</button>
+      <button class="btn-cancel" onclick="closeCameraScanner()">Cancelar</button>
+    </div>
+  </div>
+</div>
 
+<!-- Page Number Confirmation -->
+<div class="page-number-confirm-modal" id="page-number-confirm-modal" style="display: none;" onclick="if(event.target===this) closePageNumberConfirm()">
+  <div class="page-number-confirm-sheet">
+    <div style="text-align: center; margin-bottom: 16px;">
+      <div style="font-size: 40px; margin-bottom: 8px;">📄</div>
+      <div style="font-size: 16px; font-weight: 600;">Número de página detectado</div>
+    </div>
+    
+    <div class="page-number-preview">
+      <div class="page-number-preview-label">Página</div>
+      <div class="page-number-preview-value" id="detected-page-number">—</div>
+    </div>
+
+    <div class="page-number-confirm-actions">
+      <button class="btn-confirm-yes" onclick="confirmPageNumber()">✓ Correcto</button>
+      <button class="btn-confirm-edit" onclick="toggleEditPageNumber()">✏️ Editar</button>
+    </div>
+
+    <div class="page-number-edit-section" id="page-number-edit-section">
+      <input class="page-number-edit-input" type="number" id="page-number-input" placeholder="Ingresa el número correcto" min="1">
+      <button onclick="saveEditedPageNumber()">Guardar número</button>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 12px;">
+      <button class="btn-outline" style="flex: 1; font-size: 13px;" onclick="retryPageNumberScan()">🔄 Reintentar</button>
+      <button class="btn-outline" style="flex: 1; font-size: 13px; color: var(--red); border-color: rgba(196,100,90,.3);" onclick="closePageNumberConfirm()">✕ Cancelar</button>
+    </div>
+  </div>
+</div>
 <!-- MODAL: Add Book -->
 <div class="modal-overlay" id="book-modal" onclick="modalOverlayClick(event,'book-modal')">
   <div class="modal-sheet">
@@ -5299,6 +5541,293 @@ function exportNotesCSV() {
   
   downloadCSV('vivela365-notas.csv', rows);
   showToast('Notas exportadas ✓');
+}
+/* ================================================================
+   CAMERA SCANNER FOR PAGE NUMBER
+================================================================ */
+let cameraStream = null;
+let cameraVideo = null;
+let overlayCanvas = null;
+let overlayCtx = null;
+let scannerAnimationFrame = null;
+let currentCapturedFrame = null;
+let pageNumberOcrAttempts = 0;
+const MAX_OCR_ATTEMPTS = 2;
+
+function openCameraScanner() {
+  const modal = document.getElementById('camera-scanner-modal');
+  modal.style.display = 'flex';
+  initCamera();
+}
+
+function closeCameraScanner() {
+  const modal = document.getElementById('camera-scanner-modal');
+  modal.style.display = 'none';
+  stopCamera();
+  if (scannerAnimationFrame) cancelAnimationFrame(scannerAnimationFrame);
+}
+
+async function initCamera() {
+  try {
+    cameraVideo = document.getElementById('camera-video');
+    overlayCanvas = document.getElementById('camera-overlay-canvas');
+    overlayCtx = overlayCanvas.getContext('2d');
+
+    // Get camera stream
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: 'environment',
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    });
+
+    cameraVideo.srcObject = cameraStream;
+    cameraVideo.play();
+
+    // Wait for video to load, then set canvas size and start drawing overlay
+    cameraVideo.onloadedmetadata = () => {
+      overlayCanvas.width = cameraVideo.videoWidth;
+      overlayCanvas.height = cameraVideo.videoHeight;
+      drawOverlay();
+      scannerAnimationFrame = requestAnimationFrame(drawOverlay);
+    };
+  } catch (err) {
+    showToast('Permiso de cámara denegado');
+    closeCameraScanner();
+  }
+}
+
+function stopCamera() {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+  if (cameraVideo) {
+    cameraVideo.pause();
+    cameraVideo.srcObject = null;
+  }
+}
+
+function drawOverlay() {
+  if (!overlayCtx || !cameraVideo) return;
+
+  const w = overlayCanvas.width;
+  const h = overlayCanvas.height;
+
+  // Clear canvas
+  overlayCtx.clearRect(0, 0, w, h);
+
+  // Semi-transparent dark overlay on edges
+  overlayCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  overlayCtx.fillRect(0, 0, w, h);
+
+  // Approximate page region (A5 aspect ratio: ~1:1.4)
+  const pageWidth = Math.min(w * 0.85, h * 0.6);
+  const pageHeight = pageWidth * 1.4;
+  const pageX = (w - pageWidth) / 2;
+  const pageY = (h - pageHeight) / 2;
+
+  // Clear the page region (show camera feed)
+  overlayCtx.clearRect(pageX, pageY, pageWidth, pageHeight);
+
+  // Draw page rectangle (light gold/green)
+  overlayCtx.strokeStyle = '#6BAA8E';
+  overlayCtx.lineWidth = 3;
+  overlayCtx.setLineDash([5, 5]);
+  overlayCtx.strokeRect(pageX, pageY, pageWidth, pageHeight);
+  overlayCtx.setLineDash([]);
+
+  // Page number region: bottom-center, 5% width, 3% height
+  const pageNumWidth = pageWidth * 0.05;
+  const pageNumHeight = pageHeight * 0.03;
+  const pageNumX = pageX + (pageWidth - pageNumWidth) / 2;
+  const pageNumY = pageY + pageHeight - pageNumHeight - (pageHeight * 0.02); // 2% padding from bottom
+
+  // Clear page number region
+  overlayCtx.clearRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
+
+  // Draw page number rectangle (bright gold)
+  overlayCtx.strokeStyle = '#C4B88E';
+  overlayCtx.lineWidth = 2;
+  overlayCtx.fillStyle = 'rgba(196, 184, 142, 0.15)';
+  overlayCtx.fillRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
+  overlayCtx.strokeRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
+
+  // Label
+  overlayCtx.fillStyle = '#C4B88E';
+  overlayCtx.font = 'bold 12px "DM Sans"';
+  overlayCtx.textAlign = 'center';
+  overlayCtx.fillText('Página', pageX + pageWidth / 2, pageY + pageHeight + 25);
+
+  // Store for later use
+  window.pageScanRegions = {
+    page: { x: pageX, y: pageY, w: pageWidth, h: pageHeight },
+    pageNum: { x: pageNumX, y: pageNumY, w: pageNumWidth, h: pageNumHeight }
+  };
+
+  scannerAnimationFrame = requestAnimationFrame(drawOverlay);
+}
+
+async function capturePage() {
+  if (!cameraVideo) return;
+
+  // Create canvas from video frame
+  const canvas = document.createElement('canvas');
+  canvas.width = cameraVideo.videoWidth;
+  canvas.height = cameraVideo.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(cameraVideo, 0, 0);
+
+  currentCapturedFrame = canvas;
+
+  // Stop overlay animation
+  if (scannerAnimationFrame) cancelAnimationFrame(scannerAnimationFrame);
+
+  // Crop and OCR the page number
+  pageNumberOcrAttempts = 0;
+  await performPageNumberOCR();
+}
+
+async function performPageNumberOCR() {
+  if (!currentCapturedFrame) return;
+
+  pageNumberOcrAttempts++;
+
+  // Crop page number region
+  const regions = window.pageScanRegions.pageNum;
+  const croppedCanvas = document.createElement('canvas');
+  croppedCanvas.width = regions.w;
+  croppedCanvas.height = regions.h;
+  const croppedCtx = croppedCanvas.getContext('2d');
+
+  // Draw cropped region at higher zoom for better OCR
+  const zoomFactor = 4;
+  croppedCtx.drawImage(
+    currentCapturedFrame,
+    regions.x, regions.y, regions.w, regions.h,
+    0, 0, regions.w * zoomFactor, regions.h * zoomFactor
+  );
+
+  try {
+    // Show processing toast
+    const toastEl = document.getElementById('toast');
+    toastEl.textContent = 'Procesando...';
+    toastEl.classList.add('show');
+
+    // Use Tesseract to recognize digits only
+    const result = await Tesseract.recognize(
+      croppedCanvas,
+      'eng',
+      {
+        tessedit_char_whitelist: '0123456789'
+      }
+    );
+
+    toastEl.classList.remove('show');
+
+    const text = result.data.text.trim();
+    const pageNumber = text.match(/\d+/)?.[0] || '';
+
+    if (pageNumber) {
+      // Show confirmation modal
+      showPageNumberConfirmation(pageNumber);
+    } else {
+      // No number detected
+      handlePageNumberOCRFailure();
+    }
+  } catch (err) {
+    console.error('Tesseract error:', err);
+    handlePageNumberOCRFailure();
+  }
+}
+
+function handlePageNumberOCRFailure() {
+  if (pageNumberOcrAttempts < MAX_OCR_ATTEMPTS) {
+    showToast('No se detectó el número. Reintentando...');
+    setTimeout(async () => {
+      await performPageNumberOCR();
+    }, 500);
+  } else {
+    // Show error and allow manual retry
+    showToast('No se pudo detectar el número de página');
+    showPageNumberConfirmation(''); // Show empty, user must edit
+  }
+}
+
+function showPageNumberConfirmation(pageNumber) {
+  document.getElementById('detected-page-number').textContent = pageNumber || '?';
+  document.getElementById('page-number-input').value = pageNumber;
+  document.getElementById('page-number-edit-section').classList.remove('show');
+  document.getElementById('page-number-confirm-modal').style.display = 'flex';
+
+  // Auto-focus input if empty
+  if (!pageNumber) {
+    setTimeout(() => {
+      document.getElementById('page-number-input').focus();
+    }, 100);
+  }
+}
+
+function closePageNumberConfirm() {
+  document.getElementById('page-number-confirm-modal').style.display = 'none';
+  currentCapturedFrame = null;
+  // Resume overlay drawing
+  if (cameraVideo && cameraVideo.srcObject) {
+    scannerAnimationFrame = requestAnimationFrame(drawOverlay);
+  }
+}
+
+function toggleEditPageNumber() {
+  const section = document.getElementById('page-number-edit-section');
+  section.classList.toggle('show');
+  if (section.classList.contains('show')) {
+    setTimeout(() => {
+      document.getElementById('page-number-input').focus();
+      document.getElementById('page-number-input').select();
+    }, 100);
+  }
+}
+
+function saveEditedPageNumber() {
+  const input = document.getElementById('page-number-input');
+  const value = input.value.trim();
+  
+  if (!value) {
+    showToast('Ingresa un número de página');
+    return;
+  }
+
+  document.getElementById('detected-page-number').textContent = value;
+  document.getElementById('page-number-edit-section').classList.remove('show');
+  showToast('Número actualizado');
+}
+
+function confirmPageNumber() {
+  const pageNumber = document.getElementById('detected-page-number').textContent;
+  
+  if (!pageNumber || pageNumber === '?' || pageNumber === '—') {
+    showToast('Por favor ingresa un número de página válido');
+    return;
+  }
+
+  // TODO: In the next step, use this pageNumber to select a prompt
+  // and send both the pageNumber and the full image to Gemini
+  
+  showToast('Página '+pageNumber+' confirmada ✓');
+  closePageNumberConfirm();
+  closeCameraScanner();
+  
+  // For now, just log it
+  console.log('Page number confirmed:', pageNumber);
+}
+
+function retryPageNumberScan() {
+  closePageNumberConfirm();
+  pageNumberOcrAttempts = 0;
+  // Restart overlay
+  scannerAnimationFrame = requestAnimationFrame(drawOverlay);
 }
 
 /* ================================================================
