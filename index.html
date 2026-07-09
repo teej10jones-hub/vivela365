@@ -1636,6 +1636,8 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
       <div class="page-number-preview-value" id="detected-page-number">—</div>
     </div>
 
+    <button class="btn-outline" style="width: 100%; margin-bottom: 10px; font-size: 12px;" onclick="showDebugPreview()">🔍 Ver región capturada</button>
+
     <div class="page-number-confirm-actions">
       <button class="btn-confirm-yes" onclick="confirmPageNumber()">✓ Correcto</button>
       <button class="btn-confirm-edit" onclick="toggleEditPageNumber()">✏️ Editar</button>
@@ -5609,7 +5611,6 @@ function stopCamera() {
     cameraVideo.srcObject = null;
   }
 }
-
 function drawOverlay() {
   if (!overlayCtx || !cameraVideo) return;
 
@@ -5623,48 +5624,41 @@ function drawOverlay() {
   overlayCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
   overlayCtx.fillRect(0, 0, w, h);
 
-  // Approximate page region (A5 aspect ratio: ~1:1.4)
-  const pageWidth = Math.min(w * 0.85, h * 0.6);
-  const pageHeight = pageWidth * 1.4;
-  const pageX = (w - pageWidth) / 2;
-  const pageY = (h - pageHeight) / 2;
-
-  // Clear the page region (show camera feed)
-  overlayCtx.clearRect(pageX, pageY, pageWidth, pageHeight);
-
-  // Draw page rectangle (light gold/green)
-  overlayCtx.strokeStyle = '#6BAA8E';
-  overlayCtx.lineWidth = 3;
-  overlayCtx.setLineDash([5, 5]);
-  overlayCtx.strokeRect(pageX, pageY, pageWidth, pageHeight);
-  overlayCtx.setLineDash([]);
-
-  // Page number region: bottom-center, 5% width, 3% height
-  const pageNumWidth = pageWidth * 0.05;
-  const pageNumHeight = pageHeight * 0.03;
-  const pageNumX = pageX + (pageWidth - pageNumWidth) / 2;
-  const pageNumY = pageY + pageHeight - pageNumHeight - (pageHeight * 0.02); // 2% padding from bottom
+  // **Page number region = 10% width (2x bigger), 6% height from BOTTOM CENTER**
+  const pageNumWidth = w * 0.10;  // 10% width (2x the original 5%)
+  const pageNumHeight = h * 0.06; // 6% height (2x the original 3%)
+  const pageNumX = (w - pageNumWidth) / 2; // Center horizontally
+  const pageNumY = h - pageNumHeight - (h * 0.05); // 5% padding from bottom
 
   // Clear page number region
   overlayCtx.clearRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
 
   // Draw page number rectangle (bright gold)
   overlayCtx.strokeStyle = '#C4B88E';
-  overlayCtx.lineWidth = 2;
+  overlayCtx.lineWidth = 3;
   overlayCtx.fillStyle = 'rgba(196, 184, 142, 0.15)';
   overlayCtx.fillRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
   overlayCtx.strokeRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
 
-  // Label
+  // Label above
   overlayCtx.fillStyle = '#C4B88E';
-  overlayCtx.font = 'bold 12px "DM Sans"';
+  overlayCtx.font = 'bold 14px "DM Sans"';
   overlayCtx.textAlign = 'center';
-  overlayCtx.fillText('Página', pageX + pageWidth / 2, pageY + pageHeight + 25);
+  overlayCtx.fillText('Alinea aquí el número de página', w / 2, pageNumY - 12);
 
-  // Store for later use
+  // **Store both canvas coords AND visual coords for debugging**
   window.pageScanRegions = {
-    page: { x: pageX, y: pageY, w: pageWidth, h: pageHeight },
-    pageNum: { x: pageNumX, y: pageNumY, w: pageNumWidth, h: pageNumHeight }
+    pageNum: { 
+      x: pageNumX, 
+      y: pageNumY, 
+      w: pageNumWidth, 
+      h: pageNumHeight,
+      // Visual/CSS coords (for reference)
+      visualX: pageNumX,
+      visualY: pageNumY,
+      visualW: pageNumWidth,
+      visualH: pageNumHeight
+    }
   };
 
   scannerAnimationFrame = requestAnimationFrame(drawOverlay);
@@ -5673,6 +5667,9 @@ function drawOverlay() {
 async function capturePage() {
   if (!cameraVideo) return;
 
+  // Get the overlay canvas bounding rect to match coordinate systems
+  const canvasRect = overlayCanvas.getBoundingClientRect();
+  
   // Create canvas from video frame
   const canvas = document.createElement('canvas');
   canvas.width = cameraVideo.videoWidth;
@@ -5681,6 +5678,11 @@ async function capturePage() {
   ctx.drawImage(cameraVideo, 0, 0);
 
   currentCapturedFrame = canvas;
+
+  console.log('Video resolution:', cameraVideo.videoWidth, 'x', cameraVideo.videoHeight);
+  console.log('Canvas resolution:', canvas.width, 'x', canvas.height);
+  console.log('Overlay canvas resolution:', overlayCanvas.width, 'x', overlayCanvas.height);
+  console.log('Overlay visual size:', canvasRect.width, 'x', canvasRect.height);
 
   // Stop overlay animation
   if (scannerAnimationFrame) cancelAnimationFrame(scannerAnimationFrame);
@@ -5710,39 +5712,177 @@ async function performPageNumberOCR() {
     0, 0, regions.w * zoomFactor, regions.h * zoomFactor
   );
 
+  // **DEBUG: Show what we're trying to OCR**
+  const debugUrl = croppedCanvas.toDataURL();
+  console.log('Cropped region data URL:', debugUrl);
+  console.log('Crop dimensions:', regions.w, 'x', regions.h, '→ zoomed to', regions.w * zoomFactor, 'x', regions.h * zoomFactor);
+
+  // **PREPROCESSING: Increase contrast and brightness**
+  const processedCanvas = document.createElement('canvas');
+  processedCanvas.width = croppedCanvas.width;
+  processedCanvas.height = croppedCanvas.height;
+  const processedCtx = processedCanvas.getContext('2d');
+  processedCtx.drawImage(croppedCanvas, 0, 0);
+
+  // Get image data and apply contrast/brightness
+  const imageData = processedCtx.getImageData(0, 0, processedCanvas.width, processedCanvas.height);
+  const data = imageData.data;
+  const contrast = 2.0; // Increase contrast
+  const brightness = 20; // Increase brightness
+
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = Math.min(255, (data[i] - 128) * contrast + 128 + brightness); // R
+    data[i + 1] = Math.min(255, (data[i + 1] - 128) * contrast + 128 + brightness); // G
+    data[i + 2] = Math.min(255, (data[i + 2] - 128) * contrast + 128 + brightness); // B
+    // Keep alpha unchanged
+  }
+
+  processedCtx.putImageData(imageData, 0, 0);
+
+  const processedUrl = processedCanvas.toDataURL();
+  console.log('Processed (contrast+brightness) data URL:', processedUrl);
+
   try {
     // Show processing toast
     const toastEl = document.getElementById('toast');
     toastEl.textContent = 'Procesando...';
     toastEl.classList.add('show');
 
-    // Use Tesseract to recognize digits only
+    // Use Tesseract with optimized settings for digits
     const result = await Tesseract.recognize(
-      croppedCanvas,
+      processedCanvas, // Use preprocessed image
       'eng',
       {
-        tessedit_char_whitelist: '0123456789'
+        tessedit_char_whitelist: '0123456789',
+        tessedit_pageseg_mode: Tesseract.PSM.SINGLE_LINE
       }
     );
 
     toastEl.classList.remove('show');
 
     const text = result.data.text.trim();
+    const confidence = result.data.confidence;
+    
+    console.log('Tesseract raw text:', text);
+    console.log('Tesseract confidence:', confidence);
+    console.log('All OCR data:', result.data);
+
     const pageNumber = text.match(/\d+/)?.[0] || '';
 
     if (pageNumber) {
-      // Show confirmation modal
+      console.log('✓ Page number detected:', pageNumber);
       showPageNumberConfirmation(pageNumber);
     } else {
-      // No number detected
+      console.log('✗ No digits matched');
       handlePageNumberOCRFailure();
     }
   } catch (err) {
     console.error('Tesseract error:', err);
+    toastEl.classList.remove('show');
     handlePageNumberOCRFailure();
   }
 }
+function showDebugPreview() {
+  if (!currentCapturedFrame) {
+    showToast('No hay frame capturado');
+    return;
+  }
+  
+  const regions = window.pageScanRegions.pageNum;
+  
+  console.log('=== CROP COORDINATES ===');
+  console.log('X:', Math.round(regions.x));
+  console.log('Y:', Math.round(regions.y));
+  console.log('Width:', Math.round(regions.w));
+  console.log('Height:', Math.round(regions.h));
+  
+  // Create debug canvas showing full frame + crop box
+  const debugCanvas = document.createElement('canvas');
+  debugCanvas.width = currentCapturedFrame.width;
+  debugCanvas.height = currentCapturedFrame.height;
+  const debugCtx = debugCanvas.getContext('2d');
+  
+  try {
+    debugCtx.drawImage(currentCapturedFrame, 0, 0);
+    
+    // Draw RED box around crop region
+    debugCtx.strokeStyle = '#FF0000';
+    debugCtx.lineWidth = 8;
+    debugCtx.strokeRect(regions.x, regions.y, regions.w, regions.h);
+    
+    // Draw text label
+    debugCtx.fillStyle = '#FF0000';
+    debugCtx.font = 'bold 30px Arial';
+    debugCtx.fillText('CROP BOX', regions.x + 10, regions.y + 40);
+    
+    // Create cropped part at 10x zoom for clarity
+    const croppedCanvas = document.createElement('canvas');
+    croppedCanvas.width = regions.w * 10;
+    croppedCanvas.height = regions.h * 10;
+    const croppedCtx = croppedCanvas.getContext('2d');
+    
+    croppedCtx.drawImage(
+      currentCapturedFrame,
+      regions.x, regions.y, regions.w, regions.h,
+      0, 0, croppedCanvas.width, croppedCanvas.height
+    );
+    
+    const fullDataUrl = debugCanvas.toDataURL();
+    const croppedDataUrl = croppedCanvas.toDataURL();
+    
+    showDebugModal(fullDataUrl, croppedDataUrl, regions);
+    
+  } catch (err) {
+    console.error('Error:', err);
+    showToast('Error: ' + err.message);
+  }
+}
 
+function showDebugModal(fullImageUrl, croppedImageUrl, regions) {
+  // Create a simple modal to show debug info
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: white; border-radius: 12px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow-y: auto;">
+      <h2 style="margin: 0 0 16px 0; font-size: 18px;">🔍 Debug Preview</h2>
+      
+      <div style="margin-bottom: 20px; padding: 12px; background: #f0f0f0; border-radius: 8px; font-family: monospace; font-size: 12px; overflow-x: auto;">
+        <div><strong>Crop Coordinates:</strong></div>
+        <div>X: ${Math.round(regions.x)}</div>
+        <div>Y: ${Math.round(regions.y)}</div>
+        <div>Width: ${Math.round(regions.w)}</div>
+        <div>Height: ${Math.round(regions.h)}</div>
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 14px;">Full Frame (with RED box showing crop region)</h3>
+        <img src="${fullImageUrl}" style="max-width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 14px;">Cropped Region (8x zoom)</h3>
+        <img src="${croppedImageUrl}" style="max-width: 100%; border: 1px solid #ccc; border-radius: 4px; image-rendering: pixelated;">
+      </div>
+      
+      <div style="display: flex; gap: 10px;">
+        <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 10px; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Cerrar</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
 function handlePageNumberOCRFailure() {
   if (pageNumberOcrAttempts < MAX_OCR_ATTEMPTS) {
     showToast('No se detectó el número. Reintentando...');
