@@ -16,6 +16,7 @@
   --dark:        #1A1E2A;
   --dark-mid:    #2D3245;
   --dark-soft:   #3D4358;
+  --tile-background: #5b6178;
   --white:       #FFFFFF;
   --bg:          #F7F6F2;
   --surface:     #FFFFFF;
@@ -151,7 +152,13 @@ body {
 .feature-tile { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:18px 10px;cursor:pointer;transition:all .18s;text-align:center;aspect-ratio:1; }
 .feature-tile:active { background:var(--gold-light);transform:scale(.97); }
 .ft-icon { width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-.ft-icon svg { width:20px;height:20px;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;fill:none; }
+.ft-icon svg { width:20px;height:20px;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;fill:none; }
+.ft-icon img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    display: block;
+}
 .ft-dark { background:rgba(26,30,42,.07); }
 .ft-dark svg { stroke:var(--dark-soft); }
 .ft-gold { background:var(--gold-light); }
@@ -204,6 +211,22 @@ body {
 .meditation-habit-option:active { background:var(--gold-light); }
 .meditation-habit-name { font-size:14px;font-weight:500;color:var(--text-1); }
 .meditation-habit-meta { font-size:11px;color:var(--text-3);margin-top:2px; }
+.meditation-delete-prompt-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity .15s;
+  padding: 6px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.meditation-delete-prompt-btn:hover { opacity: 0.8; }
+.meditation-delete-prompt-btn:active { transform: scale(0.9); }
+.meditation-delete-prompt-btn svg { width: 14px; height: 14px; }
 
 /* HABITS */
 .week-grid-header { display:grid;grid-template-columns:1fr repeat(7, 28px);gap:4px;align-items:center;margin-bottom:6px; }
@@ -487,12 +510,47 @@ body {
 .aff-play-btn { display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:20px;border:none;background:rgba(255,255,255,.25);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s; }
 .aff-play-btn:active { background:rgba(255,255,255,.35); }
 @keyframes pulse-rec { 0%,100%{opacity:1}50%{opacity:.6} }
-.aff-nav-row { display:flex;align-items:center;justify-content:center;gap:20px;padding:12px 20px 16px;flex-shrink:0; }
+.aff-nav-row { 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px 20px 16px;
+  flex-shrink: 0;
+  position: relative;
+}
+.aff-nav-row > button {
+  position: absolute;
+  right: 20px;
+  margin-left: 0 !important;
+}
 .aff-nav-btn { width:44px;height:44px;border-radius:50%;border:0.5px solid var(--border-mid);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--text-2);transition:all .15s; }
 .aff-nav-btn:active { background:var(--gold-light); }
 .aff-progress-dots { display:flex;gap:5px;align-items:center; }
 .aff-dot { width:5px;height:5px;border-radius:50%;background:var(--border-mid);transition:all .2s; }
 .aff-dot.active { background:var(--dark);width:16px;border-radius:3px; }
+.aff-delete-btn {
+  position: absolute;
+  bottom: 44px;  /* Changed from 12px - moved up by ~button height */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all .15s;
+  padding: 6px;
+  border-radius: 4px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+.aff-delete-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.25); }
+.aff-delete-btn:active { transform: translateX(-50%) scale(0.9); }
+.aff-delete-btn svg { width: 16px; height: 16px; stroke-width: 2; }
+
 
 /* UPCOMING BOTTOM BAR */
 .upcoming-bottom-bar {
@@ -783,8 +841,21 @@ body {
   cursor: pointer;
 }
 
+.check-stats-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--blue-light);
+  padding: 2px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.check-stats-pill:active { opacity: 0.7; }
+
 .page-number-edit-section button:active { opacity: 0.8; }
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
@@ -792,7 +863,7 @@ body {
 <!-- HOME -->
 <div id="screen-home" class="screen active">
   <div class="home-hero">
-    <span class="brand-tag">Tu agenda · Tu vida</span>
+    <span class="brand-tag">Una relación más profunda contigo mismo.<br>Un día, una página, una intención a la vez.</span>
     <h1>Bienvenido a<br><em>Vívela</em>365</h1>
     <p>Tu compañero digital para sacar el máximo provecho de tu agenda.</p>
   </div>
@@ -803,20 +874,26 @@ body {
         <div class="ft-icon ft-dark"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
         <div class="ft-text"><strong>Escanear</strong><span>Escanea y importa</span></div>
       </div>
-      <div class="feature-tile" onclick="navigateTo('habits')">
-        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <div class="ft-text"><strong>Hábitos</strong><span>Rachas y progreso diario</span></div>
-      </div>
-      <div class="feature-tile" onclick="navigateTo('goals')">
-        <div class="ft-icon ft-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-        <div class="ft-text"><strong>Objetivos</strong><span>Objetivos e hitos</span></div>
-      </div>
       <div class="feature-tile" onclick="navigateTo('calendar')">
         <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
         <div class="ft-text"><strong>Calendario</strong><span>Eventos y agenda</span></div>
       </div>
+      <div class="feature-tile" onclick="navigateTo('habits')">
+        <div class="ft-icon ft-gold">
+          <img src="icons/habitos.png" alt="Hábitos">
+        </div>
+        <div class="ft-text"><strong>Hábitos</strong><span>Rachas y progreso diario</span></div>
+      </div>
+      <div class="feature-tile" onclick="navigateTo('goals')">
+        <div class="ft-icon ft-gold">
+          <img src="icons/objetivos.png" alt="Objetivos">
+        </div>
+        <div class="ft-text"><strong>Objetivos</strong><span>Objetivos e hitos</span></div>
+      </div>
       <div class="feature-tile" onclick="navigateTo('books')">
-        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="ft-icon ft-gold">
+          <img src="icons/lecturas.png" alt="Lecturas">
+        </div>
         <div class="ft-text"><strong>Lecturas</strong><span>Libros y aprendizajes</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('affirmations')">
@@ -824,11 +901,15 @@ body {
         <div class="ft-text"><strong>Afirmaciones</strong><span>100 afirmaciones de voz</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('gratitude')">
-        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="ft-icon ft-gold">
+          <img src="icons/gratitude.png" alt="Gratitud">
+        </div>
         <div class="ft-text"><strong>Gratitud</strong><span>Diario de gratitud</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('meditation')">
-        <div class="ft-icon ft-gold"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke-width="1.5"/></svg></div>
+        <div class="ft-icon ft-gold">
+          <img src="icons/meditation.png" alt="Meditación">
+        </div>
         <div class="ft-text"><strong>Meditación</strong><span>Meditación guiada</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('notes')">
@@ -843,6 +924,7 @@ body {
     </div>
   </div>
 </div>
+
 
 <!-- MEDITATION -->
 <div id="screen-meditation" class="screen">
@@ -860,12 +942,15 @@ body {
   <div class="screen-body" id="meditation-body" style="gap:12px;padding:12px 16px">
     <div class="meditation-pill">
       <div class="meditation-pill-header">Reflexión del momento</div>
-      <div class="meditation-pill-content" style="flex-direction:row;gap:12px;">
+      <div class="meditation-pill-content" style="flex-direction:row;gap:12px;align-items:center;position:relative;">
         <button class="meditation-nav-btn" onclick="prevMeditationPrompt()">‹</button>
         <div class="meditation-prompt-text" id="meditation-prompt-display"></div>
         <button class="meditation-nav-btn" onclick="nextMeditationPrompt()">›</button>
       </div>
-      <button class="meditation-add-btn" style="align-self:center;margin-top:4px" onclick="openMeditationAddPrompt()">+</button>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:8px;">
+        <button class="meditation-add-btn" onclick="openMeditationAddPrompt()">+</button>
+        <button class="meditation-delete-prompt-btn" onclick="deleteCustomMeditationPrompt()" title="Eliminar reflexión"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+      </div>
     </div>
     <div class="meditation-pill">
       <div class="meditation-pill-header">Temporizador</div>
@@ -1361,7 +1446,7 @@ Incluye únicamente los campos con información visible. Responde SOLO con el JS
     <div class="aff-nav-btn" onclick="moveAff(-1)">‹</div>
     <div class="aff-progress-dots" id="aff-dots"></div>
     <div class="aff-nav-btn" onclick="moveAff(1)">›</div>
-    <button style="width:44px;height:44px;min-width:44px;min-height:44px;border-radius:50%;background:var(--dark);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(26,30,42,.2);transition:transform .15s;flex-shrink:0;margin-left:12px" onclick="openModal('aff-modal')">
+    <button style="width:44px;height:44px;min-width:44px;min-height:44px;border-radius:50%;background:var(--dark);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(26,30,42,.2);transition:transform .15s;flex-shrink:0;margin-left:auto" onclick="openModal('aff-modal')">
       <svg viewBox="0 0 24 24" width="20" height="20" stroke="#fff" fill="none" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     </button>
   </div>
@@ -2279,6 +2364,9 @@ settings: {
   noteSearch: '',
   noteVoiceChunks: [],
   noteRecordings: {},  // { 'note_123': ObjectURL, ... }
+  planner_habits: [],
+  planner_objetivos: [],
+  planner_metas: [],
 };
 
 /* Seed habit completions */
@@ -2291,6 +2379,575 @@ state.habits.forEach((h, hi) => {
     if (Math.random() > threshold) h.completions[fmt(d)] = true;
   }
 });
+
+/* ================================================================
+   GEMINI PLANNER PROMPT GENERATION
+================================================================ */
+
+function buildPlannerPrompt() {
+  const habits = extractHabitsForPrompt();
+  const objetivos = extractObjetivosForPrompt();
+  const metas = extractMetasForPrompt();
+  const books = extractBooksForPrompt();
+
+  let completePrompt = getPlannerPromptTemplate();
+
+  const existingDataSection = `
+---
+
+EXISTING APP DATA FOR MATCHING
+
+To enable intelligent matching and deduplication, pass the user's existing data to this prompt.
+Include all items the user currently has in the app so Gemini can match new entries against them.
+
+Existing books in app (for matching):
+${JSON.stringify(books, null, 2)}
+
+Existing habits in app (for matching):
+${JSON.stringify(habits, null, 2)}
+
+Existing objetivos in app (for matching):
+${JSON.stringify(objetivos, null, 2)}
+
+Existing metas in app (for matching):
+${JSON.stringify(metas, null, 2)}`;
+
+  completePrompt = completePrompt.replace(
+    /---\n\nEXISTING APP DATA FOR MATCHING[\s\S]*?Existing metas in app \(for matching\):\n\[[\s\S]*?\]/,
+    existingDataSection
+  );
+
+  return completePrompt;
+}
+
+function getPlannerPromptTemplate() {
+  return `You are extracting structured data from a Spanish-language annual/monthly/weekly planner. 
+Your task is to identify the page type and extract all relevant information according to the page's structure.
+
+CRITICAL INSTRUCTION: Return ONLY valid JSON with no markdown formatting, no code fences, no preamble, and no trailing text. The response must be parseable as JSON immediately.
+
+---
+
+UNRECOGNIZED PAGES
+
+If the page is blank, doesn't have a page number visible, or is not a recognized planner page (pages 8-11, 20-24), return:
+
+{
+  "page_number": null,
+  "page_type": "invalid",
+  "has_scannable_content": false,
+  "message": "This page is not a recognized planner page. Scannable pages are: 8, 9, 10, 11, 20, 21, 22, 23, 24"
+}
+
+This will trigger a popup in the app. Do not attempt to extract data from invalid pages.
+
+---
+
+PAGE TYPE DETECTION
+
+Determine the page type based on page number:
+
+Page 8: Habits overview (Hábitos del día)
+- 3 vertical sections: Mañana (morning), Tarde (afternoon), Noche (evening)
+- Each has up to 3 habit lines
+- Right column has "Frecuencia" (frequency)
+
+Pages 9-10: Annual objectives (Objetivos anuales)
+- Page 9 has 3 categories: Salud y Bienestar Físico, Salud Emocional y Mental, Relaciones y Comunidad
+- Page 10 has 3 categories: Carrera y Propósito, Finanzas y Abundancia, Crecimiento Personal y Espiritual
+- Each objective has: "Mi objetivo en una oración" + "Por qué es importante para mí?"
+
+Page 11: Books list (Libros que quiero leer este año)
+- 12 book entries
+- Each has: book title + "Temática/Género" column on right
+
+Page 20: Monthly objectives & goals (Objetivo y metas del mes)
+- Top section: single "objetivo" (monthly objective)
+- Below: four "metas" (monthly goals/targets)
+- Month name is visible on page
+
+Page 21: Monthly calendar part 1 (Monday-Thursday)
+- Calendar grid with event entries
+- Dates are visible in the calendar (e.g., "Lunes 3" or just "3")
+- Each day may have events with time and description
+- Month is visible on the previous page (Page 20)
+
+Page 22: Monthly calendar part 2 (Friday-Sunday) + Book of month
+- Calendar grid for Fri, Sat, Sun with event entries
+- Dates are visible in the calendar
+- Right section: "Libro del mes" with single book title
+- Month is visible on Page 20
+
+Page 23: Weekly planner (Planificador semanal)
+- Top left: "Desocupa tu cabeza" (brain dump notes)
+- Top right: "Objetivo semanal" (weekly objective)
+- "Libro en Curso" with page progress "Pág. X de Y"
+- Habits section: up to 9 habits (3 morning/3 afternoon/3 evening) labeled with mañana/tarde/noche
+- Habit tracker: 7-column grid (L M M J V S D for Mon-Sun) with bubbles to fill
+- Bottom: "Gratitud" (gratitude) section with items
+- Month is visible on the weekly page or from context
+
+Page 24: Weekly calendar with hourly grid (Calendario semanal por horas)
+- Each day of week (Mon-Sun) has hourly slots from 6am to 9pm
+- Days and dates visible in the header (e.g., "Lunes 3" or "L 3")
+- Events are written in time slots
+- Time is auto-determined by row position (6am at top, 9pm at bottom)
+- Month is from previous week's context
+
+---
+
+EXTRACTION RULES BY PAGE TYPE
+
+Page 8 - Habits Overview
+
+Extract all habits from three sections:
+- "Mañana" (morning) - up to 3 habits
+- "Tarde" (afternoon) - up to 3 habits  
+- "Noche" (evening) - up to 3 habits
+
+For each habit extract:
+- habit name (exact text as written)
+- frequency_original (exact text from "Frecuencia" column as user wrote it)
+- frequency_normalized (structured format - see HABIT FREQUENCY NORMALIZATION below)
+- matched_habit_id (match against existing habits in app)
+- match_confidence (high/medium/low/no_match)
+
+Set default reminders based on time of day:
+- Morning → 07:00
+- Afternoon → 14:00
+- Evening → 18:00
+
+IMPORTANT: Only include habits that are actually written on the page. Skip blank lines.
+
+Pages 9-10 - Annual Objectives
+
+For each objective with content, extract:
+- category name (one of the 6 categories mentioned above)
+- objective text (from "Mi objetivo en una oración")
+- why_important text (from "Por qué es importante para mí?")
+- matched_objetivo_id (match against existing objetivos in app)
+- match_confidence (high/medium/low/no_match)
+
+IMPORTANT: Only include objectives that have text in BOTH fields. Skip if either is blank.
+
+Page 11 - Books List
+
+For each book entry with a title, extract:
+- extracted_title (exact title as written on page)
+- genre_notes (from "Temática/Género" column)
+- matched_book_id (attempt to match against existing books)
+- match_confidence (high/medium/low/no_match)
+
+IMPORTANT: Only include rows that have a book title. Skip blank rows.
+
+Page 20 - Monthly Objective & Metas
+
+Extract:
+- objetivo (the single monthly objective text with matching)
+- metas (array of 4 goals - extract each one with matching)
+
+Month name should be extracted from the page header.
+
+IMPORTANT: Include both objetivo and all metas that are written. Skip blanks.
+
+Pages 21-22 - Monthly Calendar
+
+IMPORTANT: Read the actual date from the calendar grid on the page.
+
+For each event on the calendar:
+- Extract event title/name
+- Extract day of week (Monday-Sunday)
+- Extract date (day of month, e.g., 3, 15, 28) - READ THIS FROM THE CALENDAR HEADER/CELL
+- Extract time if written (e.g., "10:30", "3pm", "14hs") - otherwise null
+- Note which page it came from (21 for Mon-Thu, 22 for Fri-Sun)
+
+For Page 22 ONLY:
+- Extract "Libro del mes" title (single book title in that section)
+- Attempt to match against existing books
+
+Month is from Page 20.
+
+Page 23 - Weekly Planner
+
+Extract ALL of the following sections:
+
+Desocupa tu cabeza (Brain dump):
+- Array of all items written in this section
+- Each item as separate entry
+
+Objetivo semanal (Weekly objective):
+- Single text string of the objective
+- Include matching against existing objetivos
+
+Libro en Curso (Current book):
+- Book title
+- Current page number (from "Pág. X")
+- Total pages (from "de Y")
+- Attempt to match against existing books
+
+Habits (Hábitos):
+- Same extraction as Page 8: three sections (morning/afternoon/evening)
+- Each with name + frequency_original + frequency_normalized + matching
+- Default reminders: Morning 07:00, Afternoon 14:00, Evening 18:00
+
+Habit Tracker (Tracker de hábitos):
+- For each habit, read the 7-day bubble grid (L M M J V S D)
+- Record which days are marked/completed
+- Return as array of day letters (e.g., ["L", "Ma", "Mi", "J", "V"])
+
+Gratitud (Gratitude):
+- Array of all items written in this section
+
+Month should be extracted from page or from context.
+
+Page 24 - Weekly Calendar with Hours
+
+IMPORTANT: Read the actual dates from the day headers on the page.
+
+For each event:
+- Event title/name
+- Day of week (Monday-Sunday)
+- Date (day of month - READ FROM HEADER, e.g., "Lunes 3" → date is 3)
+- Hour (auto-extracted from row position: 6am=top, 9pm=bottom)
+- If event spans multiple rows, use the start time
+
+Time mapping:
+- 6am = first row
+- 7am = second row
+- ...
+- 9pm = last row
+
+Month is from the week context (same as Page 23 of that week).
+
+---
+
+HABIT FREQUENCY NORMALIZATION
+
+When extracting habits from Page 8 or Page 23, normalize the frequency to a structured format.
+
+The user writes frequency however they want. You must parse it and normalize to one of these types:
+
+TYPE 1: Specific days of week
+User writes: "Lunes a viernes", "L M M J V", "Cada lunes y miércoles", "Lunes, miércoles, viernes"
+Normalize to: days_of_week with array of days
+Days must be: "L", "Ma", "Mi", "J", "V", "S", "D" (Spanish abbreviations)
+Example:
+{
+  "type": "days_of_week",
+  "days": ["L", "Ma", "Mi", "J", "V"]
+}
+
+TYPE 2: Daily (every day)
+User writes: "Diario", "Todos los días", "Cada día", "7 días"
+Normalize to: daily with all 7 days
+Example:
+{
+  "type": "daily",
+  "days": ["L", "Ma", "Mi", "J", "V", "S", "D"]
+}
+
+TYPE 3: Weekly count (no specific days)
+User writes: "3 veces por semana", "2x semana", "Dos veces a la semana", "5 veces por semana"
+Normalize to: weekly_count with number
+Example:
+{
+  "type": "weekly_count",
+  "times_per_week": 3
+}
+
+TYPE 4: Cannot parse
+User writes something unclear: "Cuando pueda", "Según disponibilidad", "A veces", gibberish
+Normalize to: unknown with original text preserved
+Example:
+{
+  "type": "unknown",
+  "original_text": "Cuando pueda"
+}
+
+IMPORTANT: Always return frequency_normalized for every habit. Be conservative with parsing - if you're not sure, use "unknown".
+
+---
+
+CALENDAR DATE EXTRACTION
+
+Pages 21, 22, and 24 all have visible dates on the calendar.
+
+- Page 21 (Mon-Thu): Look at the calendar grid headers. They show the day name and date (e.g., "Lunes 3", "Martes 4")
+- Page 22 (Fri-Sun): Same format in the calendar grid
+- Page 24 (Hourly): Look at the day headers. They show day name and date (e.g., "Lunes 3")
+
+For each event, extract the date (day of month) from the calendar structure.
+
+If you cannot clearly see the date, note in "unclear_sections" and set date to null.
+
+---
+
+MATCHING AGAINST EXISTING DATA
+
+When extracting items from the planner, attempt to match them against existing items in the app.
+This allows for updates and deduplication even if the user writes things slightly differently.
+
+BOOK MATCHING (Pages 11, 22, 23)
+
+When extracting books, attempt to match extracted titles against the existing books list.
+
+Use fuzzy matching logic:
+- Exact match (case-insensitive) → confidence: "high"
+- Partial match (author name present, title mostly matches) → confidence: "medium"
+- Similar title but different author or unclear → confidence: "low"
+- No reasonable match found → confidence: "no_match"
+
+Return for each book:
+- extracted_title: the title as written on page
+- matched_book_id: ID from existing books list (or null if no match)
+- match_confidence: "high", "medium", "low", or "no_match"
+
+HABIT MATCHING (Pages 8, 23)
+
+When extracting habits, attempt to match extracted habit names against the existing habits list.
+
+Use fuzzy matching logic:
+- Exact match (case-insensitive) → confidence: "high"
+- Very similar (minor wording differences) → confidence: "medium"
+- Could be the same thing but unclear → confidence: "low"
+- No reasonable match found → confidence: "no_match"
+
+Return for each habit:
+- extracted_name: the habit name as written on page
+- matched_habit_id: ID from existing habits list (or null if no match)
+- match_confidence: "high", "medium", "low", or "no_match"
+
+OBJETIVO MATCHING (Pages 9, 10, 20, 23)
+
+When extracting objetivos, attempt to match against the existing objetivos list.
+
+Use fuzzy matching logic:
+- Exact match (case-insensitive) → confidence: "high"
+- Very similar phrasing or same goal stated differently → confidence: "medium"
+- Could be related but unclear → confidence: "low"
+- No reasonable match found → confidence: "no_match"
+
+Return for each objetivo:
+- extracted_objetivo: the objective text as written on page
+- matched_objetivo_id: ID from existing objetivos list (or null if no match)
+- match_confidence: "high", "medium", "low", or "no_match"
+
+META MATCHING (Page 20)
+
+When extracting metas, attempt to match against the existing metas list.
+
+Use fuzzy matching logic:
+- Exact match (case-insensitive) → confidence: "high"
+- Very similar phrasing or same goal stated differently → confidence: "medium"
+- Could be related but unclear → confidence: "low"
+- No reasonable match found → confidence: "no_match"
+
+Return for each meta:
+- extracted_meta: the meta text as written on page
+- matched_meta_id: ID from existing metas list (or null if no match)
+- match_confidence: "high", "medium", "low", or "no_match"
+
+---
+
+JSON RESPONSE STRUCTURE
+
+For INVALID pages:
+{
+  "page_number": null,
+  "page_type": "invalid",
+  "has_scannable_content": false,
+  "message": "This page is not a recognized planner page. Scannable pages are: 8, 9, 10, 11, 20, 21, 22, 23, 24"
+}
+
+For VALID pages, return only this JSON structure (with only relevant fields for detected page type):
+
+{
+  "page_number": <number>,
+  "page_type": <string>,
+  "month": <string or null>,
+  "has_scannable_content": true,
+  "extraction_quality": {
+    "ocr_confidence": "high|medium|low",
+    "unclear_sections": [<array of section names if any unclear>],
+    "notes": <string or null>
+  },
+  "data": {
+    "habits": {
+      "morning": [
+        {
+          "extracted_name": <string>,
+          "matched_habit_id": <string or null>,
+          "match_confidence": "high|medium|low|no_match",
+          "frequency_original": <string>,
+          "frequency_normalized": {
+            "type": "days_of_week|daily|weekly_count|unknown",
+            "days": [<array of "L", "Ma", "Mi", "J", "V", "S", "D">],
+            "times_per_week": <number>,
+            "original_text": <string>
+          },
+          "default_time": "07:00"
+        }
+      ],
+      "afternoon": [...],
+      "evening": [...]
+    },
+    "habit_tracker": {
+      "<habit_name>": {
+        "days": [<array of "L", "Ma", "Mi", "J", "V", "S", "D">],
+        "completed_count": <number>
+      }
+    },
+    "objectives": [
+      {
+        "category": <string>,
+        "extracted_objetivo": <string>,
+        "matched_objetivo_id": <string or null>,
+        "match_confidence": "high|medium|low|no_match",
+        "why_important": <string>
+      }
+    ],
+    "metas": [
+      {
+        "extracted_meta": <string>,
+        "matched_meta_id": <string or null>,
+        "match_confidence": "high|medium|low|no_match",
+        "description": <string or null>
+      }
+    ],
+    "brain_dump": [<array of strings>],
+    "gratitude": [<array of strings>],
+    "books": [
+      {
+        "extracted_title": <string>,
+        "matched_book_id": <string or null>,
+        "match_confidence": "high|medium|low|no_match",
+        "genre_notes": <string or null>,
+        "current_progress": {
+          "current_page": <number or null>,
+          "total_pages": <number or null>
+        }
+      }
+    ],
+    "events": [
+      {
+        "title": <string>,
+        "day_of_week": <string>,
+        "date": <number or null>,
+        "month": <string>,
+        "time": <string or null>,
+        "time_extracted_from": "user_input|row_position"
+      }
+    ],
+    "objective": <string or null>,
+    "weekly_objective": <string or null>,
+    "libro_del_mes": <string or null>
+  }
+}
+
+IMPORTANT NOTES ON JSON STRUCTURE:
+
+1. For frequency_normalized: Always include this object. Only populate the fields that are relevant to the type.
+2. For events: Always include "date" field (day of month). This is crucial.
+3. Include "month" field in events.
+4. For matching fields: Always include "matched_*_id" and "match_confidence".
+5. Only include fields in the "data" object that have content.
+
+---
+
+SPECIAL CASES
+
+Empty/blank sections: Omit them entirely from the response.
+
+Handwriting quality: If sections are hard to read, note in "unclear_sections" array.
+
+Frequency formats: User may write frequency in many ways. Always attempt to normalize.
+
+Time formats in events: Extract the time as a string if present. If ambiguous or missing, set to null.
+
+---
+
+EXISTING APP DATA FOR MATCHING
+
+To enable intelligent matching and deduplication, pass the user's existing data to this prompt.
+Include all items the user currently has in the app so Gemini can match new entries against them.
+
+Existing books in app (for matching):
+[]
+
+Existing habits in app (for matching):
+[]
+
+Existing objetivos in app (for matching):
+[]
+
+Existing metas in app (for matching):
+[]
+
+---
+
+FINAL REMINDERS
+
+1. ONLY return valid JSON. No markdown, no explanation, no code fences.
+2. Always include "frequency_normalized" for every habit (never omit).
+3. Always include "date" for every event (never omit - read from calendar).
+4. Always include "month" for every event.
+5. Always include "matched_*_id" and "match_confidence" for habits, objetivos, metas, and books.
+6. Use null for missing optional fields, but omit empty arrays and objects entirely.
+7. Extract text EXACTLY as written by user.
+8. For page type detection, infer from page structure/headers.
+9. Default times for reminders: Morning=07:00, Afternoon=14:00, Evening=18:00.
+10. For hourly events (Page 24), time is determined by row position.
+11. Always attempt to match extracted items against the existing app data.
+12. Always check if page is valid before attempting extraction.
+
+NOW EXTRACT THE PAGE AND RETURN ONLY JSON.`;
+}
+
+function extractBooksForPrompt() {
+  return state.books
+    .map(book => ({
+      id: book.id,
+      title: book.title,
+      author: book.author
+    }))
+    .slice(0, 50);
+}
+
+function extractHabitsForPrompt() {
+  return state.habits
+    .map(habit => ({
+      id: habit.id,
+      name: habit.name,
+      freq: habit.freq
+    }))
+    .slice(0, 50);
+}
+
+function extractObjetivosForPrompt() {
+  return (state.goals || [])
+    .map(obj => ({
+      id: obj.id,
+      objetivo: obj.title || '',
+      category: obj.cat || '',
+      description: obj.desc || '',
+      status: obj.status || 'active',
+      milestones: (obj.milestones || []).map(m => ({
+        text: m.text || '',
+        done: !!m.done
+      }))
+    }))
+    .slice(0, 50);
+}
+
+function extractMetasForPrompt() {
+  return (state.planner_metas || [])
+    .map(meta => ({
+      id: meta.id || `meta_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      meta: meta.meta || meta.text || '',
+      month: meta.month || ''
+    }))
+    .slice(0, 50);
+}
 
 function navigateTo(name) {
   if (state.currentScreen === 'meditation' && name !== 'meditation') {
@@ -2481,91 +3138,441 @@ function modalOverlayClick(e, id) { if (e.target === document.getElementById(id)
 /* ================================================================
    SCAN
 ================================================================ */
-function copyPrompt() {
-  const text = document.getElementById('gemini-prompt').innerText;
-  navigator.clipboard.writeText(text)
-    .then(()  => showToast('¡Prompt copiado al portapapeles!'))
-    .catch(()  => {
-      const ta = document.createElement('textarea');
-      ta.value = text; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-      showToast('¡Prompt copiado!');
-    });
+async function copyPrompt() {
+  try {
+    const fullPrompt = buildPlannerPrompt();
+    await navigator.clipboard.writeText(fullPrompt);
+    showToast('✓ Prompt de extracción copiado');
+  } catch (error) {
+    console.error('Failed to copy prompt:', error);
+    showToast('Error copiando prompt. Intenta de nuevo.');
+  }
 }
 
 function parseGeminiResponse() {
-  const raw = document.getElementById('gemini-response').value.trim();
-  if (!raw) { showToast('Pega primero la respuesta de Gemini'); return; }
-  let data;
-  try { data = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
-  catch(e) { showToast('Error: el JSON no es válido'); return; }
+  const input = document.getElementById('gemini-response');  
+  if (!input) return;
 
-  const result  = document.getElementById('parsed-result');
-  const content = document.getElementById('parsed-content');
+  let raw = input.value.trim();
+
+  if (!raw) {
+    showToast('Pega primero la respuesta de Gemini');
+    return;
+  }
+
+  console.log('=== BEFORE CLEANUP ===');
+  console.log('Raw length:', raw.length);
+  console.log('First 100 chars:', raw.substring(0, 100));
+  console.log('First char code:', raw.charCodeAt(0));
+
+  // Remove markdown code fences if Gemini included them
+  raw = raw
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+
+  // Remove BOM if present
+  raw = raw.replace(/^\uFEFF/, '');
+
+  console.log('=== AFTER CLEANUP ===');
+  console.log('Raw length:', raw.length);
+  console.log('First 100 chars:', raw.substring(0, 100));
+  console.log('First char code:', raw.charCodeAt(0));
+  console.log('Full raw value:', raw);
+
+  let data;
+
+  try {
+    data = JSON.parse(raw);
+  } catch (error) {
+    console.error('❌ PARSE ERROR:', error.message);
+    console.error('Raw value:', raw);
+    showToast('JSON inválido');
+    return;
+  }
+
+  console.log('✅ SUCCESS:', data);
+  window.geminiImportData = data;
+  showGeminiImportPreview(data);
+}
+
+function showGeminiImportPreview(data) {
+  console.log('📍 showGeminiImportPreview called with:', data);
+  
+  const resultDiv = document.getElementById('parsed-result');
   const actions = document.getElementById('parsed-actions');
-  content.innerHTML = ''; actions.innerHTML = '';
+
+  if (!actions) {
+    console.error('❌ parsed-actions element not found');
+    return;
+  }
+
+  actions.innerHTML = '';
+
+  // ✅ FIX: Access data.data not just data
+  const innerData = data.data || {};
 
   const sections = [];
-  if (data.eventos && data.eventos.length) sections.push({ title:data.eventos.length+' evento(s) detectado(s)', items:data.eventos.map(e=>e.titulo+(e.hora_inicio?' · '+e.hora_inicio:'')) });
-  if (data.habitos && data.habitos.length) sections.push({ title:data.habitos.length+' hábito(s) detectado(s)', items:data.habitos.map(h=>h.nombre) });
-  if (data.metas   && data.metas.length)   sections.push({ title:data.metas.length+' meta(s) detectada(s)',    items:data.metas.map(m=>m.titulo) });
-  if (data.tareas  && data.tareas.length)  sections.push({ title:data.tareas.length+' tarea(s) detectada(s)',  items:data.tareas.map(t=>t.titulo) });
 
-  if (!sections.length) { showToast('No se encontró contenido reconocible'); return; }
+  if (innerData.events?.length) {
+    sections.push(`📅 ${innerData.events.length} evento(s)`);
+  }
 
-  sections.forEach(sec => {
-    const div = document.createElement('div');
-    div.className = 'parsed-section';
-    div.innerHTML = '<div class="parsed-section-title">'+sec.title+'</div>' +
-      sec.items.map(i=>'<div class="parsed-item">'+i+'</div>').join('');
-    content.appendChild(div);
+  // Flatten habits from nested structure
+  const allHabits = [];
+  if (innerData.habits) {
+    if (innerData.habits.morning) allHabits.push(...innerData.habits.morning);
+    if (innerData.habits.afternoon) allHabits.push(...innerData.habits.afternoon);
+    if (innerData.habits.evening) allHabits.push(...innerData.habits.evening);
+  }
+  
+  console.log('allHabits:', allHabits);
+  
+  if (allHabits.length) {
+    sections.push(`🔄 ${allHabits.length} hábito(s)`);
+  }
+
+  if (innerData.objectives?.length) {
+    sections.push(`🎯 ${innerData.objectives.length} objetivo(s)`);
+  }
+
+  // if (innerData.metas?.length) {
+  //   sections.push(`✓ ${innerData.metas.length} meta(s)`);
+  // }
+
+  if (innerData.books?.length) {
+    sections.push(`📚 ${innerData.books.length} libro(s)`);
+  }
+
+  if (innerData.gratitude?.length) {
+    sections.push(`🙏 ${innerData.gratitude.length} gratitud(es)`);
+  }
+
+  if (innerData.brain_dump?.length) {
+    sections.push(`🧠 ${innerData.brain_dump.length} nota(s)`);
+  }
+
+  console.log('sections found:', sections);
+
+  if (!sections.length) {
+    actions.innerHTML = '<p style="color:var(--text-3)">No se encontraron datos para importar.</p>';
+    console.log('❌ No sections found');
+    return;
+  }
+
+  console.log('✅ Building UI with sections:', sections);
+
+  actions.innerHTML =
+    '<div style="margin-bottom:14px;font-size:14px;font-weight:600">Datos encontrados:</div>' +
+    '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">' +
+      sections.map(x => '<div style="font-size:13px;color:var(--text-2)">' + x + '</div>').join('') +
+    '</div>';
+
+  console.log('UI built successfully');
+
+  addGeminiImportButton(actions, '🔄 Importar hábitos', importGeminiHabits, allHabits.length > 0);
+  addGeminiImportButton(actions, '📅 Importar eventos', importGeminiEvents, !!innerData.events?.length);
+  addGeminiImportButton(actions, '🎯 Importar objetivos', importGeminiObjectives, !!innerData.objectives?.length);
+  addGeminiImportButton(actions, '📚 Importar libros', importGeminiBooks, !!innerData.books?.length);
+  addGeminiImportButton(actions, '🙏 Importar gratitud', importGeminiGratitude, !!innerData.gratitude?.length);
+  addGeminiImportButton(actions, '🧠 Importar brain dump', importGeminiBrainDump, !!innerData.brain_dump?.length);
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'btn-gold';
+  allBtn.style.marginTop = '12px';
+  allBtn.textContent = '✨ Importar todo';
+  allBtn.onclick = importAllGeminiData;
+  actions.appendChild(allBtn);
+
+  resultDiv.classList.add('show');
+  console.log('✅ resultDiv shown');
+}
+
+
+function addGeminiImportButton(container, text, handler, enabled) {
+  const btn = document.createElement('button');
+
+  btn.className = 'btn-outline';
+  btn.style.width = '100%';
+  btn.style.marginBottom = '8px';
+  btn.textContent = text;
+
+  if (!enabled) {
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+  } else {
+    btn.onclick = handler;
+  }
+
+  container.appendChild(btn);
+}
+
+function importGeminiObjectives() {
+  const data = window.geminiImportData?.data;
+  
+  if (!data?.objectives?.length) {
+    return;
+  }
+
+  let added = 0;
+
+  data.objectives.forEach((obj, i) => {
+    if (!obj.objective) {
+      return;
+    }
+
+    const exists = state.goals.find(
+      x => x.title?.trim().toLowerCase() === obj.objective.trim().toLowerCase()
+    );
+
+    if (exists) {
+      return;
+    }
+
+    state.goals.push({
+      id: state.nextGoalId++,
+      title: obj.objective,
+      cat: obj.category || 'general',
+      desc: obj.why_important || '',
+      status: 'active',
+      milestones: [{text: 'Comenzar', done: false}]
+    });
+
+    added++;
   });
 
-  if (data.eventos && data.eventos.length) {
-    let importedEvents = [];
-    const btnImport = document.createElement('button');
-    btnImport.className = 'btn-outline'; btnImport.style.flex = '1';
-    btnImport.textContent = 'Importar al calendario';
-    btnImport.onclick = () => {
-      importedEvents = [];
-      data.eventos.forEach(e => {
-        const ev = { id:state.nextEventId++, title:e.titulo, date:e.fecha||todayStr, start:e.hora_inicio||'', end:e.hora_fin||'', notes:e.notas||'', color:'#C4B88E', sequence:0 };
-        state.events.push(ev); importedEvents.push(ev);
-      });
-      showToast(data.eventos.length+' evento(s) importados al calendario');
-      btnICS.style.display = 'inline-flex';
-    };
-    actions.appendChild(btnImport);
-    const btnICS = document.createElement('button');
-    btnICS.className = 'btn-outline'; btnICS.style.flex = '1';
-    btnICS.textContent = 'Apple Cal';
-    btnICS.style.display = 'none';
-    btnICS.onclick = () => exportToICS(importedEvents);
-    actions.appendChild(btnICS);
+  if (added > 0) {
+    // Skip renderGoals for now
+    showToast(added + ' objetivo(s) importado(s)');
   }
-  if (data.habitos && data.habitos.length) {
-    const btn = document.createElement('button');
-    btn.className = 'btn-outline'; btn.style.flex = '1';
-    btn.textContent = 'Importar hábitos';
-    btn.onclick = () => {
-      data.habitos.forEach(h => state.habits.push({id:state.nextHabitId++,name:h.nombre,freq:'diario',cat:'otro',notifTime:'',customDays:null,streak:0,completions:{},why:null}));
-      showToast(data.habitos.length+' hábito(s) importados');
-    };
-    actions.appendChild(btn);
+}
+
+function importGeminiEvents() {
+  const data = window.geminiImportData?.data;
+  if (!data?.events) return;
+
+  let added = 0;
+
+  // Map Spanish months to numbers
+  const monthMap = {
+    'enero': 1, 'febrero': 2, 'marzo': 3, 'abril': 4, 'mayo': 5, 'junio': 6,
+    'julio': 7, 'agosto': 8, 'septiembre': 9, 'octubre': 10, 'noviembre': 11, 'diciembre': 12
+  };
+
+  data.events.forEach(e => {
+    if (!e.title || !e.date) return;
+
+    // Get month number
+    const monthNum = monthMap[e.month?.toLowerCase()] || new Date().getMonth() + 1;
+    const year = new Date().getFullYear();
+
+    // Parse time (handle formats like "4:15 pm", "3pm", etc)
+    let timeStr = '09:00';
+    if (e.time) {
+      const timeMatch = e.time.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
+      if (timeMatch) {
+        let hours = parseInt(timeMatch[1]);
+        const minutes = timeMatch[2] ? parseInt(timeMatch[2]) : 0;
+        const period = timeMatch[3]?.toLowerCase();
+
+        if (period === 'pm' && hours !== 12) hours += 12;
+        if (period === 'am' && hours === 12) hours = 0;
+
+        timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+      }
+    }
+
+    // Create ISO date string
+    const dateStr = `${year}-${String(monthNum).padStart(2, '0')}-${String(e.date).padStart(2, '0')}`;
+
+    // Check if event already exists
+    const exists = state.events.find(
+      x => x.title?.trim().toLowerCase() === e.title.trim().toLowerCase() &&
+           x.date === dateStr
+    );
+
+    if (exists) return;
+
+    state.events.push({
+      id: state.nextEventId++,
+      title: e.title,
+      date: dateStr,
+      time: timeStr,
+      color: 'blue',
+      description: e.day_of_week ? `${e.day_of_week}` : '',
+      allDay: false
+    });
+
+    added++;
+  });
+
+  if (added > 0) {
+    showToast(added + ' evento(s) importado(s)');
   }
-  if (data.metas && data.metas.length) {
-    const btn = document.createElement('button');
-    btn.className = 'btn-outline'; btn.style.flex = '1';
-    btn.textContent = 'Importar metas';
-    btn.onclick = () => {
-      data.metas.forEach(m => state.goals.push({id:state.nextGoalId++,title:m.titulo,cat:m.categoria||'Personal',desc:'',status:'active',milestones:(m.hitos||[]).map(h=>({text:h,done:false}))}));
-      showToast(data.metas.length+' meta(s) importadas');
-    };
-    actions.appendChild(btn);
+}
+
+function importGeminiObjectives() {
+  const data = window.geminiImportData?.data;
+  
+  if (!data?.objectives?.length) {
+    return;
   }
 
-  result.classList.add('show');
-  showToast('¡Contenido detectado correctamente!');
+  let added = 0;
+
+  data.objectives.forEach((obj, i) => {
+    if (!obj.objective) {
+      return;
+    }
+
+    const exists = state.goals.find(
+      x => x.title?.trim().toLowerCase() === obj.objective.trim().toLowerCase()
+    );
+
+    if (exists) {
+      return;
+    }
+
+    state.goals.push({
+      id: state.nextGoalId++,
+      title: obj.objective,
+      cat: obj.category || 'general',
+      desc: obj.why_important || '',
+      status: 'active',
+      priority: 'medium',
+      progress: [],        // ✅ Add missing progress array
+      dueDate: '',         // ✅ Add dueDate
+      milestone: ''        // ✅ Add milestone
+    });
+
+    added++;
+  });
+
+  if (added > 0) {
+    renderGoals();
+    showToast(added + ' objetivo(s) importado(s)');
+  }
+}
+
+function normalizeGoalCategory(category) {
+  const value = String(category || '').toLowerCase();
+
+  if (value.includes('salud')) return 'Salud';
+  if (value.includes('profes')) return 'Profesional';
+  if (value.includes('finan')) return 'Finanzas';
+  if (value.includes('relac')) return 'Relaciones';
+  if (value.includes('aprend')) return 'Aprendizaje';
+  if (value.includes('personal')) return 'Personal';
+
+  return 'Otro';
+}
+
+function importGeminiBooks() {
+  const data = window.geminiImportData;
+  if (!data?.books?.length) return;
+
+  let added = 0;
+  let updated = 0;
+
+  data.books.forEach(bookData => {
+    if (!bookData.extracted_title) return;
+
+    let existing = null;
+
+    if (bookData.matched_book_id != null) {
+      existing = state.books.find(
+        b => String(b.id) === String(bookData.matched_book_id)
+      );
+    }
+
+    if (existing) {
+      const progress = bookData.current_progress || {};
+
+      if (progress.current_page != null) {
+        existing.currentPage = progress.current_page;
+      }
+
+      if (progress.total_pages != null) {
+        existing.totalPages = progress.total_pages;
+      }
+
+      if (
+        existing.status !== 'finished' &&
+        progress.total_pages &&
+        progress.current_page >= progress.total_pages
+      ) {
+        existing.status = 'finished';
+      } else if (
+        existing.status === 'not-started' &&
+        progress.current_page > 0
+      ) {
+        existing.status = 'reading';
+      }
+
+      if (bookData.genre_notes) {
+        existing.freeNotes =
+          existing.freeNotes
+            ? existing.freeNotes + '\n' + bookData.genre_notes
+            : bookData.genre_notes;
+      }
+
+      updated++;
+      return;
+    }
+
+    // Don't create duplicate based on title either
+    const titleMatch = state.books.find(
+      b => b.title.trim().toLowerCase() ===
+           bookData.extracted_title.trim().toLowerCase()
+    );
+
+    if (titleMatch) {
+      updated++;
+      return;
+    }
+
+    const progress = bookData.current_progress || {};
+
+    const currentPage = progress.current_page || 0;
+    const totalPages = progress.total_pages || 0;
+
+    let status = 'not-started';
+
+    if (currentPage > 0) {
+      status = 'reading';
+    }
+
+    if (totalPages && currentPage >= totalPages) {
+      status = 'finished';
+    }
+
+    state.books.push({
+      id: state.nextBookId++,
+      title: bookData.extracted_title,
+      author: '',
+      cover: null,
+      totalPages,
+      currentPage,
+      status,
+      rating: 0,
+      freeNotes: bookData.genre_notes || '',
+      quotes: [],
+      lessons: [],
+      actions: [],
+      dateStarted: null
+    });
+
+    added++;
+  });
+
+  renderBooks();
+  renderGoals();
+
+  showToast(
+    added + ' libro(s) nuevos · ' +
+    updated + ' actualizado(s)'
+  );
 }
 
 /* ================================================================
@@ -2663,7 +3670,7 @@ function renderDailyChecklist() {
     const done = h.completions[todayStr];
     const notifTime = getEffectiveNotifTime(h);
     const timeLabel = notifTime ? '<span class="check-time-pill" onclick="openHabitTimeEditor('+h.id+',event)" style="cursor:pointer">🔔 '+formatTime12(notifTime)+'</span>' : '';
-    const statsBtn = '<button class="btn-outline" style="padding:4px 6px;font-size:11px;gap:3px;flex-shrink:0" onclick="openHabitStats('+h.id+',event)">📊</button>';
+    const statsBtn = '<span class="check-stats-pill" onclick="openHabitStats('+h.id+',event)">📊</span>';
     return '<div class="checklist-item">'+
       '<div class="check-box'+(done?' checked':'')+'" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')"></div>'+
       '<span class="check-label" onclick="openEditHabit('+h.id+')">'+h.name+'</span>'+
@@ -3070,7 +4077,7 @@ const GOAL_CAT_COLORS = { Personal:'pill-gold', Salud:'pill-green', Profesional:
 const GOAL_CATS = ['Personal','Salud','Profesional','Finanzas','Relaciones','Aprendizaje','Otro'];
 
 function goalProgress(g) {
-  if (!g.milestones.length) return 0;
+  if (!g.milestones || !g.milestones.length) return 0;  // ✅ Added check for undefined
   // For the reading goal, count up to 12 finished books
   if (g.id === getReadingGoal()?.id) {
     const finished = Math.min(12, g.milestones.filter(m => m.done).length);
@@ -3096,14 +4103,14 @@ function getBookMilestoneByTitle(goal, bookTitle) {
 function goalCardHTML(g, extraClass) {
   const pct = goalProgress(g);
   const catClass = GOAL_CAT_COLORS[g.cat] || 'pill-gray';
-  const msDots = g.milestones.slice(0,6).map(m => '<div class="ms-dot'+(m.done?' done':'')+'"></div>').join('');
+  const milestones = g.milestones || [];  // ✅ Add this line
+  const msDots = milestones.slice(0,6).map(m => '<div class="ms-dot'+(m.done?' done':'')+'"></div>').join('');
   return '<div class="goal-card'+(extraClass?' '+extraClass:'')+'" onclick="openGoalDetail('+g.id+')">'+
     '<div class="goal-card-header"><div class="goal-card-title">'+g.title+'</div><span class="pill '+catClass+'">'+g.cat+'</span></div>'+
     '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
-    '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% · '+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+' hitos</span><div class="milestones-mini">'+msDots+'</div></div>'+
+    '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% · '+milestones.filter(m=>m.done).length+'/'+milestones.length+' hitos</span><div class="milestones-mini">'+msDots+'</div></div>'+
     '</div>';
 }
-
 const archiveOpen = { logrado: false, espera: false };
 
 function renderGoals() {
@@ -4764,10 +5771,11 @@ function renderAffCard(direction) {
   const hasRec = !!state.affRecordings[currentAffKey()];
 
   const card = document.createElement('div');
-  // FIX: 'no-anim' starts immediately visible as slide-in; animated directions start offscreen
   card.className = 'aff-card '+(direction==='no-anim'?'slide-in':direction==='in-from-right'?'slide-from-right':direction==='in-from-left'?'slide-from-left':'slide-from-right');
   card.style.background = bg;
+  card.style.position = 'relative';
   card.innerHTML =
+    '<button class="aff-delete-btn" onclick="deleteAffirmation('+idx+')" title="Eliminar afirmación"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>'+
     '<div class="aff-card-number">'+num+' / '+total+'</div>'+
     '<div class="aff-card-text">"'+text+'"</div>'+
     '<div class="aff-card-actions">'+
@@ -5974,6 +6982,247 @@ function retryPageNumberScan() {
   pageNumberOcrAttempts = 0;
   // Restart overlay
   scannerAnimationFrame = requestAnimationFrame(drawOverlay);
+}
+
+function deleteAffirmation(idx) {
+  if (!confirm('¿Eliminar esta afirmación?')) return;
+  state.affirmations.splice(idx, 1);
+  shuffleAffQueue();
+  renderAffirmations();
+  showToast('Afirmación eliminada');
+}
+
+function deleteCustomMeditationPrompt() {
+  const idx = state.meditation.promptIndex;
+  const prompt = state.meditationPrompts[idx];
+  
+  // Only allow deletion of custom prompts (not default ones)
+  if (idx < 10) { showToast('No puedes eliminar las reflexiones predefinidas'); return; }
+  
+  if (!confirm('¿Eliminar esta reflexión?')) return;
+  state.meditationPrompts.splice(idx, 1);
+  state.meditation.customPrompts = state.meditation.customPrompts.filter(p => p !== prompt);
+  
+  // Adjust promptIndex if needed
+  if (state.meditation.promptIndex >= state.meditationPrompts.length) {
+    state.meditation.promptIndex = Math.max(0, state.meditationPrompts.length - 1);
+  }
+  
+  renderMeditation();
+  showToast('Reflexión eliminada');
+}
+
+function importGeminiHabits() {
+  const data = window.geminiImportData?.data;
+  if (!data?.habits) return;
+
+  // Flatten habits from morning/afternoon/evening structure
+  const allHabits = [];
+  if (data.habits.morning) allHabits.push(...data.habits.morning);
+  if (data.habits.afternoon) allHabits.push(...data.habits.afternoon);
+  if (data.habits.evening) allHabits.push(...data.habits.evening);
+
+  if (!allHabits.length) return;
+
+  let added = 0;
+
+  allHabits.forEach(h => {
+    if (!h.name) return;
+
+    const existing = state.habits.find(
+      x => x.name.trim().toLowerCase() === h.name.trim().toLowerCase()
+    );
+
+    if (existing) return;
+
+    const freq = h.frequency_normalized || {};
+    const freqType = freq.type;
+
+    // ✅ Set customDays - default to all days if not specified
+    let customDays = [true, true, true, true, true, true, true]; // All 7 days
+    if (freqType === 'days_of_week' && freq.days) {
+      customDays = [false,false,false,false,false,false,false].map(
+        (_,i) => freq.days?.includes(['L','Ma','Mi','J','V','S','D'][i])
+      );
+    }
+
+    state.habits.push({
+      id: state.nextHabitId++,
+      name: h.name,
+      freq: freqType === 'daily' ? 'diario' : 'personalizado',
+      customDays: customDays,  // ✅ Set the days array instead of null
+      cat: 'otro',
+      notifTime: h.default_time || '',
+      streak: 0,
+      completions: {},
+      improvementStrategy: '',
+      why: ''
+    });
+
+    added++;
+  });
+
+  renderHabits();
+  showToast(added + ' hábito(s) importado(s)');
+}
+
+function importGeminiMetas() {
+  const data = window.geminiImportData?.data;
+  if (!data?.metas) return;
+
+  let added = 0;
+
+  data.metas.forEach(m => {
+    if (!m.meta_title) return;
+
+    const exists = state.metas.find(
+      x => x.title.trim().toLowerCase() === m.meta_title.trim().toLowerCase()
+    );
+
+    if (exists) return;
+
+    state.metas.push({
+      id: state.nextMetaId++,
+      title: m.meta_title,
+      description: m.description || '',
+      completed: false,
+      dueDate: '',
+      priority: 'medium'
+    });
+
+    added++;
+  });
+
+  renderMetas();
+  showToast(added + ' meta(s) importada(s)');
+}
+
+function importGeminiBooks() {
+  const data = window.geminiImportData?.data;
+  if (!data?.books) return;
+
+  let added = 0;
+
+  data.books.forEach(b => {
+    if (!b.extracted_title) return;
+
+    const exists = state.books.find(
+      x => x.title?.trim().toLowerCase() === b.extracted_title.trim().toLowerCase()
+    );
+
+    if (exists) return;
+
+    state.books.push({
+      id: state.nextBookId++,
+      title: b.extracted_title,
+      currentPage: b.current_progress?.current_page || 0,
+      totalPages: b.current_progress?.total_pages || 0,
+      status: 'reading',
+      rating: 0,
+      review: ''
+    });
+
+    // ✅ NEW: Also add to reading goal if it exists
+    const readingGoal = state.goals.find(g => g.id === 1); // Or search by title
+    if (readingGoal) {
+      readingGoal.milestones.push({
+        text: 'Libro ' + (readingGoal.milestones.length + 1) + ': ' + b.extracted_title,
+        done: false
+      });
+    }
+
+    added++;
+  });
+
+  if (added > 0) {
+    showToast(added + ' libro(s) importado(s)');
+  }
+}
+
+function importGeminiGratitude() {
+  const data = window.geminiImportData?.data;
+  if (!data?.gratitude) return;
+
+  let added = 0;
+
+  data.gratitude.forEach(g => {
+    if (!g || !g.trim()) return;
+
+    state.gratitudeEntries.push({
+      id: state.nextGratitudeId++,
+      text: g,
+      date: new Date().toISOString().split('T')[0]
+    });
+
+    added++;
+  });
+
+  if (added > 0) {
+    // renderGratitude?.();  // Skip render for now
+    showToast(added + ' entrada(s) de gratitud importada(s)');
+  }
+}
+
+function importGeminiBrainDump() {
+  const data = window.geminiImportData?.data;
+  
+  if (!data?.brain_dump) {
+    return;
+  }
+
+  let added = 0;
+
+  data.brain_dump.forEach((note, i) => {
+    if (!note || !note.trim()) {
+      return;
+    }
+    
+    const now = new Date().toISOString();
+    
+    state.notes.push({
+      id: state.nextNoteId++,
+      text: note,
+      content: note,           // ✅ renderNotes expects 'content'
+      date: now.split('T')[0],
+      timestamp: new Date(now).getTime(),  // ✅ renderNotes expects 'timestamp'
+      type: 'text',            // ✅ renderNotes expects 'type'
+      processed: false
+    });
+
+    added++;
+  });
+
+  if (added > 0) {
+    renderNotes();
+    showToast(added + ' nota(s) importada(s)');
+  }
+}
+
+function importAllGeminiData() {
+  console.log('🚀 importAllGeminiData started');
+  console.log('State object keys:', Object.keys(state));
+  console.log('Full state:', state);
+  
+  console.log('1️⃣ Calling importGeminiHabits');
+  importGeminiHabits();
+  
+  console.log('2️⃣ Calling importGeminiEvents');
+  importGeminiEvents?.();
+  
+  console.log('3️⃣ Calling importGeminiObjectives');
+  importGeminiObjectives?.();
+  
+  console.log('4️⃣ Calling importGeminiBooks');
+  importGeminiBooks();
+  
+  console.log('5️⃣ Calling importGeminiGratitude');
+  importGeminiGratitude();
+  
+  console.log('6️⃣ Calling importGeminiBrainDump');
+  importGeminiBrainDump();
+  
+  console.log('✅ All imports done');
+  showToast('✨ Importación completa');
 }
 
 /* ================================================================
