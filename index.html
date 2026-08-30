@@ -1655,7 +1655,7 @@ body {
   <div class="camera-scanner-container" onclick="event.stopPropagation()">
     <div class="camera-scanner-top">
       <h3>Escanear página</h3>
-      <p>Alinea el número de página en el centro del rectángulo inferior</p>
+      <p>Alinea la página en el rectángulo</p>
     </div>
     <div class="camera-scanner-video-wrap">
       <video id="camera-video" playsinline></video>
@@ -6910,8 +6910,8 @@ function drawOverlay() {
   overlayCtx.fillRect(0, 0, w, h);
 
   // Centered guide rectangle
-  const guideW = w * 0.8;
-  const guideH = h * 0.99;
+  const guideW = w * 0.9;
+  const guideH = h * 0.9;
   const guideX = (w - guideW) / 2;
   const guideY = (h - guideH) / 2;
 
