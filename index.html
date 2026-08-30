@@ -6,8 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Vívela365</title>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="logo-02.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/logo-02.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -732,26 +732,6 @@ body {
 
 .btn-cancel:active { background: rgba(255,255,255,0.3); }
 
-/* PAGE NUMBER CONFIRMATION MODAL */
-.page-number-confirm-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: var(--safe-b);
-}
-
-.page-number-confirm-sheet {
-  background: var(--surface);
-  border-radius: var(--r-xl) var(--r-xl) 0 0;
-  padding: 24px;
-  width: 100%;
-  max-width: 430px;
-  animation: slideUp .3s ease;
-}
 
 @keyframes slideUp {
   from { transform: translateY(100%); }
@@ -1688,37 +1668,7 @@ body {
   </div>
 </div>
 
-<!-- Page Number Confirmation -->
-<div class="page-number-confirm-modal" id="page-number-confirm-modal" style="display: none;" onclick="if(event.target===this) closePageNumberConfirm()">
-  <div class="page-number-confirm-sheet">
-    <div style="text-align: center; margin-bottom: 16px;">
-      <div style="font-size: 40px; margin-bottom: 8px;">📄</div>
-      <div style="font-size: 16px; font-weight: 600;">Número de página detectado</div>
-    </div>
-    
-    <div class="page-number-preview">
-      <div class="page-number-preview-label">Página</div>
-      <div class="page-number-preview-value" id="detected-page-number">—</div>
-    </div>
 
-    <button class="btn-outline" style="width: 100%; margin-bottom: 10px; font-size: 12px;" onclick="showDebugPreview()">🔍 Ver región capturada</button>
-
-    <div class="page-number-confirm-actions">
-      <button class="btn-confirm-yes" onclick="confirmPageNumber()">✓ Correcto</button>
-      <button class="btn-confirm-edit" onclick="toggleEditPageNumber()">✏️ Editar</button>
-    </div>
-
-    <div class="page-number-edit-section" id="page-number-edit-section">
-      <input class="page-number-edit-input" type="number" id="page-number-input" placeholder="Ingresa el número correcto" min="1">
-      <button onclick="saveEditedPageNumber()">Guardar número</button>
-    </div>
-
-    <div style="display: flex; gap: 10px; margin-top: 12px;">
-      <button class="btn-outline" style="flex: 1; font-size: 13px;" onclick="retryPageNumberScan()">🔄 Reintentar</button>
-      <button class="btn-outline" style="flex: 1; font-size: 13px; color: var(--red); border-color: rgba(196,100,90,.3);" onclick="closePageNumberConfirm()">✕ Cancelar</button>
-    </div>
-  </div>
-</div>
 <!-- MODAL: Add Book -->
 <div class="modal-overlay" id="book-modal" onclick="modalOverlayClick(event,'book-modal')">
   <div class="modal-sheet">
@@ -6890,8 +6840,6 @@ let overlayCanvas = null;
 let overlayCtx = null;
 let scannerAnimationFrame = null;
 let currentCapturedFrame = null;
-let pageNumberOcrAttempts = 0;
-const MAX_OCR_ATTEMPTS = 2;
 
 function openCameraScanner() {
   const modal = document.getElementById('camera-scanner-modal');
@@ -6957,46 +6905,27 @@ function drawOverlay() {
   // Clear canvas
   overlayCtx.clearRect(0, 0, w, h);
 
-  // Semi-transparent dark overlay on edges
-  overlayCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  // Semi-transparent dark overlay
+  overlayCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
   overlayCtx.fillRect(0, 0, w, h);
 
-  // **Page number region = 10% width (2x bigger), 6% height from BOTTOM CENTER**
-  const pageNumWidth = w * 0.10;  // 10% width (2x the original 5%)
-  const pageNumHeight = h * 0.06; // 6% height (2x the original 3%)
-  const pageNumX = (w - pageNumWidth) / 2; // Center horizontally
-  const pageNumY = h - pageNumHeight - (h * 0.05); // 5% padding from bottom
+  // Centered guide rectangle
+  const guideW = w * 0.8;
+  const guideH = h * 0.6;
+  const guideX = (w - guideW) / 2;
+  const guideY = (h - guideH) / 2;
 
-  // Clear page number region
-  overlayCtx.clearRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
-
-  // Draw page number rectangle (bright gold)
   overlayCtx.strokeStyle = '#C4B88E';
   overlayCtx.lineWidth = 3;
-  overlayCtx.fillStyle = 'rgba(196, 184, 142, 0.15)';
-  overlayCtx.fillRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
-  overlayCtx.strokeRect(pageNumX, pageNumY, pageNumWidth, pageNumHeight);
+  overlayCtx.fillStyle = 'rgba(196, 184, 142, 0.1)';
+  overlayCtx.fillRect(guideX, guideY, guideW, guideH);
+  overlayCtx.strokeRect(guideX, guideY, guideW, guideH);
 
-  // Label above
+  // Label
   overlayCtx.fillStyle = '#C4B88E';
-  overlayCtx.font = 'bold 14px "DM Sans"';
+  overlayCtx.font = 'bold 16px "DM Sans"';
   overlayCtx.textAlign = 'center';
-  overlayCtx.fillText('Alinea aquí el número de página', w / 2, pageNumY - 12);
-
-  // **Store both canvas coords AND visual coords for debugging**
-  window.pageScanRegions = {
-    pageNum: { 
-      x: pageNumX, 
-      y: pageNumY, 
-      w: pageNumWidth, 
-      h: pageNumHeight,
-      // Visual/CSS coords (for reference)
-      visualX: pageNumX,
-      visualY: pageNumY,
-      visualW: pageNumWidth,
-      visualH: pageNumHeight
-    }
-  };
+  overlayCtx.fillText('Encuadra la página dentro del rectángulo', w / 2, guideY - 20);
 
   scannerAnimationFrame = requestAnimationFrame(drawOverlay);
 }
@@ -7004,9 +6933,6 @@ function drawOverlay() {
 async function capturePage() {
   if (!cameraVideo) return;
 
-  // Get the overlay canvas bounding rect to match coordinate systems
-  const canvasRect = overlayCanvas.getBoundingClientRect();
-  
   // Create canvas from video frame
   const canvas = document.createElement('canvas');
   canvas.width = cameraVideo.videoWidth;
@@ -7014,301 +6940,19 @@ async function capturePage() {
   const ctx = canvas.getContext('2d');
   ctx.drawImage(cameraVideo, 0, 0);
 
-  currentCapturedFrame = canvas;
+  // Close camera immediately
+  closeCameraScanner();
 
-  console.log('Video resolution:', cameraVideo.videoWidth, 'x', cameraVideo.videoHeight);
-  console.log('Canvas resolution:', canvas.width, 'x', canvas.height);
-  console.log('Overlay canvas resolution:', overlayCanvas.width, 'x', overlayCanvas.height);
-  console.log('Overlay visual size:', canvasRect.width, 'x', canvasRect.height);
-
-  // Stop overlay animation
-  if (scannerAnimationFrame) cancelAnimationFrame(scannerAnimationFrame);
-
-  // Crop and OCR the page number
-  pageNumberOcrAttempts = 0;
-  await performPageNumberOCR();
-}
-
-async function performPageNumberOCR() {
-  if (!currentCapturedFrame) return;
-
-  pageNumberOcrAttempts++;
-
-  // Crop page number region
-  const regions = window.pageScanRegions.pageNum;
-  const croppedCanvas = document.createElement('canvas');
-  croppedCanvas.width = regions.w;
-  croppedCanvas.height = regions.h;
-  const croppedCtx = croppedCanvas.getContext('2d');
-
-  // Draw cropped region at higher zoom for better OCR
-  const zoomFactor = 4;
-  croppedCtx.drawImage(
-    currentCapturedFrame,
-    regions.x, regions.y, regions.w, regions.h,
-    0, 0, regions.w * zoomFactor, regions.h * zoomFactor
-  );
-
-  // **DEBUG: Show what we're trying to OCR**
-  const debugUrl = croppedCanvas.toDataURL();
-  console.log('Cropped region data URL:', debugUrl);
-  console.log('Crop dimensions:', regions.w, 'x', regions.h, '→ zoomed to', regions.w * zoomFactor, 'x', regions.h * zoomFactor);
-
-  // **PREPROCESSING: Increase contrast and brightness**
-  const processedCanvas = document.createElement('canvas');
-  processedCanvas.width = croppedCanvas.width;
-  processedCanvas.height = croppedCanvas.height;
-  const processedCtx = processedCanvas.getContext('2d');
-  processedCtx.drawImage(croppedCanvas, 0, 0);
-
-  // Get image data and apply contrast/brightness
-  const imageData = processedCtx.getImageData(0, 0, processedCanvas.width, processedCanvas.height);
-  const data = imageData.data;
-  const contrast = 2.0; // Increase contrast
-  const brightness = 20; // Increase brightness
-
-  for (let i = 0; i < data.length; i += 4) {
-    data[i] = Math.min(255, (data[i] - 128) * contrast + 128 + brightness); // R
-    data[i + 1] = Math.min(255, (data[i + 1] - 128) * contrast + 128 + brightness); // G
-    data[i + 2] = Math.min(255, (data[i + 2] - 128) * contrast + 128 + brightness); // B
-    // Keep alpha unchanged
-  }
-
-  processedCtx.putImageData(imageData, 0, 0);
-
-  const processedUrl = processedCanvas.toDataURL();
-  console.log('Processed (contrast+brightness) data URL:', processedUrl);
-
-  try {
-    // Show processing toast
-    const toastEl = document.getElementById('toast');
-    toastEl.textContent = 'Procesando...';
-    toastEl.classList.add('show');
-
-    // Use Tesseract with optimized settings for digits
-    const result = await Tesseract.recognize(
-      processedCanvas, // Use preprocessed image
-      'eng',
-      {
-        tessedit_char_whitelist: '0123456789',
-        tessedit_pageseg_mode: Tesseract.PSM.SINGLE_LINE
-      }
-    );
-
-    toastEl.classList.remove('show');
-
-    const text = result.data.text.trim();
-    const confidence = result.data.confidence;
-    
-    console.log('Tesseract raw text:', text);
-    console.log('Tesseract confidence:', confidence);
-    console.log('All OCR data:', result.data);
-
-    const pageNumber = text.match(/\d+/)?.[0] || '';
-
-    if (pageNumber) {
-      console.log('✓ Page number detected:', pageNumber);
-      showPageNumberConfirmation(pageNumber);
-    } else {
-      console.log('✗ No digits matched');
-      handlePageNumberOCRFailure();
-    }
-  } catch (err) {
-    console.error('Tesseract error:', err);
-    toastEl.classList.remove('show');
-    handlePageNumberOCRFailure();
-  }
-}
-function showDebugPreview() {
-  if (!currentCapturedFrame) {
-    showToast('No hay frame capturado');
-    return;
-  }
-  
-  const regions = window.pageScanRegions.pageNum;
-  
-  console.log('=== CROP COORDINATES ===');
-  console.log('X:', Math.round(regions.x));
-  console.log('Y:', Math.round(regions.y));
-  console.log('Width:', Math.round(regions.w));
-  console.log('Height:', Math.round(regions.h));
-  
-  // Create debug canvas showing full frame + crop box
-  const debugCanvas = document.createElement('canvas');
-  debugCanvas.width = currentCapturedFrame.width;
-  debugCanvas.height = currentCapturedFrame.height;
-  const debugCtx = debugCanvas.getContext('2d');
-  
-  try {
-    debugCtx.drawImage(currentCapturedFrame, 0, 0);
-    
-    // Draw RED box around crop region
-    debugCtx.strokeStyle = '#FF0000';
-    debugCtx.lineWidth = 8;
-    debugCtx.strokeRect(regions.x, regions.y, regions.w, regions.h);
-    
-    // Draw text label
-    debugCtx.fillStyle = '#FF0000';
-    debugCtx.font = 'bold 30px Arial';
-    debugCtx.fillText('CROP BOX', regions.x + 10, regions.y + 40);
-    
-    // Create cropped part at 10x zoom for clarity
-    const croppedCanvas = document.createElement('canvas');
-    croppedCanvas.width = regions.w * 10;
-    croppedCanvas.height = regions.h * 10;
-    const croppedCtx = croppedCanvas.getContext('2d');
-    
-    croppedCtx.drawImage(
-      currentCapturedFrame,
-      regions.x, regions.y, regions.w, regions.h,
-      0, 0, croppedCanvas.width, croppedCanvas.height
-    );
-    
-    const fullDataUrl = debugCanvas.toDataURL();
-    const croppedDataUrl = croppedCanvas.toDataURL();
-    
-    showDebugModal(fullDataUrl, croppedDataUrl, regions);
-    
-  } catch (err) {
-    console.error('Error:', err);
-    showToast('Error: ' + err.message);
-  }
-}
-
-function showDebugModal(fullImageUrl, croppedImageUrl, regions) {
-  // Create a simple modal to show debug info
-  const modal = document.createElement('div');
-  modal.style.cssText = `
-    position: fixed;
-    inset: 0;
-    z-index: 400;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow-y: auto;
-  `;
-  
-  modal.innerHTML = `
-    <div style="background: white; border-radius: 12px; padding: 20px; max-width: 90vw; max-height: 90vh; overflow-y: auto;">
-      <h2 style="margin: 0 0 16px 0; font-size: 18px;">🔍 Debug Preview</h2>
-      
-      <div style="margin-bottom: 20px; padding: 12px; background: #f0f0f0; border-radius: 8px; font-family: monospace; font-size: 12px; overflow-x: auto;">
-        <div><strong>Crop Coordinates:</strong></div>
-        <div>X: ${Math.round(regions.x)}</div>
-        <div>Y: ${Math.round(regions.y)}</div>
-        <div>Width: ${Math.round(regions.w)}</div>
-        <div>Height: ${Math.round(regions.h)}</div>
-      </div>
-      
-      <div style="margin-bottom: 20px;">
-        <h3 style="margin: 0 0 10px 0; font-size: 14px;">Full Frame (with RED box showing crop region)</h3>
-        <img src="${fullImageUrl}" style="max-width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-      </div>
-      
-      <div style="margin-bottom: 20px;">
-        <h3 style="margin: 0 0 10px 0; font-size: 14px;">Cropped Region (8x zoom)</h3>
-        <img src="${croppedImageUrl}" style="max-width: 100%; border: 1px solid #ccc; border-radius: 4px; image-rendering: pixelated;">
-      </div>
-      
-      <div style="display: flex; gap: 10px;">
-        <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 10px; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Cerrar</button>
-      </div>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-}
-function handlePageNumberOCRFailure() {
-  if (pageNumberOcrAttempts < MAX_OCR_ATTEMPTS) {
-    showToast('No se detectó el número. Reintentando...');
-    setTimeout(async () => {
-      await performPageNumberOCR();
-    }, 500);
-  } else {
-    // Show error and allow manual retry
-    showToast('No se pudo detectar el número de página');
-    showPageNumberConfirmation(''); // Show empty, user must edit
-  }
-}
-
-function showPageNumberConfirmation(pageNumber) {
-  document.getElementById('detected-page-number').textContent = pageNumber || '?';
-  document.getElementById('page-number-input').value = pageNumber;
-  document.getElementById('page-number-edit-section').classList.remove('show');
-  document.getElementById('page-number-confirm-modal').style.display = 'flex';
-
-  // Auto-focus input if empty
-  if (!pageNumber) {
-    setTimeout(() => {
-      document.getElementById('page-number-input').focus();
-    }, 100);
-  }
-}
-
-function closePageNumberConfirm() {
-  document.getElementById('page-number-confirm-modal').style.display = 'none';
-  currentCapturedFrame = null;
-  // Resume overlay drawing
-  if (cameraVideo && cameraVideo.srcObject) {
-    scannerAnimationFrame = requestAnimationFrame(drawOverlay);
-  }
-}
-
-function toggleEditPageNumber() {
-  const section = document.getElementById('page-number-edit-section');
-  section.classList.toggle('show');
-  if (section.classList.contains('show')) {
-    setTimeout(() => {
-      document.getElementById('page-number-input').focus();
-      document.getElementById('page-number-input').select();
-    }, 100);
-  }
-}
-
-function saveEditedPageNumber() {
-  const input = document.getElementById('page-number-input');
-  const value = input.value.trim();
-  
-  if (!value) {
-    showToast('Ingresa un número de página');
-    return;
-  }
-
-  document.getElementById('detected-page-number').textContent = value;
-  document.getElementById('page-number-edit-section').classList.remove('show');
-  showToast('Número actualizado');
-}
-
-async function confirmPageNumber() {
-  const pageNumber = document.getElementById('detected-page-number').textContent;
-  
-  if (!pageNumber || pageNumber === '?' || pageNumber === '—') {
-    showToast('Por favor ingresa un número de página válido');
-    return;
-  }
-
-  showToast('Página '+pageNumber+' confirmada. Procesando con Gemini...');
-  
-  // Send the full captured frame to Gemini
-  const result = await extractPageWithGemini(currentCapturedFrame);
+  // Send to Gemini (same flow as image upload)
+  showToast('Procesando imagen...');
+  const result = await extractPageWithGemini(canvas);
   
   if (result) {
-    console.log('✅ Page extraction successful');
-    showToast('¡Página procesada! Revisa los datos importados');
+    showToast('¡Página importada!');
   }
-  
-  closePageNumberConfirm();
-  closeCameraScanner();
 }
 
-function retryPageNumberScan() {
-  closePageNumberConfirm();
-  pageNumberOcrAttempts = 0;
-  // Restart overlay
-  scannerAnimationFrame = requestAnimationFrame(drawOverlay);
-}
+
 
 function deleteAffirmation(idx) {
   if (!confirm('¿Eliminar esta afirmación?')) return;
