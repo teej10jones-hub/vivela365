@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Vívela365</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/logo-02.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -961,8 +963,8 @@ body {
           <button class="meditation-mode-btn" id="meditation-countup-btn" onclick="setMeditationCountup()">Hacia adelante</button>
         </div>
         <div class="meditation-timer-controls" style="margin-top:8px;padding-bottom:8px;">
-          <button class="meditation-timer-btn" id="meditation-play-btn" onclick="toggleMeditationTimer()"><span id="play-icon">▶</span> Iniciar</button>
-          <button class="meditation-timer-btn" onclick="stopMeditationTimer()"><span id="stop-icon">⏹</span> Detener</button>
+          <button class="meditation-timer-btn" id="meditation-play-btn" onclick="toggleMeditationTimer()"><svg id="play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;display:inline"><polygon points="5 3 19 12 5 21 5 3"/></svg><span id="play-label">Iniciar</span></button>
+          <button class="meditation-timer-btn" onclick="stopMeditationTimer()"><svg id="stop-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;display:inline"><rect x="6" y="6" width="12" height="12" fill="currentColor"/></svg>Detener</button>
         </div>
       </div>
     </div>
@@ -979,8 +981,8 @@ body {
         <button class="meditation-nav-btn" onclick="nextMeditationSound()">›</button>
       </div>
       <div class="meditation-timer-controls" style="margin-top:8px;padding-bottom:8px">
-        <button class="meditation-timer-btn" id="meditation-audio-play-btn" onclick="toggleMeditationAudio()">▶ Reproducir</button>
-        <button class="meditation-timer-btn" onclick="stopMeditationAudio()">⏹ Detener</button>
+        <button class="meditation-timer-btn" id="meditation-audio-play-btn" onclick="toggleMeditationAudio()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;display:inline"><polygon points="5 3 19 12 5 21 5 3"/></svg>Reproducir</button>
+        <button class="meditation-timer-btn" onclick="stopMeditationAudio()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;display:inline"><rect x="6" y="6" width="12" height="12" fill="currentColor"/></svg>Detener</button>
       </div>
       <audio id="meditation-audio-element" style="display:none"></audio>
     </div>
@@ -997,37 +999,9 @@ body {
     </div>
   </div>
   <div class="screen-body">
-    <div class="scan-area" onclick="openCameraScanner()">
-      <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <h3>Fotografiar página</h3>
-      <p>Próximamente con Gemini integrado.<br>Por ahora usa el prompt de abajo con Gemini.google.com</p>
-    </div>
-    <div class="prompt-box">
-      <span class="section-label">Prompt para Gemini</span>
-      <div class="prompt-text" id="gemini-prompt">Eres un asistente que extrae información estructurada de páginas de agenda. Analiza la imagen de esta página de la agenda Vívela365 y extrae toda la información disponible en formato JSON con la siguiente estructura exacta:
-
-{
-  "fecha": "YYYY-MM-DD o descripción del período",
-  "tipo_pagina": "diaria | semanal | mensual | hábitos | metas | otra",
-  "eventos": [
-    { "titulo": "", "fecha": "", "hora_inicio": "", "hora_fin": "", "notas": "" }
-  ],
-  "habitos": [
-    { "nombre": "", "completado": true, "notas": "" }
-  ],
-  "metas": [
-    { "titulo": "", "categoria": "", "hitos": [""], "progreso": 0 }
-  ],
-  "tareas": [
-    { "titulo": "", "completada": false, "prioridad": "alta | media | baja" }
-  ],
-  "notas_generales": ""
-}
-
-Incluye únicamente los campos con información visible. Responde SOLO con el JSON, sin texto adicional ni bloques de código.</div>
-      <div style="margin-top:10px">
-        <button class="btn-primary" onclick="copyPrompt()">Copiar prompt al portapapeles</button>
-      </div>
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button class="btn-gold" style="flex:1;font-size:14px" onclick="openCameraScanner()">📷 Usar cámara</button>
+      <button class="btn-outline" style="flex:1;font-size:14px" onclick="triggerDirectImageUpload()">📁 Subir imagen</button>
     </div>
     <div class="response-box">
       <span class="section-label">Pegar respuesta de Gemini</span>
@@ -2159,6 +2133,11 @@ function isScheduled(habit, dateObj) {
   return freqToDays(habit.freq, habit.customDays)[dateObj.getDay()];
 }
 
+function capitalizeFirst(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 const state = {
   currentScreen: 'home',
   habits: [
@@ -2381,6 +2360,152 @@ state.habits.forEach((h, hi) => {
 });
 
 /* ================================================================
+   GEMINI API INTEGRATION
+================================================================ */
+
+const GEMINI_WORKER_URL = 'https://vivela365.teej10jones.workers.dev/';
+const GEMINI_ACCESS_CODE = 'AGENDA-2024-001'; // Use one of your valid codes
+
+async function callGeminiWorker(imageBase64, customPrompt) {
+  if (!imageBase64) {
+    showToast('No hay imagen para procesar');
+    return null;
+  }
+
+  try {
+    const response = await fetch(GEMINI_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        imageBase64: imageBase64,
+        prompt: customPrompt,
+        accessCode: GEMINI_ACCESS_CODE
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Worker error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Your worker returns the full Gemini response
+    // The actual content is in data.candidates[0].content.parts[0].text
+    if (data.error) {
+      showToast('Error: ' + data.error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Gemini Worker error:', error);
+    showToast('Error: ' + error.message);
+    return null;
+  }
+}
+
+async function extractPageWithGemini(canvas) {
+  if (!canvas) {
+    showToast('No hay imagen para procesar');
+    return null;
+  }
+
+  showToast('Enviando a Gemini...');
+  
+  // Convert canvas to base64 (remove data:image/jpeg;base64, prefix)
+  const imageBase64 = canvas.toDataURL('image/jpeg').split(',')[1];
+  
+  // Build the prompt for page extraction
+  const prompt = buildPlannerPrompt();
+  
+  // Call Gemini via worker
+  const geminiResponse = await callGeminiWorker(imageBase64, prompt);
+  
+  if (!geminiResponse) return null;
+  
+  try {
+    // Extract text from Gemini response
+    let responseText = '';
+    
+    if (geminiResponse.candidates && geminiResponse.candidates[0]) {
+      responseText = geminiResponse.candidates[0].content.parts[0].text;
+    } else {
+      throw new Error('Unexpected Gemini response format');
+    }
+
+    console.log('Gemini raw response:', responseText);
+
+    // Clean up markdown if present
+    let cleanedText = responseText
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim()
+      .replace(/^\uFEFF/, '');
+
+    // Parse JSON
+    const parsedData = JSON.parse(cleanedText);
+    
+    // Store for import preview
+    window.geminiImportData = parsedData;
+    
+    console.log('✅ Parsed data:', parsedData);
+    
+    // Show import preview
+    showGeminiImportPreview(parsedData);
+    
+    return parsedData;
+  } catch (err) {
+    console.error('Error parsing Gemini response:', err);
+    showToast('Error procesando respuesta: ' + err.message);
+    return null;
+  }
+}
+
+async function triggerDirectImageUpload() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    showToast('Procesando imagen...');
+    
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      // evt.target.result is already data:image/...;base64,...
+      const base64 = evt.target.result.split(',')[1];
+      
+      const prompt = buildPlannerPrompt();
+      const result = await callGeminiWorker(base64, prompt);
+      
+      if (result) {
+        try {
+          // Extract text from Gemini response
+          const responseText = result.candidates[0].content.parts[0].text;
+          
+          const cleanedText = responseText
+            .replace(/^```json\s*/i, '')
+            .replace(/^```\s*/i, '')
+            .replace(/\s*```$/i, '')
+            .trim()
+            .replace(/^\uFEFF/, '');
+          
+          const parsedData = JSON.parse(cleanedText);
+          window.geminiImportData = parsedData;
+          showGeminiImportPreview(parsedData);
+        } catch (err) {
+          showToast('Error: ' + err.message);
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+/* ================================================================
    GEMINI PLANNER PROMPT GENERATION
 ================================================================ */
 
@@ -2443,57 +2568,233 @@ This will trigger a popup in the app. Do not attempt to extract data from invali
 
 ---
 
-PAGE TYPE DETECTION
+COMPREHENSIVE PAGE MAPPING (All 219 Pages)
 
-Determine the page type based on page number:
+MONTH STRUCTURES
 
-Page 8: Habits overview (Hábitos del día)
-- 3 vertical sections: Mañana (morning), Tarde (afternoon), Noche (evening)
-- Each has up to 3 habit lines
-- Right column has "Frecuencia" (frequency)
+Every month in the 2027 planner follows an identical pattern. Each month has a defined date range and start page number:
 
-Pages 9-10: Annual objectives (Objetivos anuales)
-- Page 9 has 3 categories: Salud y Bienestar Físico, Salud Emocional y Mental, Relaciones y Comunidad
-- Page 10 has 3 categories: Carrera y Propósito, Finanzas y Abundancia, Crecimiento Personal y Espiritual
-- Each objective has: "Mi objetivo en una oración" + "Por qué es importante para mí?"
+JANUARY: Dec 28 - Jan 31 | Start page: 20 | Structure: 5 weeks
+FEBRUARY: Feb 01 - Feb 28 | Start page: 38 | Structure: 4 weeks
+MARCH: Mar 01 - Apr 04 | Start page: 54 | Structure: 5 weeks
+APRIL: Apr 05 - May 02 | Start page: 72 | Structure: 4 weeks
+MAY: May 03 - Jun 06 | Start page: 88 | Structure: 4 weeks
+JUNE: Jun 07 - Jul 04 | Start page: 104 | Structure: 5 weeks
+JULY: Jul 05 - Aug 08 | Start page: 122 | Structure: 4 weeks
+AUGUST: Aug 02 - Sep 05 | Start page: 138 | Structure: 4 weeks
+SEPTEMBER: Sep 06 - Oct 03 | Start page: 154 | Structure: 5 weeks
+OCTOBER: Oct 04 - Nov 07 | Start page: 172 | Structure: 4 weeks
+NOVEMBER: Nov 08 - Nov 28 | Start page: 188 | Structure: 4 weeks
+DECEMBER: Nov 29 - Jan 02 | Start page: 204 | Structure: 5 weeks
 
-Page 11: Books list (Libros que quiero leer este año)
-- 12 book entries
-- Each has: book title + "Temática/Género" column on right
+UNIVERSAL PAGE TYPE PATTERN
 
-Page 20: Monthly objectives & goals (Objetivo y metas del mes)
-- Top section: single "objetivo" (monthly objective)
-- Below: four "metas" (monthly goals/targets)
-- Month name is visible on page
+Every month repeats this identical positional pattern (where position = page_number - month_start_page + 1):
 
-Page 21: Monthly calendar part 1 (Monday-Thursday)
-- Calendar grid with event entries
-- Dates are visible in the calendar (e.g., "Lunes 3" or just "3")
-- Each day may have events with time and description
-- Month is visible on the previous page (Page 20)
+Position 1:  monthly_objectives (Objetivo y metas del mes)
+Position 2:  calendar_mon_thu (Calendario lunes-jueves)
+Position 3:  calendar_fri_sun_and_book_of_month (Calendario viernes-domingo + Libro del mes)
+Position 4:  weekly_planner (Planificador semanal - Week 1)
+Position 5:  daily_agenda (Agenda diaria - Week 1)
+Position 6:  weekly_planner (Planificador semanal - Week 2)
+Position 7:  daily_agenda (Agenda diaria - Week 2)
+Position 8:  weekly_planner (Planificador semanal - Week 3)
+Position 9:  daily_agenda (Agenda diaria - Week 3)
+Position 10: weekly_planner (Planificador semanal - Week 4)
+Position 11: daily_agenda (Agenda diaria - Week 4)
+Position 12: weekly_planner (Planificador semanal - Week 5) [5-week months only]
+Position 13: daily_agenda (Agenda diaria - Week 5) [5-week months only]
+Position 14+: reserved
 
-Page 22: Monthly calendar part 2 (Friday-Sunday) + Book of month
-- Calendar grid for Fri, Sat, Sun with event entries
-- Dates are visible in the calendar
-- Right section: "Libro del mes" with single book title
-- Month is visible on Page 20
+PAGE DETECTION ALGORITHM
 
-Page 23: Weekly planner (Planificador semanal)
-- Top left: "Desocupa tu cabeza" (brain dump notes)
-- Top right: "Objetivo semanal" (weekly objective)
-- "Libro en Curso" with page progress "Pág. X de Y"
-- Habits section: up to 9 habits (3 morning/3 afternoon/3 evening) labeled with mañana/tarde/noche
-- Habit tracker: 7-column grid (L M M J V S D for Mon-Sun) with bubbles to fill
-- Bottom: "Gratitud" (gratitude) section with items
-- Month is visible on the weekly page or from context
+For page number 8-11 (fixed pages):
+- Page 8: habits_overview
+- Page 9: annual_objectives_part_1
+- Page 10: annual_objectives_part_2
+- Page 11: annual_books_list
 
-Page 24: Weekly calendar with hourly grid (Calendario semanal por horas)
-- Each day of week (Mon-Sun) has hourly slots from 6am to 9pm
-- Days and dates visible in the header (e.g., "Lunes 3" or "L 3")
-- Events are written in time slots
-- Time is auto-determined by row position (6am at top, 9pm at bottom)
-- Month is from previous week's context
+For page number < 8 or between 12-19 or > 219:
+- invalid
 
+For page number >= 20:
+
+STEP 1: Determine which month contains this page
+Match page_number against month ranges:
+- Pages 20-37: January
+- Pages 38-53: February
+- Pages 54-71: March
+- Pages 72-87: April
+- Pages 88-103: May
+- Pages 104-121: June
+- Pages 122-137: July
+- Pages 138-153: August
+- Pages 154-171: September
+- Pages 172-187: October
+- Pages 188-203: November
+- Pages 204-219: December
+
+STEP 2: Calculate position within month
+position = (page_number - month_start_page) + 1
+
+STEP 3: Apply position to pattern above
+Look up the page_type for that position
+
+STEP 4: Determine month name
+- If page_type is: monthly_objectives, calendar_mon_thu, or weekly_planner
+  → Extract month name directly from page content (it is printed)
+- If page_type is: calendar_fri_sun_and_book_of_month or daily_agenda
+  → Infer month from the month range determined in STEP 1
+
+EXAMPLES
+
+Example 1: Page 27
+- Month range check: 27 falls in pages 20-37 (January)
+- Position calculation: position = (27 - 20) + 1 = 8
+- Pattern lookup: position 8 = weekly_planner (Week 3)
+- Month: Extract "Enero" from page content
+- Result: January Week 3 weekly planner
+
+Example 2: Page 40
+- Month range check: 40 falls in pages 38-53 (February)
+- Position calculation: position = (40 - 38) + 1 = 3
+- Pattern lookup: position 3 = calendar_fri_sun_and_book_of_month
+- Month: Infer "Febrero" from month range
+- Result: February calendar fri-sun with book of month
+
+Example 3: Page 99
+- Month range check: 99 falls in pages 88-103 (May)
+- Position calculation: position = (99 - 88) + 1 = 12
+- Pattern lookup: position 12 = weekly_planner (Week 5)
+- Month: Extract from page content (likely shows "May 31 - Jun 06" since it spans)
+- Result: May Week 5 weekly planner (spans into June)
+
+WEEK DATES FOR WEEKLY PLANNER PAGES
+
+Weekly planner pages (positions 4, 6, 8, 10, 12) show the week date range on the page itself.
+PRIMARY: Always extract the week dates directly from the page content.
+FALLBACK: If dates are unclear, use this lookup by month and position:
+
+JANUARY:
+- Position 4 (page 23): Dec 28 - Jan 03
+- Position 6 (page 25): Jan 04 - Jan 10
+- Position 8 (page 27): Jan 11 - Jan 17
+- Position 10 (page 29): Jan 18 - Jan 24
+- Position 12 (page 31): Jan 25 - Jan 31
+
+FEBRUARY:
+- Position 4 (page 41): Feb 01 - Feb 07
+- Position 6 (page 43): Feb 08 - Feb 14
+- Position 8 (page 45): Feb 15 - Feb 21
+- Position 10 (page 47): Feb 22 - Feb 28
+
+MARCH:
+- Position 4 (page 57): Mar 01 - Mar 07
+- Position 6 (page 59): Mar 08 - Mar 14
+- Position 8 (page 61): Mar 15 - Mar 21
+- Position 10 (page 63): Mar 22 - Mar 28
+- Position 12 (page 65): Mar 29 - Apr 04
+
+APRIL:
+- Position 4 (page 75): Apr 05 - Apr 11
+- Position 6 (page 77): Apr 12 - Apr 18
+- Position 8 (page 79): Apr 19 - Apr 25
+- Position 10 (page 81): Apr 26 - May 02
+
+MAY:
+- Position 4 (page 91): May 03 - May 09
+- Position 6 (page 93): May 10 - May 16
+- Position 8 (page 95): May 17 - May 23
+- Position 10 (page 97): May 24 - May 30
+- Position 12 (page 99): May 31 - Jun 06
+
+JUNE:
+- Position 4 (page 107): Jun 07 - Jun 13
+- Position 6 (page 109): Jun 14 - Jun 20
+- Position 8 (page 111): Jun 21 - Jun 27
+- Position 10 (page 113): Jun 28 - Jul 04
+
+JULY:
+- Position 4 (page 125): Jul 05 - Jul 11
+- Position 6 (page 127): Jul 12 - Jul 18
+- Position 8 (page 129): Jul 19 - Jul 25
+- Position 10 (page 131): Jul 26 - Aug 01
+- Position 12 (page 133): Aug 02 - Aug 08
+
+AUGUST:
+- Position 4 (page 141): Aug 02 - Aug 08
+- Position 6 (page 143): Aug 09 - Aug 15
+- Position 8 (page 145): Aug 16 - Aug 22
+- Position 10 (page 147): Aug 23 - Aug 29
+- Position 12 (page 149): Aug 30 - Sep 05
+
+SEPTEMBER:
+- Position 4 (page 157): Sep 06 - Sep 12
+- Position 6 (page 159): Sep 13 - Sep 19
+- Position 8 (page 161): Sep 20 - Sep 26
+- Position 10 (page 163): Sep 27 - Oct 03
+
+OCTOBER:
+- Position 4 (page 175): Oct 04 - Oct 10
+- Position 6 (page 177): Oct 11 - Oct 17
+- Position 8 (page 179): Oct 18 - Oct 24
+- Position 10 (page 181): Oct 25 - Oct 31
+- Position 12 (page 183): Nov 01 - Nov 07
+
+NOVEMBER:
+- Position 4 (page 191): Nov 08 - Nov 14
+- Position 6 (page 193): Nov 15 - Nov 21
+- Position 8 (page 195): Nov 22 - Nov 28
+
+DECEMBER:
+- Position 4 (page 207): Nov 29 - Dec 05
+- Position 6 (page 209): Dec 06 - Dec 12
+- Position 8 (page 211): Dec 13 - Dec 19
+- Position 10 (page 213): Dec 20 - Dec 26
+- Position 12 (page 215): Dec 27 - Jan 02
+
+MONTH EXTRACTION RULES
+
+Pages 20 (monthly_objectives), 21 (calendar_mon_thu), 23/25/27/29/31 (weekly_planner):
+- Month name is explicitly printed on these pages
+- Extract the month name directly from the page
+
+Pages 22 (calendar_fri_sun_and_book_of_month), 24/26/28/30/32 (daily_agenda):
+- Month name is NOT printed on these pages
+- Infer the month from the month range rule above
+- Example: If page 24 falls in pages 20-37, it is in January (Enero)
+
+CROSS-MONTH WEEKS
+
+Some weeks span two calendar months (e.g., Mar 29 - Apr 04, Jul 26 - Aug 01, Dec 27 - Jan 02).
+These weeks are assigned to the month range where their page number falls, but both months appear in the content.
+
+For weekly_planner pages showing cross-month weeks:
+- The page will print both month names (e.g., "Marzo/Abril")
+- Extract dates that belong to each month based on the date progression
+
+For daily_agenda pages following cross-month weeks:
+- Use the date progression to determine month assignment
+- Example: If dates show 26,27,28,29,30,31,1,2,3 then 26-31 belong to the first month, 1-3 to the second
+
+For weekly_planner and daily_agenda pages that span a specific week:
+- Extract the week start and end dates from the page header
+- Format dates as YYYY-MM-DD
+- Include both date and day name
+- Return in "week_date_range" field at the top level of "data"
+
+Example for page 207 (Dec 27 - Jan 02):
+{
+  "data": {
+    "week_date_range": {
+      "start_date": "2024-12-27",
+      "end_date": "2025-01-02",
+      "start_day_name": "Viernes",
+      "end_day_name": "Jueves"
+    },
+    ...
+  }
+}
 ---
 
 EXTRACTION RULES BY PAGE TYPE
@@ -2672,13 +2973,73 @@ CALENDAR DATE EXTRACTION
 
 Pages 21, 22, and 24 all have visible dates on the calendar.
 
-- Page 21 (Mon-Thu): Look at the calendar grid headers. They show the day name and date (e.g., "Lunes 3", "Martes 4")
+- Page 21 (Mon-Thu): Look at the calendar grid headers. They show the day name AND date (e.g., "Lunes 3", "Martes 4")
 - Page 22 (Fri-Sun): Same format in the calendar grid
-- Page 24 (Hourly): Look at the day headers. They show day name and date (e.g., "Lunes 3")
+- Page 24 (Hourly): Look at the day headers. They show day name AND date (e.g., "Lunes 3")
 
-For each event, extract the date (day of month) from the calendar structure.
+For EVERY calendar event, you MUST return these fields:
 
-If you cannot clearly see the date, note in "unclear_sections" and set date to null.
+- "title": the event title
+- "day_of_week": the full Spanish day name, such as "Lunes", "Martes", "Miércoles", etc.
+- "date": the NUMERIC DAY OF THE MONTH shown in the calendar (for example, 3, 14, or 28)
+- "month": the Spanish month name, such as "Enero", "Febrero", etc.
+- "time": the event time if visible, otherwise null
+- "time_extracted_from": indicate where the time came from
+
+IMPORTANT:
+"day_of_week" and "date" are TWO DIFFERENT pieces of information.
+
+For example, if an event appears under the calendar header:
+
+"Miércoles 15"
+
+the event MUST contain:
+
+"day_of_week": "Miércoles",
+"date": 15
+
+Do NOT omit the "date" field when the calendar date is visible.
+
+The "date" field must ALWAYS be the numeric day of the month, NOT the day of the week.
+
+Example:
+
+{
+  "title": "Cita",
+  "day_of_week": "Miércoles",
+  "date": 15,
+  "month": "Enero",
+  "time": "4:15 pm",
+  "time_extracted_from": "user_input"
+}
+
+If the calendar date genuinely cannot be determined from the image, still include the field and set:
+
+"date": null
+
+Do not omit the "date" field.
+
+---
+
+BOOK AUTHOR EXTRACTION
+
+FOR EVERY BOOK, identify the author of the book.
+
+If the author is not visible on the planner page, use your general knowledge to identify the most likely author based on the book title. If necessary, research/verify the author using reliable information.
+
+Return the author in the "author" field.
+
+For example:
+
+{
+  "extracted_title": "Atomic Habits",
+  "author": "James Clear"
+}
+
+IMPORTANT:
+- ALWAYS include the "author" field for every book.
+- If the author cannot be confidently determined, set "author" to null rather than guessing.
+- Preserve the author's full name when known.
 
 ---
 
@@ -2701,6 +3062,8 @@ Return for each book:
 - extracted_title: the title as written on page
 - matched_book_id: ID from existing books list (or null if no match)
 - match_confidence: "high", "medium", "low", or "no_match"
+
+
 
 HABIT MATCHING (Pages 8, 23)
 
@@ -2772,8 +3135,14 @@ For VALID pages, return only this JSON structure (with only relevant fields for 
     "notes": <string or null>
   },
   "data": {
-    "habits": {
-      "morning": [
+      "week_date_range": {
+        "start_date": "YYYY-MM-DD",
+        "end_date": "YYYY-MM-DD",
+        "start_day_name": "Lunes",
+        "end_day_name": "Domingo"
+      },
+      "habits": {
+        "morning":
         {
           "extracted_name": <string>,
           "matched_habit_id": <string or null>,
@@ -2819,6 +3188,7 @@ For VALID pages, return only this JSON structure (with only relevant fields for 
     "books": [
       {
         "extracted_title": <string>,
+        "author": <strong or null>,
         "matched_book_id": <string or null>,
         "match_confidence": "high|medium|low|no_match",
         "genre_notes": <string or null>,
@@ -2899,6 +3269,7 @@ FINAL REMINDERS
 10. For hourly events (Page 24), time is determined by row position.
 11. Always attempt to match extracted items against the existing app data.
 12. Always check if page is valid before attempting extraction.
+13. Always include the week_date_range object in the JSON output for weekly planner pages. If the dates are not visibly printed at the top of the page, calculate or look up the start and end dates based on the page number and month mapping table provided in the prompt.
 
 NOW EXTRACT THE PAGE AND RETURN ONLY JSON.`;
 }
@@ -2954,6 +3325,51 @@ function navigateTo(name) {
     stopMeditationTimer();
     stopMeditationAudio();
   }}
+
+
+
+async function triggerDirectImageUpload() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    showToast('Procesando imagen...');
+    
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      // evt.target.result is already data:image/...;base64,...
+      const base64 = evt.target.result.split(',')[1];
+      
+      const prompt = buildPlannerPrompt();
+      const result = await callGeminiWorker(base64, prompt);
+      
+      if (result) {
+        try {
+          // Extract text from Gemini response
+          const responseText = result.candidates[0].content.parts[0].text;
+          
+          const cleanedText = responseText
+            .replace(/^```json\s*/i, '')
+            .replace(/^```\s*/i, '')
+            .replace(/\s*```$/i, '')
+            .trim()
+            .replace(/^\uFEFF/, '');
+          
+          const parsedData = JSON.parse(cleanedText);
+          window.geminiImportData = parsedData;
+          showGeminiImportPreview(parsedData);
+        } catch (err) {
+          showToast('Error: ' + err.message);
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
 
 /* Seed events */
 (function(){
@@ -3160,39 +3576,24 @@ function parseGeminiResponse() {
     return;
   }
 
-  console.log('=== BEFORE CLEANUP ===');
-  console.log('Raw length:', raw.length);
-  console.log('First 100 chars:', raw.substring(0, 100));
-  console.log('First char code:', raw.charCodeAt(0));
-
-  // Remove markdown code fences if Gemini included them
+  // Remove markdown code fences
   raw = raw
     .replace(/^```json\s*/i, '')
     .replace(/^```\s*/i, '')
     .replace(/\s*```$/i, '')
     .trim();
 
-  // Remove BOM if present
   raw = raw.replace(/^\uFEFF/, '');
 
-  console.log('=== AFTER CLEANUP ===');
-  console.log('Raw length:', raw.length);
-  console.log('First 100 chars:', raw.substring(0, 100));
-  console.log('First char code:', raw.charCodeAt(0));
-  console.log('Full raw value:', raw);
-
   let data;
-
   try {
     data = JSON.parse(raw);
   } catch (error) {
     console.error('❌ PARSE ERROR:', error.message);
-    console.error('Raw value:', raw);
     showToast('JSON inválido');
     return;
   }
 
-  console.log('✅ SUCCESS:', data);
   window.geminiImportData = data;
   showGeminiImportPreview(data);
 }
@@ -3233,8 +3634,9 @@ function showGeminiImportPreview(data) {
     sections.push(`🔄 ${allHabits.length} hábito(s)`);
   }
 
-  if (innerData.objectives?.length) {
-    sections.push(`🎯 ${innerData.objectives.length} objetivo(s)`);
+  if (innerData.objectives?.length || innerData.weekly_objective) {
+      const objectiveCount = (innerData.objectives?.length || 0) + (innerData.weekly_objective ? 1 : 0);
+      sections.push(`🎯 ${objectiveCount} objetivo(s)`);
   }
 
   // if (innerData.metas?.length) {
@@ -3273,7 +3675,7 @@ function showGeminiImportPreview(data) {
 
   addGeminiImportButton(actions, '🔄 Importar hábitos', importGeminiHabits, allHabits.length > 0);
   addGeminiImportButton(actions, '📅 Importar eventos', importGeminiEvents, !!innerData.events?.length);
-  addGeminiImportButton(actions, '🎯 Importar objetivos', importGeminiObjectives, !!innerData.objectives?.length);
+  addGeminiImportButton(actions, '🎯 Importar objetivos', importGeminiObjectives, !!(innerData.objectives?.length || innerData.weekly_objective));
   addGeminiImportButton(actions, '📚 Importar libros', importGeminiBooks, !!innerData.books?.length);
   addGeminiImportButton(actions, '🙏 Importar gratitud', importGeminiGratitude, !!innerData.gratitude?.length);
   addGeminiImportButton(actions, '🧠 Importar brain dump', importGeminiBrainDump, !!innerData.brain_dump?.length);
@@ -3309,42 +3711,99 @@ function addGeminiImportButton(container, text, handler, enabled) {
 }
 
 function importGeminiObjectives() {
-  const data = window.geminiImportData?.data;
+  console.log('🔍 importGeminiObjectives called - STEP 1');
   
-  if (!data?.objectives?.length) {
-    return;
-  }
-
-  let added = 0;
-
-  data.objectives.forEach((obj, i) => {
-    if (!obj.objective) {
+  try {
+    console.log('🔍 STEP 2 - Accessing window.geminiImportData');
+    console.log('window.geminiImportData:', window.geminiImportData);
+    
+    const data = window.geminiImportData?.data;
+    console.log('🔍 STEP 3 - Got data object');
+    console.log('data:', data);
+    console.log('data.objectives:', data?.objectives);
+    console.log('data.weekly_objective:', data?.weekly_objective);
+    
+    if (!data?.objectives?.length && !data?.weekly_objective) {
+      console.log('❌ No objectives or weekly_objective found - EXITING');
       return;
     }
 
-    const exists = state.goals.find(
-      x => x.title?.trim().toLowerCase() === obj.objective.trim().toLowerCase()
-    );
+    console.log('✅ STEP 4 - Found data to import');
+    let added = 0;
 
-    if (exists) {
-      return;
+    // Import regular objectives
+    if (data.objectives?.length) {
+      console.log('📋 STEP 5 - Processing regular objectives...');
+      data.objectives.forEach((obj) => {
+        if (!obj.objective) {
+          console.log('  ⚠️ Skipping objective with no text');
+          return;
+        }
+
+        const capitalizedTitle = capitalizeFirst(obj.objective);
+        console.log('  Checking if exists:', capitalizedTitle);
+        
+        const exists = state.goals.find(
+          x => x.title?.trim().toLowerCase() === capitalizedTitle.trim().toLowerCase()
+        );
+
+        if (exists) {
+          console.log('  ⏭️ Objetivo ya existe:', capitalizedTitle);
+          return;
+        }
+
+        console.log('  ✅ Agregando objetivo:', capitalizedTitle);
+        state.goals.push({
+          id: state.nextGoalId++,
+          title: capitalizedTitle,
+          cat: obj.category || 'Otro',
+          desc: obj.why_important || '',
+          status: 'active',
+          milestones: [{text: 'Comenzar', done: false}]
+        });
+        added++;
+      });
     }
 
-    state.goals.push({
-      id: state.nextGoalId++,
-      title: obj.objective,
-      cat: obj.category || 'general',
-      desc: obj.why_important || '',
-      status: 'active',
-      milestones: [{text: 'Comenzar', done: false}]
-    });
+    // Import weekly objective if present
+    if (data.weekly_objective?.trim()) {
+      console.log('📅 STEP 6 - Processing weekly_objective:', data.weekly_objective);
+      const capitalizedTitle = capitalizeFirst(data.weekly_objective.trim());
+      console.log('  Capitalized title:', capitalizedTitle);
+      
+      const exists = state.goals.find(
+        x => x.title?.trim().toLowerCase() === capitalizedTitle.trim().toLowerCase()
+      );
 
-    added++;
-  });
+      if (!exists) {
+        console.log('  ✅ Agregando objetivo semanal:', capitalizedTitle);
+        state.goals.push({
+          id: state.nextGoalId++,
+          title: capitalizedTitle,
+          cat: 'Otro',
+          desc: 'Objetivo semanal',
+          status: 'active',
+          milestones: [{text: 'Completar', done: false}]
+        });
+        added++;
+      } else {
+        console.log('  ⏭️ Objetivo semanal ya existe:', capitalizedTitle);
+      }
+    }
 
-  if (added > 0) {
-    // Skip renderGoals for now
-    showToast(added + ' objetivo(s) importado(s)');
+    console.log('📊 STEP 7 - Total agregados:', added);
+    console.log('Estado goals después:', state.goals);
+
+    if (added > 0) {
+      console.log('STEP 8 - Calling renderGoals');
+      renderGoals();
+      showToast(added + ' objetivo(s) importado(s)');
+    } else {
+      console.log('⚠️ No se agregaron objetivos');
+    }
+  } catch (error) {
+    console.error('❌ Error in importGeminiObjectives:', error);
+    console.error('Stack:', error.stack);
   }
 }
 
@@ -3412,48 +3871,6 @@ function importGeminiEvents() {
   }
 }
 
-function importGeminiObjectives() {
-  const data = window.geminiImportData?.data;
-  
-  if (!data?.objectives?.length) {
-    return;
-  }
-
-  let added = 0;
-
-  data.objectives.forEach((obj, i) => {
-    if (!obj.objective) {
-      return;
-    }
-
-    const exists = state.goals.find(
-      x => x.title?.trim().toLowerCase() === obj.objective.trim().toLowerCase()
-    );
-
-    if (exists) {
-      return;
-    }
-
-    state.goals.push({
-      id: state.nextGoalId++,
-      title: obj.objective,
-      cat: obj.category || 'general',
-      desc: obj.why_important || '',
-      status: 'active',
-      priority: 'medium',
-      progress: [],        // ✅ Add missing progress array
-      dueDate: '',         // ✅ Add dueDate
-      milestone: ''        // ✅ Add milestone
-    });
-
-    added++;
-  });
-
-  if (added > 0) {
-    renderGoals();
-    showToast(added + ' objetivo(s) importado(s)');
-  }
-}
 
 function normalizeGoalCategory(category) {
   const value = String(category || '').toLowerCase();
@@ -3468,112 +3885,7 @@ function normalizeGoalCategory(category) {
   return 'Otro';
 }
 
-function importGeminiBooks() {
-  const data = window.geminiImportData;
-  if (!data?.books?.length) return;
 
-  let added = 0;
-  let updated = 0;
-
-  data.books.forEach(bookData => {
-    if (!bookData.extracted_title) return;
-
-    let existing = null;
-
-    if (bookData.matched_book_id != null) {
-      existing = state.books.find(
-        b => String(b.id) === String(bookData.matched_book_id)
-      );
-    }
-
-    if (existing) {
-      const progress = bookData.current_progress || {};
-
-      if (progress.current_page != null) {
-        existing.currentPage = progress.current_page;
-      }
-
-      if (progress.total_pages != null) {
-        existing.totalPages = progress.total_pages;
-      }
-
-      if (
-        existing.status !== 'finished' &&
-        progress.total_pages &&
-        progress.current_page >= progress.total_pages
-      ) {
-        existing.status = 'finished';
-      } else if (
-        existing.status === 'not-started' &&
-        progress.current_page > 0
-      ) {
-        existing.status = 'reading';
-      }
-
-      if (bookData.genre_notes) {
-        existing.freeNotes =
-          existing.freeNotes
-            ? existing.freeNotes + '\n' + bookData.genre_notes
-            : bookData.genre_notes;
-      }
-
-      updated++;
-      return;
-    }
-
-    // Don't create duplicate based on title either
-    const titleMatch = state.books.find(
-      b => b.title.trim().toLowerCase() ===
-           bookData.extracted_title.trim().toLowerCase()
-    );
-
-    if (titleMatch) {
-      updated++;
-      return;
-    }
-
-    const progress = bookData.current_progress || {};
-
-    const currentPage = progress.current_page || 0;
-    const totalPages = progress.total_pages || 0;
-
-    let status = 'not-started';
-
-    if (currentPage > 0) {
-      status = 'reading';
-    }
-
-    if (totalPages && currentPage >= totalPages) {
-      status = 'finished';
-    }
-
-    state.books.push({
-      id: state.nextBookId++,
-      title: bookData.extracted_title,
-      author: '',
-      cover: null,
-      totalPages,
-      currentPage,
-      status,
-      rating: 0,
-      freeNotes: bookData.genre_notes || '',
-      quotes: [],
-      lessons: [],
-      actions: [],
-      dateStarted: null
-    });
-
-    added++;
-  });
-
-  renderBooks();
-  renderGoals();
-
-  showToast(
-    added + ' libro(s) nuevos · ' +
-    updated + ' actualizado(s)'
-  );
-}
 
 /* ================================================================
    HABITS
@@ -3838,6 +4150,10 @@ function openAddHabit() {
 function addHabit() {
   const name = document.getElementById('habit-name-input').value.trim();
   if (!name) { showToast('Escribe el nombre del hábito'); return; }
+  
+  // ✅ Capitalize first letter
+  const capitalizedName = capitalizeFirst(name);
+  
   const freq = document.getElementById('habit-freq-input').value;
   let customDays = null;
   if (freq === 'personalizado') {
@@ -3846,7 +4162,7 @@ function addHabit() {
   }
   state.habits.push({
     id: state.nextHabitId++,
-    name,
+    name: capitalizedName,  // ✅ Use capitalized name
     freq,
     cat:      document.getElementById('habit-cat-input').value,
     notifTime:document.getElementById('habit-time-input').value,
@@ -3900,13 +4216,17 @@ function saveEditHabit() {
   if (!h) return;
   const name = document.getElementById('habit-name-input').value.trim();
   if (!name) { showToast('Escribe el nombre del hábito'); return; }
+  
+  // ✅ Capitalize first letter
+  const capitalizedName = capitalizeFirst(name);
+  
   const freq = document.getElementById('habit-freq-input').value;
   let customDays = null;
   if (freq === 'personalizado') {
     customDays = getCustomDaysFromUI();
     if (!customDays.some(Boolean)) { showToast('Selecciona al menos un día'); return; }
   }
-  h.name      = name;
+  h.name      = capitalizedName;  // ✅ Use capitalized name
   h.freq      = freq;
   h.cat       = document.getElementById('habit-cat-input').value;
   h.why       = document.getElementById('habit-why-input').value.trim();
@@ -4432,9 +4752,7 @@ function createSVGIcon(type) {
 function updateMeditationAudioBtn() {
   const btn = document.getElementById('meditation-audio-play-btn');
   if (!btn) return;
-  btn.innerHTML = '';
-  btn.appendChild(createSVGIcon('play'));
-  btn.appendChild(document.createTextNode(' Reproducir'));
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;display:inline"><polygon points="5 3 19 12 5 21 5 3"/></svg>Reproducir';
 }
 
 function prevMeditationPrompt() {
@@ -5218,14 +5536,19 @@ function disconnectGCal() {
 function saveGeminiKey() {
   const key = document.getElementById('gemini-key-input').value.trim();
   if (!key) { showToast('Ingresa tu API key de Gemini'); return; }
+  
   state.settings.geminiKey = key;
+  
   const statusEl = document.getElementById('gemini-key-status');
   statusEl.style.display = 'block';
   statusEl.innerHTML = '<div style="background:var(--green-light);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:#3d7a60;display:flex;align-items:center;gap:8px"><span>✓</span><span>API key guardada correctamente</span></div>';
+  
   document.getElementById('gemini-key-saved-actions').style.display = 'block';
   document.getElementById('gemini-key-input').value = '••••••••••••••••';
-  document.getElementById('gemini-key-input').type  = 'password';
-  renderSettings(); showToast('¡API key de Gemini guardada!');
+  document.getElementById('gemini-key-input').type = 'password';
+  
+  renderSettings();
+  showToast('¡API key de Gemini guardada!');
 }
 
 function removeGeminiKey() {
@@ -6958,7 +7281,7 @@ function saveEditedPageNumber() {
   showToast('Número actualizado');
 }
 
-function confirmPageNumber() {
+async function confirmPageNumber() {
   const pageNumber = document.getElementById('detected-page-number').textContent;
   
   if (!pageNumber || pageNumber === '?' || pageNumber === '—') {
@@ -6966,15 +7289,18 @@ function confirmPageNumber() {
     return;
   }
 
-  // TODO: In the next step, use this pageNumber to select a prompt
-  // and send both the pageNumber and the full image to Gemini
+  showToast('Página '+pageNumber+' confirmada. Procesando con Gemini...');
   
-  showToast('Página '+pageNumber+' confirmada ✓');
+  // Send the full captured frame to Gemini
+  const result = await extractPageWithGemini(currentCapturedFrame);
+  
+  if (result) {
+    console.log('✅ Page extraction successful');
+    showToast('¡Página procesada! Revisa los datos importados');
+  }
+  
   closePageNumberConfirm();
   closeCameraScanner();
-  
-  // For now, just log it
-  console.log('Page number confirmed:', pageNumber);
 }
 
 function retryPageNumberScan() {
@@ -7014,43 +7340,57 @@ function deleteCustomMeditationPrompt() {
 
 function importGeminiHabits() {
   const data = window.geminiImportData?.data;
-  if (!data?.habits) return;
+  if (!data?.habits) {
+    console.error('❌ No habits data found');
+    return;
+  }
 
-  // Flatten habits from morning/afternoon/evening structure
   const allHabits = [];
   if (data.habits.morning) allHabits.push(...data.habits.morning);
   if (data.habits.afternoon) allHabits.push(...data.habits.afternoon);
   if (data.habits.evening) allHabits.push(...data.habits.evening);
 
-  if (!allHabits.length) return;
+  if (!allHabits.length) {
+    console.warn('⚠️ No habits extracted');
+    return;
+  }
 
   let added = 0;
 
   allHabits.forEach(h => {
-    if (!h.name) return;
+    if (!h.extracted_name) {
+      console.log('⚠️ Skipping habit with no name');
+      return;
+    }
+
+    const capitalizedName = capitalizeFirst(h.extracted_name);
 
     const existing = state.habits.find(
-      x => x.name.trim().toLowerCase() === h.name.trim().toLowerCase()
+      x => x.name.trim().toLowerCase() === capitalizedName.trim().toLowerCase()
     );
 
-    if (existing) return;
+    if (existing) {
+      console.log('⏭️ Habit already exists:', capitalizedName);
+      return;
+    }
 
-    const freq = h.frequency_normalized || {};
-    const freqType = freq.type;
+    let customDays = [false, false, false, false, false, false, false];
+    let freq = 'diario';
 
-    // ✅ Set customDays - default to all days if not specified
-    let customDays = [true, true, true, true, true, true, true]; // All 7 days
-    if (freqType === 'days_of_week' && freq.days) {
-      customDays = [false,false,false,false,false,false,false].map(
-        (_,i) => freq.days?.includes(['L','Ma','Mi','J','V','S','D'][i])
-      );
+    if (h.frequency_normalized && h.frequency_normalized.type === 'days_of_week' && h.frequency_normalized.days) {
+      const dayMap = {'D': 0, 'L': 1, 'Ma': 2, 'Mi': 3, 'J': 4, 'V': 5, 'S': 6};
+      h.frequency_normalized.days.forEach(day => {
+        const idx = dayMap[day];
+        if (idx != null) customDays[idx] = true;
+      });
+      freq = 'personalizado';
     }
 
     state.habits.push({
       id: state.nextHabitId++,
-      name: h.name,
-      freq: freqType === 'daily' ? 'diario' : 'personalizado',
-      customDays: customDays,  // ✅ Set the days array instead of null
+      name: capitalizedName,
+      freq: freq,
+      customDays: customDays,
       cat: 'otro',
       notifTime: h.default_time || '',
       streak: 0,
@@ -7062,8 +7402,65 @@ function importGeminiHabits() {
     added++;
   });
 
-  renderHabits();
-  showToast(added + ' hábito(s) importado(s)');
+  // Process tracker completions
+  const tracker = data.habit_tracker || {};
+  const weekDateRange = data.week_date_range;
+
+  console.log('📊 Habits added:', added);
+  console.log('📊 Habit Tracker Data:', tracker);
+  console.log('📅 Week Date Range:', weekDateRange);
+
+  Object.entries(tracker).forEach(([habitName, trackerData]) => {
+    const capitalizedHabitName = capitalizeFirst(habitName);
+    
+    const habit = state.habits.find(
+      h => h.name.trim().toLowerCase() === capitalizedHabitName.trim().toLowerCase()
+    );
+
+    if (!habit || !trackerData?.days) {
+      console.log('⚠️ Could not find habit for tracker:', capitalizedHabitName);
+      return;
+    }
+
+    console.log('✅ Processing completions for:', capitalizedHabitName, 'days:', trackerData.days);
+
+    if (weekDateRange && weekDateRange.start_date && weekDateRange.end_date) {
+      const startDate = new Date(weekDateRange.start_date + 'T12:00:00');
+      const endDate = new Date(weekDateRange.end_date + 'T12:00:00');
+
+      const dayMap = {
+        'D': 0, 'L': 1, 'Ma': 2, 'Mi': 3,
+        'J': 4, 'V': 5, 'S': 6
+      };
+
+      const currentDate = new Date(startDate);
+
+      while (currentDate <= endDate) {
+        const dayOfWeek = currentDate.getDay();
+        const dayLetter = ['D', 'L', 'Ma', 'Mi', 'J', 'V', 'S'][dayOfWeek];
+
+        if (trackerData.days.includes(dayLetter)) {
+          habit.completions[fmt(currentDate)] = true;
+          console.log('  ✓', fmt(currentDate));
+        }
+
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    } else {
+      console.warn('⚠️ No week_date_range found');
+    }
+  });
+
+  if (added > 0) {
+    state.habits.forEach(h => {
+      h.streak = calculateHabitStreak(h);
+    });
+    
+    renderHabits();
+    showToast(added + ' hábito(s) importado(s)');
+  } else {
+    showToast('No se encontraron hábitos nuevos');
+  }
 }
 
 function importGeminiMetas() {
@@ -7112,29 +7509,32 @@ function importGeminiBooks() {
 
     if (exists) return;
 
+    const totalPages = b.current_progress?.total_pages || 0;
+    const currentPage = b.current_progress?.current_page || 0;
+    const status = currentPage > 0 ? 'reading' : 'not-started';
+
     state.books.push({
       id: state.nextBookId++,
       title: b.extracted_title,
-      currentPage: b.current_progress?.current_page || 0,
-      totalPages: b.current_progress?.total_pages || 0,
-      status: 'reading',
+      author: b.author || '',
+      cover: null,
+      totalPages: totalPages,
+      currentPage: currentPage,
+      status: status,
       rating: 0,
-      review: ''
+      freeNotes: b.genre_notes || '',
+      quotes: [],
+      lessons: [],
+      actions: [],
+      dateStarted: currentPage > 0 ? todayStr : null,
+      color: null
     });
-
-    // ✅ NEW: Also add to reading goal if it exists
-    const readingGoal = state.goals.find(g => g.id === 1); // Or search by title
-    if (readingGoal) {
-      readingGoal.milestones.push({
-        text: 'Libro ' + (readingGoal.milestones.length + 1) + ': ' + b.extracted_title,
-        done: false
-      });
-    }
 
     added++;
   });
 
   if (added > 0) {
+    renderBooks();
     showToast(added + ' libro(s) importado(s)');
   }
 }
@@ -7210,7 +7610,7 @@ function importAllGeminiData() {
   importGeminiEvents?.();
   
   console.log('3️⃣ Calling importGeminiObjectives');
-  importGeminiObjectives?.();
+  importGeminiObjectives();
   
   console.log('4️⃣ Calling importGeminiBooks');
   importGeminiBooks();
