@@ -2,14 +2,14 @@
   "name": "Vívela365",
   "short_name": "Vívela",
   "description": "Tu compañero digital para sacar el máximo provecho de tu agenda",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
-  "scope": "/",
+  "scope": "./",
   "background_color": "#F7F6F2",
   "theme_color": "#1A1E2A",
   "icons": [
     {
-      "src": "/logo-02.png",
+      "src": "logo-02.png",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
