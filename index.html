@@ -122,6 +122,8 @@ body {
 .form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); }
 .form-textarea { resize:none;height:80px;line-height:1.5; }
 
+
+
 /* TOAST */
 .toast { position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--dark);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:20px;opacity:0;transition:all .25s ease;pointer-events:none;white-space:nowrap;z-index:300; }
 .toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
@@ -836,11 +838,45 @@ body {
 .check-stats-pill:active { opacity: 0.7; }
 
 .page-number-edit-section button:active { opacity: 0.8; }
+
+.activation-gate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--dark);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px 28px; text-align: center;
+}
+.activation-gate.hidden { display: none; }
+.activation-gate .ag-logo { font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+.activation-gate .ag-logo em { font-style: italic; font-weight: 300; color: var(--gold); }
+.activation-gate p { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.6; margin-bottom: 28px; max-width: 280px; }
+.activation-gate input {
+  width: 100%; max-width: 280px; padding: 14px 16px; border-radius: var(--r-md);
+  border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06); color: #fff;
+  font-family: 'DM Sans', sans-serif; font-size: 16px; text-align: center; letter-spacing: .08em;
+  text-transform: uppercase; outline: none; margin-bottom: 12px;
+}
+.activation-gate input:focus { border-color: var(--gold); }
+.activation-gate button {
+  width: 100%; max-width: 280px; padding: 14px; border: none; border-radius: var(--r-md);
+  background: var(--gold); color: var(--dark); font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.activation-gate button:disabled { opacity: .5; }
+.activation-gate .ag-error { font-size: 12px; color: #E8A9A2; margin-top: 12px; min-height: 16px; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
+
+<!--ACTIVATION PAGE-->
+<div class="activation-gate" id="activation-gate">
+  <div class="ag-logo">Vívela<em>365</em></div>
+  <p>Ingresa el código de activación que viene incluido con tu agenda física.</p>
+  <input type="text" id="ag-code-input" placeholder="XXXXXXXX" maxlength="12" autocapitalize="characters" autocomplete="off">
+  <button id="ag-submit-btn" onclick="attemptRedeem()">Activar</button>
+  <div class="ag-error" id="ag-error"></div>
+</div>
 
 <!-- HOME -->
 <div id="screen-home" class="screen active">
@@ -870,7 +906,13 @@ body {
         <div class="ft-icon ft-gold">
           <img src="icons/objetivos.png" alt="Objetivos">
         </div>
-        <div class="ft-text"><strong>Objetivos</strong><span>Objetivos e hitos</span></div>
+        <div class="ft-text"><strong>Objetivos</strong><span>Objetivos e pasos</span></div>
+      </div>
+      <div class="feature-tile" onclick="navigateTo('metas')">
+        <div class="ft-icon ft-gold">
+          <img src="icons/metas.png" alt="Metas">
+        </div>
+        <div class="ft-text"><strong>Metas</strong><span>Progreso hacia tus metas</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('books')">
         <div class="ft-icon ft-gold">
@@ -955,7 +997,6 @@ body {
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-width:0;">
         <button class="meditation-nav-btn" onclick="prevMeditationSound()">‹</button>
         <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;min-width:0;text-align:center;">
-          <div style="font-size:32px;margin-bottom:8px;" id="meditation-sound-emoji">🌧️</div>
           <div class="meditation-audio-label" id="meditation-sound-name">Lluvia</div>
         </div>
         <button class="meditation-nav-btn" onclick="nextMeditationSound()">›</button>
@@ -969,6 +1010,19 @@ body {
   </div>
 </div>
 
+<!-- METAS -->
+<div id="screen-metas" class="screen">
+  <div class="screen-header">
+    <div class="screen-header-row">
+      <button class="back-arrow" onclick="navigateTo('home')" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div><h2>Metas</h2><p>Pasos específicos hacia tus objetivos</p></div>
+    </div>
+  </div>
+  <div class="screen-body" id="metas-body"></div>
+  <button class="fab" onclick="openAddMeta()">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+</div>
 
 <!-- SCAN -->
 <div id="screen-scan" class="screen">
@@ -1254,7 +1308,7 @@ body {
         </div>
         <div class="settings-row" onclick="exportGoalsCSV()">
           <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-          <div class="settings-row-text"><strong>Exportar objetivos</strong><span>Objetivos e hitos en CSV</span></div>
+          <div class="settings-row-text"><strong>Exportar objetivos</strong><span>Objetivos e pasos en CSV</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">CSV ⬇</span>
         </div>
         <div class="settings-row" onclick="exportBooksCSV()">
@@ -1470,6 +1524,69 @@ body {
   </div>
 </div>
 
+<!-- MODAL: Add / Edit Event -->
+<div class="modal-overlay" id="event-modal" onclick="modalOverlayClick(event,'event-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <input type="hidden" id="event-edit-id" value="">
+    <div class="modal-title" id="event-modal-title">Nuevo evento</div>
+    <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="event-title-input" type="text" placeholder="Ej. Reunión con equipo"></div>
+    <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" id="event-date-input" type="date"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group"><label class="form-label">Hora inicio</label><input class="form-input" id="event-start-input" type="time"></div>
+      <div class="form-group"><label class="form-label">Hora fin</label><input class="form-input" id="event-end-input" type="time"></div>
+    </div>
+    
+    <!-- NEW: Notification select -->
+    <div class="form-group">
+      <label class="form-label">Recordatorio</label>
+      <select class="form-select" id="event-notification-input">
+        <option value="">Sin recordatorio</option>
+        <option value="0">En el momento</option>
+        <option value="15">15 minutos antes</option>
+        <option value="30">30 minutos antes</option>
+        <option value="60">1 hora antes</option>
+        <option value="120">2 horas antes</option>
+        <option value="1440" selected>1 día antes</option>
+        <option value="2880">2 días antes</option>
+        <option value="10080">1 semana antes</option>
+      </select>
+    </div>
+    
+    <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="event-notes-input" placeholder="Detalles del evento..."></textarea></div>
+    <div class="form-group">
+      <label class="form-label">Color / Categoría</label>
+      <div style="display:flex;gap:8px" id="event-color-picker">
+        <div class="ecswatch" data-color="#C4B88E" style="width:28px;height:28px;border-radius:50%;background:#C4B88E;cursor:pointer;border:2px solid #1A1E2A" onclick="selectEventColor(this)"></div>
+        <div class="ecswatch" data-color="#6BAA8E" style="width:28px;height:28px;border-radius:50%;background:#6BAA8E;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
+        <div class="ecswatch" data-color="#5B82B4" style="width:28px;height:28px;border-radius:50%;background:#5B82B4;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
+        <div class="ecswatch" data-color="#C4645A" style="width:28px;height:28px;border-radius:50%;background:#C4645A;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
+        <div class="ecswatch" data-color="#1A1E2A" style="width:28px;height:28px;border-radius:50%;background:#1A1E2A;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
+      </div>
+      <button class="btn-outline" style="width:100%;margin-top:8px;font-size:12px" onclick="openEventCategoriesModal()">Editar nombres</button>
+    </div>
+    
+    <div id="event-delete-row" style="display:none;margin-bottom:12px">
+      <button class="btn-outline" id="event-delete-btn" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)">Eliminar evento</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('event-modal')">Cancelar</button>
+      <button class="btn-gold" id="event-save-btn" style="flex:2" onclick="addEvent()">Guardar evento</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Edit Event Category Names -->
+<div class="modal-overlay" id="event-categories-modal" onclick="modalOverlayClick(event,'event-categories-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Categorías de eventos</div>
+    <p style="font-size:12px;color:var(--text-3);margin-bottom:16px;line-height:1.6">Dale un nombre a cada color para organizar tus eventos</p>
+    <div id="categories-list" style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px"></div>
+    <button class="btn-gold" onclick="closeModal('event-categories-modal')">Guardar</button>
+  </div>
+</div>
+
 <!-- MODAL: Add Habit -->
 <div class="modal-overlay" id="habit-modal" onclick="modalOverlayClick(event,'habit-modal')">
   <div class="modal-sheet">
@@ -1605,7 +1722,7 @@ body {
     <div class="form-group"><label class="form-label">Título del objetivo</label><input class="form-input" id="goal-title-input" type="text" placeholder="Ej. Leer 12 libros este año"></div>
     <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="goal-cat-input"><option value="Personal">Personal</option><option value="Salud">Salud</option><option value="Profesional">Profesional</option><option value="Finanzas">Finanzas</option><option value="Relaciones">Relaciones</option><option value="Aprendizaje">Aprendizaje</option><option value="Otro">Otro</option></select></div>
     <div class="form-group"><label class="form-label">Descripción (opcional)</label><textarea class="form-textarea" id="goal-desc-input" placeholder="¿Por qué es importante esta meta?"></textarea></div>
-    <div class="form-group"><label class="form-label">Primer hito</label><input class="form-input" id="goal-milestone-input" type="text" placeholder="Ej. Leer el primer libro"></div>
+    <div class="form-group"><label class="form-label">Primer paso</label><input class="form-input" id="goal-milestone-input" type="text" placeholder="Ej. Leer el primer libro"></div>
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('goal-modal')">Cancelar</button>
       <button class="btn-gold"    style="flex:2" onclick="addGoal()">Crear objetivo</button>
@@ -1618,44 +1735,12 @@ body {
   <div class="modal-sheet" id="goal-detail-content"></div>
 </div>
 
-<!-- MODAL: Add / Edit Event -->
-<div class="modal-overlay" id="event-modal" onclick="modalOverlayClick(event,'event-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <input type="hidden" id="event-edit-id" value="">
-    <div class="modal-title" id="event-modal-title">Nuevo evento</div>
-    <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="event-title-input" type="text" placeholder="Ej. Reunión con equipo"></div>
-    <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" id="event-date-input" type="date"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="form-group"><label class="form-label">Hora inicio</label><input class="form-input" id="event-start-input" type="time"></div>
-      <div class="form-group"><label class="form-label">Hora fin</label><input class="form-input" id="event-end-input" type="time"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="event-notes-input" placeholder="Detalles del evento..."></textarea></div>
-    <div class="form-group">
-      <label class="form-label">Color</label>
-      <div style="display:flex;gap:8px" id="event-color-picker">
-        <div class="ecswatch" data-color="#C4B88E" style="width:28px;height:28px;border-radius:50%;background:#C4B88E;cursor:pointer;border:2px solid #1A1E2A" onclick="selectEventColor(this)"></div>
-        <div class="ecswatch" data-color="#6BAA8E" style="width:28px;height:28px;border-radius:50%;background:#6BAA8E;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
-        <div class="ecswatch" data-color="#5B82B4" style="width:28px;height:28px;border-radius:50%;background:#5B82B4;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
-        <div class="ecswatch" data-color="#C4645A" style="width:28px;height:28px;border-radius:50%;background:#C4645A;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
-        <div class="ecswatch" data-color="#1A1E2A" style="width:28px;height:28px;border-radius:50%;background:#1A1E2A;cursor:pointer;border:2px solid transparent" onclick="selectEventColor(this)"></div>
-      </div>
-    </div>
-    <div id="event-delete-row" style="display:none;margin-bottom:12px">
-      <button class="btn-outline" id="event-delete-btn" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)">Eliminar evento</button>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <button class="btn-outline" style="flex:1" onclick="closeModal('event-modal')">Cancelar</button>
-      <button class="btn-gold" id="event-save-btn" style="flex:2" onclick="addEvent()">Guardar evento</button>
-    </div>
-  </div>
-</div>
 <!-- MODAL: Camera Scanner for Page Number -->
 <div class="modal-overlay" id="camera-scanner-modal" onclick="closeCameraScanner()" style="align-items: stretch; justify-content: stretch;">
   <div class="camera-scanner-container" onclick="event.stopPropagation()">
     <div class="camera-scanner-top">
       <h3>Escanear página</h3>
-      <p>Alinea la página en el rectángulo</p>
+      <p>Alinea el número de página en el centro del rectángulo inferior</p>
     </div>
     <div class="camera-scanner-video-wrap">
       <video id="camera-video" playsinline></video>
@@ -1796,6 +1881,93 @@ body {
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('note-modal')">Cancelar</button>
       <button class="btn-gold" id="note-save-btn" style="flex:2" onclick="addNote()">Guardar nota</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Meta Detail -->
+<div class="modal-overlay" id="meta-detail-modal" onclick="modalOverlayClick(event,'meta-detail-modal')">
+  <div class="modal-sheet" id="meta-detail-content"></div>
+</div>
+
+<!-- MODAL: Add / Edit Meta -->
+<div class="modal-overlay" id="meta-modal" onclick="modalOverlayClick(event,'meta-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <input type="hidden" id="meta-edit-id" value="">
+    <div class="modal-title" id="meta-modal-title">Nueva meta</div>
+    
+    <div class="form-group">
+      <label class="form-label">Título de la meta</label>
+      <input class="form-input" id="meta-title-input" type="text" placeholder="Ej. Completar diseño de portada">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-textarea" id="meta-desc-input" placeholder="¿Qué es exactamente esta meta?" style="height:80px"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">¿Por qué es importante?</label>
+      <textarea class="form-textarea" id="meta-why-input" placeholder="¿Cuál es el propósito o impacto de esta meta?" style="height:80px"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Prioridad</label>
+      <select class="form-select" id="meta-priority-input">
+        <option value="baja">Baja</option>
+        <option value="normal">Normal</option>
+        <option value="alta">Alta</option>
+        <option value="crítica">Crítica</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Estado</label>
+      <select class="form-select" id="meta-status-input">
+        <option value="active">Activa</option>
+        <option value="on-hold">En pausa</option>
+        <option value="completed">Completada</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Vincular a objetivo (opcional)</label>
+      <select class="form-select" id="meta-goal-input">
+        <option value="">-- Sin vincular --</option>
+      </select>
+      <span style="font-size:11px;color:var(--text-3);margin-top:4px;display:block">Cuando vincules una meta, se agregará como un paso al objetivo</span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Fecha de vencimiento</label>
+      <input class="form-input" id="meta-due-input" type="date">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notificación</label>
+      <select class="form-select" id="meta-notif-input">
+        <option value="0">En la fecha de vencimiento</option>
+        <option value="1">1 día antes</option>
+        <option value="2">2 días antes</option>
+        <option value="7">1 semana antes</option>
+        <option value="14">2 semanas antes</option>
+        <option value="-1">Sin notificación</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notas</label>
+      <textarea class="form-textarea" id="meta-notes-input" placeholder="Notas adicionales..." style="height:60px"></textarea>
+    </div>
+
+    <div id="meta-delete-row" style="display:none;margin-bottom:12px">
+      <button class="btn-outline" id="meta-delete-btn" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)">Eliminar meta</button>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-outline" style="flex:1" onclick="closeModal('meta-modal')">Cancelar</button>
+      <button class="btn-gold" id="meta-save-btn" style="flex:2" onclick="addMeta()">Guardar meta</button>
     </div>
   </div>
 </div>
@@ -2060,6 +2232,143 @@ body {
 })();
 
 /* ================================================================
+   SWIPE NAVIGATION
+================================================================ */
+(function() {
+  let startX = 0;
+  
+  document.addEventListener('pointerdown', e => {
+    const screen = document.querySelector('.screen.active');
+    if (screen && screen.id !== 'screen-home') {
+      startX = e.clientX;
+    }
+  }, true);
+  
+  document.addEventListener('pointerend', e => {
+    if (!startX) return;
+    const endX = e.clientX;
+    const diff = startX - endX;
+    
+    const screen = document.querySelector('.screen.active');
+    if (screen && screen.id !== 'screen-home' && diff > 100) { // Swipe left threshold: 100px
+      navigateTo('home');
+    }
+    startX = 0;
+  }, true);
+})();
+/* ================================================================
+   ACTIVATION GATE
+================================================================ */
+const ACTIVATION_API = 'https://vivela365-auth.teej10jones.workers.dev';
+
+async function getOrCreateDeviceId() {
+  try {
+    if (window.Capacitor?.Plugins?.Device) {
+      const info = await window.Capacitor.Plugins.Device.getId();
+      if (info?.identifier) return info.identifier;
+    }
+  } catch (e) {}
+  let id = localStorage.getItem('vivela365_device_id_fallback');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('vivela365_device_id_fallback', id);
+  }
+  return id;
+}
+
+async function getStoredToken() {
+  try {
+    if (window.Capacitor?.Plugins?.Preferences) {
+      const res = await window.Capacitor.Plugins.Preferences.get({ key: 'vivela365_token' });
+      return res?.value || null;
+    }
+  } catch (e) {}
+  return localStorage.getItem('vivela365_token_fallback');
+}
+
+async function storeToken(token) {
+  try {
+    if (window.Capacitor?.Plugins?.Preferences) {
+      await window.Capacitor.Plugins.Preferences.set({ key: 'vivela365_token', value: token });
+      return;
+    }
+  } catch (e) {}
+  localStorage.setItem('vivela365_token_fallback', token);
+}
+
+function unlockApp() {
+  document.getElementById('activation-gate').classList.add('hidden');
+}
+
+async function initActivation() {
+  const token = await getStoredToken();
+
+  if (token) {
+    unlockApp();
+    try {
+      const res = await fetch(ACTIVATION_API + '/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+      const data = await res.json();
+      if (!data.valid) {
+        document.getElementById('activation-gate').classList.remove('hidden');
+      }
+    } catch (e) {}
+    return;
+  }
+
+  document.getElementById('activation-gate').classList.remove('hidden');
+}
+
+async function attemptRedeem() {
+  const input = document.getElementById('ag-code-input');
+  const btn = document.getElementById('ag-submit-btn');
+  const errorEl = document.getElementById('ag-error');
+  const code = input.value.trim();
+
+  if (!code) { errorEl.textContent = 'Ingresa tu código de activación'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Activando...';
+  errorEl.textContent = '';
+
+  try {
+    const deviceId = await getOrCreateDeviceId();
+    const res = await fetch(ACTIVATION_API + '/redeem', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, device_id: deviceId })
+    });
+    const data = await res.json();
+
+    if (res.ok && data.token) {
+      await storeToken(data.token);
+      unlockApp();
+    } else if (data.error === 'already_redeemed') {
+      errorEl.textContent = 'Este código ya fue activado en otro dispositivo.';
+    } else if (data.error === 'invalid_code') {
+      errorEl.textContent = 'Código inválido. Verifica que lo escribiste correctamente.';
+    } else if (data.error === 'revoked') {
+      errorEl.textContent = 'Este código ya no es válido. Contáctanos para ayuda.';
+    } else {
+      errorEl.textContent = 'Algo salió mal. Intenta de nuevo.';
+    }
+  } catch (e) {
+    errorEl.textContent = 'Sin conexión a internet. Verifica tu conexión e intenta de nuevo.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Activar';
+  }
+}
+
+document.getElementById('ag-code-input')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') attemptRedeem();
+});
+
+initActivation();
+/* ================================================================
    STATE
 ================================================================ */
 const today = new Date();
@@ -2116,6 +2425,8 @@ const state = {
     ]},
   ],
   events: [],
+  habitDragIndex: null,
+  habitDragStartY: 0,
   calView: 'month',
   calDate: new Date(today.getFullYear(), today.getMonth(), 1),
   selectedDay: todayStr,
@@ -2135,6 +2446,13 @@ const state = {
     savedTimerMinutes: 5,      
     savedTimerSeconds: 0,   
   },
+  eventCategories: {
+    '#C4B88E': 'Sin asignar',
+    '#6BAA8E': 'Sin asignar',
+    '#5B82B4': 'Sin asignar',
+    '#C4645A': 'Sin asignar',
+    '#1A1E2A': 'Sin asignar',
+  },
   meditationPrompts: [
     "¿Quién soy realmente más allá de mis roles y responsabilidades?",
     "¿Qué estoy agradecido en este momento?",
@@ -2150,7 +2468,7 @@ const state = {
   meditationSounds: [
     { name: 'Lluvia', file: './sounds/lluvia.wav' },
     { name: 'Ruido blanco', file: './sounds/white noise.wav' },
-    { name: 'Olas oceánicas',  file: './sounds/ocean-waves.mp3' },
+    { name: 'Olas oceánicas',  file: './sounds/ocean-waves.wav' },
     { name: 'Ruido rosa', file: './sounds/pink noise.wav' },
   ],
   selectedEventColor: '#C4B88E',
@@ -2296,6 +2614,8 @@ settings: {
   planner_habits: [],
   planner_objetivos: [],
   planner_metas: [],
+  metas: [],
+  nextMetaId: 1,
 };
 
 /* Seed habit completions */
@@ -2830,6 +3150,16 @@ Objetivo semanal (Weekly objective):
 - Single text string of the objective
 - Include matching against existing objetivos
 
+Prioridades (Weekly priorities):
+- Array of all items written in this section
+- Each item becomes a meta with:
+  - extracted_meta: the priority text as written
+  - matched_meta_id: ID from existing metas list (or null if no match)
+  - match_confidence: "high", "medium", "low", or "no_match"
+  - description: null
+- Return these under "metas" in the data object (same structure as Page 20's metas array)
+- If the section is empty, omit "metas" from the response entirely
+
 Libro en Curso (Current book):
 - Book title
 - Current page number (from "Pág. X")
@@ -3045,9 +3375,9 @@ Return for each objetivo:
 - matched_objetivo_id: ID from existing objetivos list (or null if no match)
 - match_confidence: "high", "medium", "low", or "no_match"
 
-META MATCHING (Page 20)
+META MATCHING (Pages 20, 23)
 
-When extracting metas, attempt to match against the existing metas list.
+When extracting metas (from "Metas" on Page 20 or "Prioridades" on Page 23), attempt to match against the existing metas list.
 
 Use fuzzy matching logic:
 - Exact match (case-insensitive) → confidence: "high"
@@ -3261,11 +3591,11 @@ function extractObjetivosForPrompt() {
 }
 
 function extractMetasForPrompt() {
-  return (state.planner_metas || [])
+  return (state.metas || [])        
     .map(meta => ({
-      id: meta.id || `meta_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      meta: meta.meta || meta.text || '',
-      month: meta.month || ''
+      id: meta.id,
+      meta: meta.title || '',     
+      month: meta.dueDate || ''
     }))
     .slice(0, 50);
 }
@@ -3363,6 +3693,7 @@ function navigateTo(name) {
   if (name==='settings')     renderSettings();
   if (name==='gratitude')    renderGratitude();
   if (name==='meditation')   renderMeditation();
+  if (name==='metas')        renderMetas();  // ADD THIS LINE
 }
 
 /* ================================================================
@@ -3403,6 +3734,7 @@ function openModal(id) {
       document.getElementById('event-delete-row').style.display = 'none';
       document.getElementById('event-edit-id').value = '';
       state.selectedEventColor = '#C4B88E';
+      document.getElementById('event-notification-input').value = '1440';
       document.querySelectorAll('.ecswatch').forEach(s => {
         s.style.borderColor = s.dataset.color === '#C4B88E' ? '#1A1E2A' : 'transparent';
       });
@@ -3589,9 +3921,9 @@ function showGeminiImportPreview(data) {
       sections.push(`🎯 ${objectiveCount} objetivo(s)`);
   }
 
-  // if (innerData.metas?.length) {
-  //   sections.push(`✓ ${innerData.metas.length} meta(s)`);
-  // }
+  if (innerData.metas?.length) {
+    sections.push(`✓ ${innerData.metas.length} meta(s)`);
+  }
 
   if (innerData.books?.length) {
     sections.push(`📚 ${innerData.books.length} libro(s)`);
@@ -3626,9 +3958,11 @@ function showGeminiImportPreview(data) {
   addGeminiImportButton(actions, '🔄 Importar hábitos', importGeminiHabits, allHabits.length > 0);
   addGeminiImportButton(actions, '📅 Importar eventos', importGeminiEvents, !!innerData.events?.length);
   addGeminiImportButton(actions, '🎯 Importar objetivos', importGeminiObjectives, !!(innerData.objectives?.length || innerData.weekly_objective));
+  addGeminiImportButton(actions, '✓ Importar metas', importGeminiMetas, !!innerData.metas?.length);
   addGeminiImportButton(actions, '📚 Importar libros', importGeminiBooks, !!innerData.books?.length);
   addGeminiImportButton(actions, '🙏 Importar gratitud', importGeminiGratitude, !!innerData.gratitude?.length);
   addGeminiImportButton(actions, '🧠 Importar brain dump', importGeminiBrainDump, !!innerData.brain_dump?.length);
+
 
   const allBtn = document.createElement('button');
   allBtn.className = 'btn-gold';
@@ -3887,8 +4221,9 @@ function renderWeekGrid() {
     html += '<span style="color:'+(isT?'var(--dark)':'var(--text-3)')+';font-weight:'+(isT?'600':'500')+'">'+DAYS_ES[d.getDay()]+'</span>';
   });
   html += '</div>';
+  
   state.habits.forEach(h => {
-    html += '<div class="week-grid-row"><span class="habit-name" onclick="openEditHabit('+h.id+')">'+h.name+'</span>';
+    html += '<div class="week-grid-row" data-habit-id="'+h.id+'" style="cursor:grab;user-select:none"><span class="habit-name" onclick="openEditHabit('+h.id+')">'+h.name+'</span>';
     dates.forEach(d => {
       const ds = fmt(d);
       const scheduled = isScheduled(h, d);
@@ -3903,6 +4238,8 @@ function renderWeekGrid() {
     html += '</div>';
   });
   document.getElementById('week-grid-container').innerHTML = html;
+  
+  setupHabitDragListeners();
 }
 
 function toggleHabitDay(id, dateStr) {
@@ -3924,16 +4261,19 @@ function renderDailyChecklist() {
   const el = document.getElementById('daily-checklist');
   const todayDate = new Date(todayStr+'T12:00:00');
   const todayHabits = state.habits.filter(h => isScheduled(h, todayDate));
+  
   if (!todayHabits.length) {
     el.innerHTML = '<p style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0">Sin hábitos para hoy. Toca + para agregar uno.</p>';
     return;
   }
-  el.innerHTML = todayHabits.map(h => {
+  
+  el.innerHTML = todayHabits.map((h, idx) => {
     const done = h.completions[todayStr];
     const notifTime = getEffectiveNotifTime(h);
     const timeLabel = notifTime ? '<span class="check-time-pill" onclick="openHabitTimeEditor('+h.id+',event)" style="cursor:pointer">🔔 '+formatTime12(notifTime)+'</span>' : '';
     const statsBtn = '<span class="check-stats-pill" onclick="openHabitStats('+h.id+',event)">📊</span>';
-    return '<div class="checklist-item">'+
+    
+    return '<div class="checklist-item" draggable="true" data-habit-id="'+h.id+'" ondragstart="startHabitDrag('+h.id+', event)" ondragover="dragOverHabit('+h.id+', event)" ondrop="dropHabit('+h.id+', event)" ondragend="endHabitDrag(event)" style="touch-action:none;cursor:grab;user-select:none">'+
       '<div class="check-box'+(done?' checked':'')+'" onclick="toggleHabitDay('+h.id+',\''+todayStr+'\')"></div>'+
       '<span class="check-label" onclick="openEditHabit('+h.id+')">'+h.name+'</span>'+
       statsBtn+
@@ -3941,6 +4281,90 @@ function renderDailyChecklist() {
       '<span class="check-streak-pill">🔥 '+h.streak+'</span>'+
       '</div>';
   }).join('');
+  
+  setupHabitDragListeners();
+}
+
+function initializeHabitDragListeners() {
+  let isDragging = false;
+  let dragStartY = 0;
+  let draggedHabitId = null;
+  let dragSource = null;
+  
+  document.addEventListener('pointerdown', e => {
+    const checklistItem = e.target.closest('.checklist-item');
+    const weekGridRow = e.target.closest('.week-grid-row');
+    
+    if (!checklistItem && !weekGridRow) return;
+    
+    const element = checklistItem || weekGridRow;
+    draggedHabitId = parseInt(element.dataset.habitId);
+    dragSource = checklistItem ? '.checklist-item' : '.week-grid-row';
+    dragStartY = e.clientY;
+    isDragging = true;
+    element.style.opacity = '0.6';
+  });
+  
+  document.addEventListener('pointermove', e => {
+    if (!isDragging || !draggedHabitId) return;
+    
+    const deltaY = e.clientY - dragStartY;
+    const similarItems = Array.from(document.querySelectorAll(dragSource));
+    const currentIdx = similarItems.findIndex(el => parseInt(el.dataset.habitId) === draggedHabitId);
+    
+    if (Math.abs(deltaY) > 30) {
+      if (deltaY < 0 && currentIdx > 0) {
+        const prevHabit = parseInt(similarItems[currentIdx - 1].dataset.habitId);
+        swapHabits(draggedHabitId, prevHabit);
+        dragStartY = e.clientY;
+      } else if (deltaY > 0 && currentIdx < similarItems.length - 1) {
+        const nextHabit = parseInt(similarItems[currentIdx + 1].dataset.habitId);
+        swapHabits(draggedHabitId, nextHabit);
+        dragStartY = e.clientY;
+      }
+    }
+  }, { passive: true });
+  
+  document.addEventListener('pointerup', () => {
+    if (isDragging && draggedHabitId) {
+      const element = document.querySelector('[data-habit-id="'+draggedHabitId+'"]');
+      if (element) element.style.opacity = '1';
+      isDragging = false;
+      draggedHabitId = null;
+      dragSource = null;
+    }
+  });
+}
+
+function setupHabitDragListeners() {
+  // This is now just a stub - listeners are set up once on page load
+  // No need to call this anymore
+}
+
+// Drag and drop functions (for mouse drag)
+function startHabitDrag(habitId, event) {
+  state.habitDragIndex = state.habits.findIndex(h => h.id === habitId);
+  event.dataTransfer.effectAllowed = 'move';
+}
+
+function dragOverHabit(habitId, event) {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+}
+
+function dropHabit(habitId, event) {
+  event.preventDefault();
+  const targetIdx = state.habits.findIndex(h => h.id === habitId);
+  const sourceIdx = state.habitDragIndex;
+  
+  if (sourceIdx !== -1 && targetIdx !== -1 && sourceIdx !== targetIdx) {
+    [state.habits[sourceIdx], state.habits[targetIdx]] = [state.habits[targetIdx], state.habits[sourceIdx]];
+    renderDailyChecklist();
+  }
+}
+
+function endHabitDrag(event) {
+  state.habitDragIndex = null;
 }
 
 function renderHeatmap() {
@@ -4378,7 +4802,7 @@ function goalCardHTML(g, extraClass) {
   return '<div class="goal-card'+(extraClass?' '+extraClass:'')+'" onclick="openGoalDetail('+g.id+')">'+
     '<div class="goal-card-header"><div class="goal-card-title">'+g.title+'</div><span class="pill '+catClass+'">'+g.cat+'</span></div>'+
     '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
-    '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% · '+milestones.filter(m=>m.done).length+'/'+milestones.length+' hitos</span><div class="milestones-mini">'+msDots+'</div></div>'+
+    '<div class="goal-card-footer"><span class="goal-pct">'+pct+'% · '+milestones.filter(m=>m.done).length+'/'+milestones.length+' pasos</span><div class="milestones-mini">'+msDots+'</div></div>'+
     '</div>';
 }
 const archiveOpen = { logrado: false, espera: false };
@@ -4422,7 +4846,7 @@ function renderGoals() {
     '<div class="goal-archive-toggle" onclick="toggleArchiveSection(\'espera\')">'+
     '<div class="goal-archive-toggle-label">'+
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+
-    'En espera'+
+    'En pausa'+
     '</div>'+
     '<div style="display:flex;align-items:center;gap:8px">'+
     '<span class="goal-archive-count archive-espera-count">'+espera.length+'</span>'+
@@ -4430,7 +4854,7 @@ function renderGoals() {
     '</div></div>'+
     '<div class="goal-archive-body'+(archiveOpen.espera?' open':'')+'" id="archive-body-espera">'+
     (espera.length ? espera.map(g => goalCardHTML(g,'archived-espera')).join('') :
-      '<div style="padding:12px;font-size:13px;color:var(--text-3);text-align:center">Sin objetivos en espera</div>')+
+      '<div style="padding:12px;font-size:13px;color:var(--text-3);text-align:center">Sin objetivos En pausa</div>')+
     '</div></div>';
 
   body.innerHTML = html;
@@ -4455,7 +4879,7 @@ function openGoalDetail(id) {
   const statusOptions = [
     {val:'active',   label:'Activo',    color:'var(--blue)'},
     {val:'logrado',  label:'Logrado ✓', color:'var(--green)'},
-    {val:'espera',   label:'En espera', color:'var(--amber)'},
+    {val:'espera',   label:'En pausa', color:'var(--amber)'},
   ];
   const statusBtns = statusOptions.map(s =>
     '<button class="btn-outline" style="flex:1;font-size:12px;'+(g.status===s.val?'background:var(--dark);color:#fff;border-color:var(--dark)':'')+'" onclick="setGoalStatus('+id+',\''+s.val+'\')">'+s.label+'</button>'
@@ -4482,7 +4906,7 @@ function openGoalDetail(id) {
     '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-3);font-weight:500">Progreso general</span><span style="font-size:12px;font-weight:600">'+pct+'%</span></div>'+
     '<div class="goal-progress-bar" style="height:7px"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
     '</div>'+
-    '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Hitos ('+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+')</div>'+
+    '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">pasos ('+g.milestones.filter(m=>m.done).length+'/'+g.milestones.length+')</div>'+
     '<div class="milestone-list">'+
     g.milestones.map((m,i) =>
       '<div class="milestone-item'+(m.done?' done-ms':'')+'" onclick="toggleMilestone('+id+','+i+')">'+
@@ -4493,11 +4917,11 @@ function openGoalDetail(id) {
     ).join('')+
     '</div>'+
     '<div style="display:flex;gap:8px;margin-top:12px">'+
-    '<input class="form-input" id="ms-add-input-'+id+'" type="text" placeholder="Agregar nuevo hito..." style="flex:1">'+
+    '<input class="form-input" id="ms-add-input-'+id+'" type="text" placeholder="Agregar nuevo paso..." style="flex:1">'+
     '<button class="btn-outline" onclick="addMilestone('+id+')">+ Agregar</button>'+
     '</div>'+
     '<div style="margin-top:16px;padding-top:16px;border-top:0.5px solid var(--border);display:flex;gap:8px">'+
-    '<button class="btn-outline" style="flex:1;color:var(--amber);border-color:rgba(212,168,71,.4);font-size:12px" onclick="clearGoalCompletions('+id+')">Reiniciar hitos</button>'+
+    '<button class="btn-outline" style="flex:1;color:var(--amber);border-color:rgba(212,168,71,.4);font-size:12px" onclick="clearGoalCompletions('+id+')">Reiniciar pasos</button>'+
     '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3);font-size:12px" onclick="deleteGoal('+id+')">Eliminar</button>'+
     '</div>'+
     '<div style="margin-top:10px">'+
@@ -4513,7 +4937,7 @@ function setGoalStatus(id, status) {
   g.status = status;
   renderGoals();
   openGoalDetail(id);
-  showToast(status==='logrado'?'¡Objetivo marcado como logrado! 🎉':status==='espera'?'Objetivo puesto en espera':'Objetivo reactivado');
+  showToast(status==='logrado'?'¡Objetivo marcado como logrado! 🎉':status==='espera'?'Objetivo puesto En pausa':'Objetivo reactivado');
 }
 
 function escHtml(str) {
@@ -4544,7 +4968,7 @@ function toggleMilestone(goalId, msIdx) {
 function removeMilestone(goalId, msIdx) {
   const g = state.goals.find(x => x.id === goalId);
   if (!g) return;
-  if (!confirm('¿Eliminar este hito?')) return;
+  if (!confirm('¿Eliminar este paso?')) return;
   g.milestones.splice(msIdx, 1);
   openGoalDetail(goalId);
   renderGoals();
@@ -4553,7 +4977,7 @@ function removeMilestone(goalId, msIdx) {
 function addMilestone(goalId) {
   const g   = state.goals.find(x => x.id === goalId);
   const inp = document.getElementById('ms-add-input-'+goalId);
-  if (!inp || !inp.value.trim()) { showToast('Escribe el nombre del hito'); return; }
+  if (!inp || !inp.value.trim()) { showToast('Escribe el nombre del paso'); return; }
   
   const milestoneText = inp.value.trim();
   g.milestones.push({ text:milestoneText, done:false });
@@ -4585,21 +5009,21 @@ function addMilestone(goalId) {
   
   openGoalDetail(goalId);
   renderGoals();
-  showToast('¡Hito agregado!');
+  showToast('¡paso agregado!');
 }
 
 function clearGoalCompletions(id) {
-  if (!confirm('¿Reiniciar todos los hitos de este objetivo? Esta acción no se puede deshacer.')) return;
+  if (!confirm('¿Reiniciar todos los pasos de este objetivo? Esta acción no se puede deshacer.')) return;
   const g = state.goals.find(x => x.id === id);
   if (!g) return;
   g.milestones.forEach(m => m.done = false);
   openGoalDetail(id);
   renderGoals();
-  showToast('Hitos reiniciados');
+  showToast('pasos reiniciados');
 }
 
 function deleteGoal(id) {
-  if (!confirm('¿Eliminar este objetivo y todos sus hitos? Esta acción no se puede deshacer.')) return;
+  if (!confirm('¿Eliminar este objetivo y todos sus pasos? Esta acción no se puede deshacer.')) return;
   state.goals = state.goals.filter(g => g.id !== id);
   closeModal('goal-detail-modal');
   renderGoals();
@@ -5074,6 +5498,19 @@ function selectEventColor(el) {
 function openAddEvent() {
   document.getElementById('event-edit-id').value = '';
   openModal('event-modal');
+  
+  // ADD THIS: Auto-set end time when start time changes
+  setTimeout(() => {
+    document.getElementById('event-start-input').addEventListener('change', (e) => {
+      const startTime = e.target.value;
+      if (startTime) {
+        const [hours, minutes] = startTime.split(':').map(Number);
+        const endHours = (hours + 1) % 24; // Add 1 hour, wrap around if needed
+        const endTime = String(endHours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+        document.getElementById('event-end-input').value = endTime;
+      }
+    });
+  }, 100);
 }
 
 function addEvent() {
@@ -5081,6 +5518,7 @@ function addEvent() {
   const date  = document.getElementById('event-date-input').value;
   if (!title) { showToast('Escribe el título del evento'); return; }
   if (!date)  { showToast('Selecciona una fecha'); return; }
+  
   state.events.push({
     id:       state.nextEventId++,
     title,
@@ -5089,8 +5527,10 @@ function addEvent() {
     end:      document.getElementById('event-end-input').value,
     notes:    document.getElementById('event-notes-input').value.trim(),
     color:    state.selectedEventColor,
+    notification: document.getElementById('event-notification-input').value || null, // NEW
     sequence: 0,
   });
+
   ['event-title-input','event-date-input','event-start-input','event-end-input','event-notes-input'].forEach(id => document.getElementById(id).value = '');
   closeModal('event-modal');
   if (state.currentScreen === 'calendar') renderCalendar();
@@ -5111,11 +5551,33 @@ function openEditEvent(id) {
   document.getElementById('event-start-input').value = e.start || '';
   document.getElementById('event-end-input').value   = e.end   || '';
   document.getElementById('event-notes-input').value = e.notes || '';
+  document.getElementById('event-notification-input').value = e.notification || '';
   state.selectedEventColor = e.color || '#C4B88E';
   document.querySelectorAll('.ecswatch').forEach(s => {
     s.style.borderColor = s.dataset.color === e.color ? '#1A1E2A' : 'transparent';
   });
+  
+  // Setup auto-set for editing too
+  setTimeout(() => {
+    const startInput = document.getElementById('event-start-input');
+    if (startInput) {
+      startInput.addEventListener('change', autoSetEndTime, { once: false });
+    }
+  }, 50);
+  
   document.getElementById('event-modal').classList.add('open');
+}
+
+function autoSetEndTime() {
+  const startTime = document.getElementById('event-start-input').value;
+  const endInput = document.getElementById('event-end-input');
+  
+  if (startTime && !endInput.value) {
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const endHours = (hours + 1) % 24;
+    const endTime = String(endHours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+    endInput.value = endTime;
+  }
 }
 
 function saveEditEvent() {
@@ -5126,13 +5588,16 @@ function saveEditEvent() {
   const date  = document.getElementById('event-date-input').value;
   if (!title) { showToast('Escribe el título del evento'); return; }
   if (!date)  { showToast('Selecciona una fecha'); return; }
-  e.title    = title;
-  e.date     = date;
-  e.start    = document.getElementById('event-start-input').value;
-  e.end      = document.getElementById('event-end-input').value;
-  e.notes    = document.getElementById('event-notes-input').value.trim();
-  e.color    = state.selectedEventColor;
-  e.sequence = (e.sequence || 0) + 1;
+  
+  e.title        = title;
+  e.date         = date;
+  e.start        = document.getElementById('event-start-input').value;
+  e.end          = document.getElementById('event-end-input').value;
+  e.notes        = document.getElementById('event-notes-input').value.trim();
+  e.color        = state.selectedEventColor;
+  e.notification = document.getElementById('event-notification-input').value || null;
+  e.sequence     = (e.sequence || 0) + 1;
+  
   closeModal('event-modal');
   if (state.currentScreen === 'calendar') {
     if (state.calView === 'upcoming') { renderUpcoming(); renderUpcomingBottomBar(); }
@@ -5582,12 +6047,12 @@ function exportHabitsCSV() {
 
 function exportGoalsCSV() {
   if (!state.goals.length) { showToast('No hay metas para exportar'); return; }
-  const rows = [['Objetivo','Categoría','Estado','Descripción','Progreso %','Hitos completados','Total hitos','Hitos']];
+  const rows = [['Objetivo','Categoría','Estado','Descripción','Progreso %','pasos completados','Total pasos','pasos']];
   state.goals.forEach(g => {
     const pct  = goalProgress(g);
     const done = g.milestones.filter(m=>m.done).length;
-    const hitos = g.milestones.map(m=>(m.done?'✓ ':'○ ')+m.text).join(' | ');
-    rows.push([g.title, g.cat, g.status||'active', g.desc, pct+'%', done, g.milestones.length, hitos]);
+    const pasos = g.milestones.map(m=>(m.done?'✓ ':'○ ')+m.text).join(' | ');
+    rows.push([g.title, g.cat, g.status||'active', g.desc, pct+'%', done, g.milestones.length, pasos]);
   });
   downloadCSV('vivela365-objetivos.csv', rows);
   showToast('Objetivos exportados ✓');
@@ -6910,8 +7375,8 @@ function drawOverlay() {
   overlayCtx.fillRect(0, 0, w, h);
 
   // Centered guide rectangle
-  const guideW = w * 0.9;
-  const guideH = h * 0.8;
+  const guideW = w * 0.8;
+  const guideH = h * 0.99;
   const guideX = (w - guideW) / 2;
   const guideY = (h - guideH) / 2;
 
@@ -6989,13 +7454,14 @@ function importGeminiHabits() {
     return;
   }
 
+  // PART 1: Process frequency/schedule from Page 8 (morning/afternoon/evening)
   const allHabits = [];
   if (data.habits.morning) allHabits.push(...data.habits.morning);
   if (data.habits.afternoon) allHabits.push(...data.habits.afternoon);
   if (data.habits.evening) allHabits.push(...data.habits.evening);
 
   if (!allHabits.length) {
-    console.warn('⚠️ No habits extracted');
+    console.warn('⚠️ No habits extracted from Page 8');
     return;
   }
 
@@ -7009,15 +7475,40 @@ function importGeminiHabits() {
 
     const capitalizedName = capitalizeFirst(h.extracted_name);
 
-    const existing = state.habits.find(
-      x => x.name.trim().toLowerCase() === capitalizedName.trim().toLowerCase()
-    );
+    // Try to find existing habit by matched_habit_id first, then by name
+    let existingHabit = null;
+    if (h.matched_habit_id) {
+      existingHabit = state.habits.find(x => x.id === parseInt(h.matched_habit_id));
+    }
+    if (!existingHabit) {
+      existingHabit = state.habits.find(
+        x => x.name.trim().toLowerCase() === capitalizedName.trim().toLowerCase()
+      );
+    }
 
-    if (existing) {
-      console.log('⏭️ Habit already exists:', capitalizedName);
+    if (existingHabit) {
+      console.log('✅ Updating existing habit:', capitalizedName);
+      // Update frequency from Page 8 data
+      if (h.frequency_normalized && h.frequency_normalized.type === 'days_of_week' && h.frequency_normalized.days) {
+        const dayMap = {'D': 0, 'L': 1, 'Ma': 2, 'Mi': 3, 'J': 4, 'V': 5, 'S': 6};
+        const customDays = [false, false, false, false, false, false, false];
+        h.frequency_normalized.days.forEach(day => {
+          const idx = dayMap[day];
+          if (idx != null) customDays[idx] = true;
+        });
+        existingHabit.freq = 'personalizado';
+        existingHabit.customDays = customDays;
+      } else if (h.frequency_normalized && h.frequency_normalized.type === 'daily') {
+        existingHabit.freq = 'diario';
+        existingHabit.customDays = null;
+      }
+      if (h.default_time && !existingHabit.notifTime) {
+        existingHabit.notifTime = h.default_time;
+      }
       return;
     }
 
+    // New habit from Page 8
     let customDays = [false, false, false, false, false, false, false];
     let freq = 'diario';
 
@@ -7028,6 +7519,9 @@ function importGeminiHabits() {
         if (idx != null) customDays[idx] = true;
       });
       freq = 'personalizado';
+    } else if (h.frequency_normalized && h.frequency_normalized.type === 'daily') {
+      freq = 'diario';
+      customDays = null;
     }
 
     state.habits.push({
@@ -7043,32 +7537,38 @@ function importGeminiHabits() {
       why: ''
     });
 
+    console.log('✅ Added new habit:', capitalizedName);
     added++;
   });
 
-  // Process tracker completions
+  console.log('📊 Page 8 habits processed:', added);
+
+  // PART 2: Process completions ONLY from Page 23 (weekly planner habit tracker)
+  // This only marks specific dates as completed, does NOT define the habit schedule
   const tracker = data.habit_tracker || {};
   const weekDateRange = data.week_date_range;
 
-  console.log('📊 Habits added:', added);
   console.log('📊 Habit Tracker Data:', tracker);
   console.log('📅 Week Date Range:', weekDateRange);
 
-  Object.entries(tracker).forEach(([habitName, trackerData]) => {
-    const capitalizedHabitName = capitalizeFirst(habitName);
-    
-    const habit = state.habits.find(
-      h => h.name.trim().toLowerCase() === capitalizedHabitName.trim().toLowerCase()
-    );
+  if (Object.keys(tracker).length && weekDateRange && weekDateRange.start_date && weekDateRange.end_date) {
+    let completionsUpdated = 0;
 
-    if (!habit || !trackerData?.days) {
-      console.log('⚠️ Could not find habit for tracker:', capitalizedHabitName);
-      return;
-    }
+    Object.entries(tracker).forEach(([habitName, trackerData]) => {
+      const capitalizedHabitName = capitalizeFirst(habitName);
+      
+      // Find the habit (should exist by now from Page 8 or existing)
+      const habit = state.habits.find(
+        h => h.name.trim().toLowerCase() === capitalizedHabitName.trim().toLowerCase()
+      );
 
-    console.log('✅ Processing completions for:', capitalizedHabitName, 'days:', trackerData.days);
+      if (!habit || !trackerData?.days) {
+        console.log('⚠️ Could not find habit for tracker:', capitalizedHabitName);
+        return;
+      }
 
-    if (weekDateRange && weekDateRange.start_date && weekDateRange.end_date) {
+      console.log('✅ Marking completions for:', capitalizedHabitName, 'days:', trackerData.days);
+
       const startDate = new Date(weekDateRange.start_date + 'T12:00:00');
       const endDate = new Date(weekDateRange.end_date + 'T12:00:00');
 
@@ -7086,56 +7586,83 @@ function importGeminiHabits() {
         if (trackerData.days.includes(dayLetter)) {
           habit.completions[fmt(currentDate)] = true;
           console.log('  ✓', fmt(currentDate));
+          completionsUpdated++;
         }
 
         currentDate.setDate(currentDate.getDate() + 1);
       }
-    } else {
-      console.warn('⚠️ No week_date_range found');
-    }
+    });
+
+    console.log('📊 Completions marked:', completionsUpdated);
+  } else {
+    console.log('ℹ️ No habit tracker data or week date range found');
+  }
+
+  // Update streaks based on actual completion history
+  state.habits.forEach(h => {
+    h.streak = calculateHabitStreak(h);
   });
 
-  if (added > 0) {
-    state.habits.forEach(h => {
-      h.streak = calculateHabitStreak(h);
-    });
-    
-    renderHabits();
-    showToast(added + ' hábito(s) importado(s)');
-  } else {
-    showToast('No se encontraron hábitos nuevos');
-  }
+  renderHabits();
+  showToast((added > 0 ? added + ' hábito(s) nuevo(s) y ' : '') + 'datos importados ✓');
 }
 
 function importGeminiMetas() {
-  const data = window.geminiImportData?.data;
-  if (!data?.metas) return;
+  const root = window.geminiImportData;
+  const data = root?.data;
+  if (!data?.metas?.length) return;
+
+  const monthMap = {
+    'enero':1,'febrero':2,'marzo':3,'abril':4,'mayo':5,'junio':6,
+    'julio':7,'agosto':8,'septiembre':9,'octubre':10,'noviembre':11,'diciembre':12
+  };
+
+  let dueDate = '';
+  const pageType = root.page_type;
+  const year = new Date().getFullYear();
+
+  if (pageType === 'monthly_objectives' && root.month) {
+    const monthNum = monthMap[root.month.toLowerCase()];
+    if (monthNum) {
+      // Date(year, monthNum, 0) = last day of the calendar month `monthNum`
+      dueDate = fmt(new Date(year, monthNum, 0));
+    }
+  } else if (pageType === 'weekly_planner' && data.week_date_range?.end_date) {
+    dueDate = data.week_date_range.end_date; // should be the Sunday
+  }
 
   let added = 0;
-
   data.metas.forEach(m => {
-    if (!m.meta_title) return;
+    const text = m.extracted_meta?.trim();
+    if (!text) return;
+    const capitalizedTitle = capitalizeFirst(text);
 
     const exists = state.metas.find(
-      x => x.title.trim().toLowerCase() === m.meta_title.trim().toLowerCase()
+      x => x.title.trim().toLowerCase() === capitalizedTitle.trim().toLowerCase()
     );
-
     if (exists) return;
 
     state.metas.push({
       id: state.nextMetaId++,
-      title: m.meta_title,
+      title: capitalizedTitle,
       description: m.description || '',
-      completed: false,
-      dueDate: '',
-      priority: 'medium'
+      whyImportant: '',
+      dueDate: dueDate,
+      linkedGoalId: null,
+      linkedMilestoneText: null,
+      done: false,
+      status: 'active',
+      notificationDaysBefore: 0,
+      notes: '',
+      priority: 'normal'
     });
-
     added++;
   });
 
-  renderMetas();
-  showToast(added + ' meta(s) importada(s)');
+  if (added > 0) {
+    renderMetas();
+    showToast(added + ' meta(s) importada(s)');
+  }
 }
 
 function importGeminiBooks() {
@@ -7243,32 +7770,550 @@ function importGeminiBrainDump() {
 }
 
 function importAllGeminiData() {
-  console.log('🚀 importAllGeminiData started');
-  console.log('State object keys:', Object.keys(state));
-  console.log('Full state:', state);
-  
-  console.log('1️⃣ Calling importGeminiHabits');
   importGeminiHabits();
-  
-  console.log('2️⃣ Calling importGeminiEvents');
   importGeminiEvents?.();
-  
-  console.log('3️⃣ Calling importGeminiObjectives');
   importGeminiObjectives();
-  
-  console.log('4️⃣ Calling importGeminiBooks');
+  importGeminiMetas();          // ← add this
   importGeminiBooks();
-  
-  console.log('5️⃣ Calling importGeminiGratitude');
   importGeminiGratitude();
-  
-  console.log('6️⃣ Calling importGeminiBrainDump');
   importGeminiBrainDump();
-  
-  console.log('✅ All imports done');
   showToast('✨ Importación completa');
 }
 
+/* ================================================================
+   SWIPE NAVIGATION - BACK TO HOME
+================================================================ */
+(function() {
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+  const swipeThreshold = 100; // pixels
+  
+  document.addEventListener('pointerdown', e => {
+    swipeStartX = e.clientX;
+    swipeStartY = e.clientY;
+  }, true);
+  
+  document.addEventListener('pointerup', e => {
+    if (swipeStartX === 0) return;
+    
+    const currentScreen = document.querySelector('.screen.active');
+    if (!currentScreen || currentScreen.id === 'screen-home') {
+      swipeStartX = 0;
+      swipeStartY = 0;
+      return;
+    }
+    
+    const deltaX = swipeStartX - e.clientX;
+    const deltaY = Math.abs(swipeStartY - e.clientY);
+    
+    // Swipe left (positive deltaX) with minimal vertical movement
+    if (deltaX > swipeThreshold && deltaY < 50) {
+      navigateTo('home');
+    }
+    
+    swipeStartX = 0;
+    swipeStartY = 0;
+  }, true);
+})();
+
+function openEventCategoriesModal() {
+  const list = document.getElementById('categories-list');
+  list.innerHTML = Object.entries(state.eventCategories).map(([color, name]) => 
+    '<div style="display:flex;gap:8px;align-items:center">'+
+    '<div style="width:32px;height:32px;border-radius:50%;background:'+color+';flex-shrink:0"></div>'+
+    '<input class="form-input" type="text" value="'+escHtml(name)+'" onchange="updateCategoryName(\''+color+'\', this.value)" placeholder="Nombre de categoría" style="flex:1">'+
+    '</div>'
+  ).join('');
+  openModal('event-categories-modal');
+}
+
+function updateCategoryName(color, newName) {
+  state.eventCategories[color] = newName.trim() || 'Sin asignar';
+}
+
+function setupHabitDragListeners() {
+  const items = document.querySelectorAll('.checklist-item');
+  
+  items.forEach(item => {
+    let isDragging = false;
+    let dragStartY = 0;
+    let draggedHabitId = null;
+    
+    item.addEventListener('pointerdown', e => {
+      dragStartY = e.clientY;
+      draggedHabitId = parseInt(item.dataset.habitId);
+      
+      // Only drag if grabbed by the handle (⋮⋮)
+      if (!e.target.textContent.includes('⋮')) {
+        draggedHabitId = null;
+        return;
+      }
+      
+      isDragging = true;
+      item.style.opacity = '0.6';
+    });
+    
+    document.addEventListener('pointermove', e => {
+      if (!isDragging || !draggedHabitId) return;
+      
+      const deltaY = e.clientY - dragStartY;
+      const siblings = Array.from(document.querySelectorAll('.checklist-item'));
+      const currentIdx = siblings.findIndex(el => parseInt(el.dataset.habitId) === draggedHabitId);
+      
+      if (Math.abs(deltaY) > 30) {
+        if (deltaY < 0 && currentIdx > 0) {
+          // Move up
+          const prevHabit = parseInt(siblings[currentIdx - 1].dataset.habitId);
+          swapHabits(draggedHabitId, prevHabit);
+          dragStartY = e.clientY;
+        } else if (deltaY > 0 && currentIdx < siblings.length - 1) {
+          // Move down
+          const nextHabit = parseInt(siblings[currentIdx + 1].dataset.habitId);
+          swapHabits(draggedHabitId, nextHabit);
+          dragStartY = e.clientY;
+        }
+      }
+    });
+    
+    document.addEventListener('pointerup', () => {
+      if (isDragging) {
+        isDragging = false;
+        item.style.opacity = '1';
+        draggedHabitId = null;
+      }
+    });
+  });
+}
+
+function swapHabits(habitId1, habitId2) {
+  const idx1 = state.habits.findIndex(h => h.id === habitId1);
+  const idx2 = state.habits.findIndex(h => h.id === habitId2);
+  
+  if (idx1 !== -1 && idx2 !== -1) {
+    [state.habits[idx1], state.habits[idx2]] = [state.habits[idx2], state.habits[idx1]];
+    renderWeekGrid();
+    renderDailyChecklist();
+    renderStreaks();
+  }
+}
+
+function startHabitDrag(habitId, event) {
+  state.habitDragIndex = state.habits.findIndex(h => h.id === habitId);
+  event.dataTransfer.effectAllowed = 'move';
+}
+
+function dragOverHabit(habitId, event) {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+}
+
+function dropHabit(habitId, event) {
+  event.preventDefault();
+  const targetIdx = state.habits.findIndex(h => h.id === habitId);
+  const sourceIdx = state.habitDragIndex;
+  
+  if (sourceIdx !== -1 && targetIdx !== -1 && sourceIdx !== targetIdx) {
+    [state.habits[sourceIdx], state.habits[targetIdx]] = [state.habits[targetIdx], state.habits[sourceIdx]];
+    renderDailyChecklist();
+  }
+}
+
+function endHabitDrag(event) {
+  state.habitDragIndex = null;
+}
+
+/* ================================================================
+   METAS - COMPLETE IMPLEMENTATION
+================================================================ */
+
+/* ================================================================
+   METAS — same visual system as Objetivos (goal-card, archive, etc.)
+================================================================ */
+const META_PRIORITY_COLORS = { crítica:'pill-red', alta:'pill-amber', normal:'pill-gray', baja:'pill-blue' };
+const META_PRIORITY_LABELS = { crítica:'Crítica', alta:'Alta', normal:'Normal', baja:'Baja' };
+const metaArchiveOpen = { completed: false, 'on-hold': false };
+
+function metaProgress(m) { return m.done ? 100 : 0; }
+
+function metaCardHTML(m, extraClass) {
+  const pct = metaProgress(m);
+  const priorityClass = META_PRIORITY_COLORS[m.priority] || 'pill-gray';
+  const goal = state.goals.find(g => g.id === m.linkedGoalId);
+  const dueLabel = m.dueDate ? new Date(m.dueDate+'T12:00:00').toLocaleDateString('es-MX',{day:'numeric',month:'short'}) : '';
+  return '<div class="goal-card'+(extraClass?' '+extraClass:'')+'" onclick="openMetaDetail('+m.id+')">'+
+    '<div class="goal-card-header"><div class="goal-card-title">'+escHtml(m.title)+'</div><span class="pill '+priorityClass+'">'+META_PRIORITY_LABELS[m.priority]+'</span></div>'+
+    '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>'+
+    '<div class="goal-card-footer"><span class="goal-pct">'+(m.done?'Completo':'Incompleto')+(dueLabel?' · '+dueLabel:'')+'</span>'+
+    (goal ? '<span class="pill pill-blue" style="font-size:10px">🔗 '+escHtml(goal.title)+'</span>' : '<span></span>')+
+    '</div></div>';
+}
+
+function renderMetas() {
+  const body = document.getElementById('metas-body');
+  const active    = state.metas.filter(m => m.status === 'active');
+  const completed = state.metas.filter(m => m.status === 'completed');
+  const onhold    = state.metas.filter(m => m.status === 'on-hold');
+
+  if (!active.length && !completed.length && !onhold.length) {
+    body.innerHTML = '<div style="text-align:center;padding:60px 24px;flex:1"><div style="font-size:48px;opacity:.2;margin-bottom:14px">✓</div><h3 style="font-size:18px;font-weight:600;margin-bottom:8px">Sin metas aún</h3><p style="font-size:14px;color:var(--text-3);line-height:1.6">Toca "+ Nueva" para crear tu primera meta</p></div>';
+    return;
+  }
+
+  let html = '';
+
+  if (active.length) {
+    html += active.map(m => metaCardHTML(m)).join('');
+  } else {
+    html += '<div style="text-align:center;padding:24px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);color:var(--text-3);font-size:13px">Sin metas activas</div>';
+  }
+
+  html += '<div class="goal-archive-section">'+
+    '<div class="goal-archive-toggle" onclick="toggleMetaArchiveSection(\'completed\')">'+
+    '<div class="goal-archive-toggle-label">'+
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>'+
+    'Completadas'+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<span class="goal-archive-count archive-logrado-count">'+completed.length+'</span>'+
+    '<span class="goal-archive-chevron'+(metaArchiveOpen.completed?' open':'')+'" id="chevron-meta-completed">›</span>'+
+    '</div></div>'+
+    '<div class="goal-archive-body'+(metaArchiveOpen.completed?' open':'')+'" id="archive-body-meta-completed">'+
+    (completed.length ? completed.map(m => metaCardHTML(m,'archived-logrado')).join('') :
+      '<div style="padding:12px;font-size:13px;color:var(--text-3);text-align:center">Sin metas completadas aún</div>')+
+    '</div></div>';
+
+  html += '<div class="goal-archive-section">'+
+    '<div class="goal-archive-toggle" onclick="toggleMetaArchiveSection(\'on-hold\')">'+
+    '<div class="goal-archive-toggle-label">'+
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+
+    'En pausa'+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<span class="goal-archive-count archive-espera-count">'+onhold.length+'</span>'+
+    '<span class="goal-archive-chevron'+(metaArchiveOpen['on-hold']?' open':'')+'" id="chevron-meta-onhold">›</span>'+
+    '</div></div>'+
+    '<div class="goal-archive-body'+(metaArchiveOpen['on-hold']?' open':'')+'" id="archive-body-meta-onhold">'+
+    (onhold.length ? onhold.map(m => metaCardHTML(m,'archived-espera')).join('') :
+      '<div style="padding:12px;font-size:13px;color:var(--text-3);text-align:center">Sin metas en pausa</div>')+
+    '</div></div>';
+
+  body.innerHTML = html;
+}
+
+function toggleMetaArchiveSection(key) {
+  metaArchiveOpen[key] = !metaArchiveOpen[key];
+  const idSuffix = key === 'on-hold' ? 'onhold' : key;
+  const body    = document.getElementById('archive-body-meta-'+idSuffix);
+  const chevron = document.getElementById('chevron-meta-'+idSuffix);
+  if (body)    body.classList.toggle('open', metaArchiveOpen[key]);
+  if (chevron) chevron.classList.toggle('open', metaArchiveOpen[key]);
+}
+
+function openAddMeta() {
+  document.getElementById('meta-edit-id').value = '';
+  document.getElementById('meta-modal-title').textContent = 'Nueva meta';
+  document.getElementById('meta-save-btn').textContent = 'Guardar meta';
+  document.getElementById('meta-save-btn').setAttribute('onclick', 'addMeta()');
+  document.getElementById('meta-delete-row').style.display = 'none';
+  document.getElementById('meta-title-input').value = '';
+  document.getElementById('meta-desc-input').value = '';
+  document.getElementById('meta-why-input').value = '';
+  document.getElementById('meta-goal-input').value = '';
+  document.getElementById('meta-due-input').value = '';
+  document.getElementById('meta-priority-input').value = 'normal';
+  document.getElementById('meta-status-input').value = 'active';
+  document.getElementById('meta-notif-input').value = '0';
+  document.getElementById('meta-notes-input').value = '';
+  populateGoalDropdown('meta-goal-input');
+  openModal('meta-modal');
+}
+
+function populateGoalDropdown(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  const currentVal = input.value;
+  input.innerHTML = '<option value="">-- Sin vincular --</option>' +
+    state.goals.filter(g => g.status === 'active').map(g =>
+      '<option value="'+g.id+'">'+escHtml(g.title)+'</option>'
+    ).join('');
+  input.value = currentVal;
+}
+
+function addMeta() {
+  const title = document.getElementById('meta-title-input').value.trim();
+  if (!title) { showToast('Escribe el título de la meta'); return; }
+
+  const goalId = parseInt(document.getElementById('meta-goal-input').value) || null;
+
+  const newMeta = {
+    id: state.nextMetaId++,
+    title,
+    description: document.getElementById('meta-desc-input').value.trim(),
+    whyImportant: document.getElementById('meta-why-input').value.trim(),
+    dueDate: document.getElementById('meta-due-input').value,
+    linkedGoalId: goalId,
+    linkedMilestoneText: null,
+    done: false,
+    status: document.getElementById('meta-status-input').value,
+    notificationDaysBefore: parseInt(document.getElementById('meta-notif-input').value),
+    notes: document.getElementById('meta-notes-input').value.trim(),
+    priority: document.getElementById('meta-priority-input').value
+  };
+
+  state.metas.push(newMeta);
+
+  // If goal is linked, add milestone to that goal
+  if (goalId) {
+    const goal = state.goals.find(g => g.id === goalId);
+    if (goal) {
+      const milestoneText = title;
+      goal.milestones.push({ text: milestoneText, done: false });
+      newMeta.linkedMilestoneText = milestoneText;
+    }
+  }
+
+  closeModal('meta-modal');
+  renderMetas();
+  renderGoals();
+  showToast('¡Meta creada!');
+}
+
+function openMetaDetail(id) {
+  const m = state.metas.find(x => x.id === id);
+  if (!m) return;
+
+  const goal = state.goals.find(g => g.id === m.linkedGoalId);
+  const isOverdue = m.dueDate && new Date(m.dueDate) < today && !m.done;
+  const priorityLabels = { crítica: 'Crítica', alta: 'Alta', normal: 'Normal', baja: 'Baja' };
+  const statusLabels = { active: 'Activa', completed: 'Completada', 'on-hold': 'En pausa' };
+  const notifLabels = { '-1': 'Sin notificación', '0': 'En la fecha', '1': '1 día antes', '2': '2 días antes', '7': '1 semana antes', '14': '2 semanas antes' };
+
+  document.getElementById('meta-detail-content').innerHTML =
+    '<div class="modal-handle"></div>'+
+    '<div style="margin-bottom:16px">'+
+    '<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">'+
+    '<input type="checkbox" '+(m.done?'checked':'')+' onchange="toggleMetaCompletion('+id+')" style="width:20px;height:20px;margin-top:2px;cursor:pointer;accent-color:var(--gold)">'+
+    '<div style="flex:1">'+
+    '<div class="modal-title" style="margin-bottom:4px">'+escHtml(m.title)+'</div>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+    '<span class="pill '+(m.priority==='crítica'?'pill-red':m.priority==='alta'?'pill-amber':m.priority==='normal'?'pill-gray':'pill-blue')+'">'+priorityLabels[m.priority]+'</span>'+
+    '<span class="pill pill-blue">'+statusLabels[m.status]+'</span>'+
+    (isOverdue?'<span class="pill pill-red">Vencido</span>':'')+
+    '</div>'+
+    '</div>'+
+    '</div>'+
+    (m.description?'<div style="background:var(--surface2);border-radius:var(--r-md);padding:12px;margin-bottom:12px;font-size:13px;color:var(--text-1);line-height:1.6">'+escHtml(m.description)+'</div>':'')+
+    '<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:0.5px solid var(--border)">'+
+    '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px">¿Por qué es importante?</div>'+
+    '<div style="font-size:13px;color:var(--text-2);line-height:1.6">'+escHtml(m.whyImportant)+'</div>'+
+    '</div>'+
+    (m.dueDate?'<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:0.5px solid var(--border)">'+
+      '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px">Fecha de vencimiento</div>'+
+      '<div style="font-size:13px;font-weight:600;color:var(--text-1)">'+new Date(m.dueDate).toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</div>'+
+    '</div>':'')+
+    '<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:0.5px solid var(--border)">'+
+    '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px">Notificación</div>'+
+    '<div style="font-size:13px;color:var(--text-1)">'+notifLabels[m.notificationDaysBefore]+'</div>'+
+    '</div>'+
+    (goal?'<div style="background:var(--gold-light);border-radius:var(--r-md);padding:12px;margin-bottom:12px">'+
+      '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:4px">Vinculado a objetivo</div>'+
+      '<div style="font-size:13px;font-weight:600;color:var(--text-1)">'+escHtml(goal.title)+'</div>'+
+      '<div style="font-size:11px;color:var(--text-3);margin-top:6px">Aparece como un paso dentro del objetivo</div>'+
+    '</div>':
+      '<div style="background:var(--surface2);border-radius:var(--r-md);padding:12px;margin-bottom:12px;font-size:12px;color:var(--text-3);text-align:center">Sin vincular a ningún objetivo</div>')+
+    (m.notes?'<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:0.5px solid var(--border)">'+
+      '<div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px">Notas</div>'+
+      '<div style="font-size:13px;color:var(--text-2);line-height:1.6">'+escHtml(m.notes)+'</div>'+
+    '</div>':'')+
+    '</div>'+
+    '<div style="display:flex;gap:10px;margin-top:4px">'+
+    '<button class="btn-outline" style="flex:1;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="deleteMeta('+id+')">Eliminar</button>'+
+    '<button class="btn-outline" style="flex:1" onclick="openEditMeta('+id+')">Editar</button>'+
+    '<button class="btn-gold" style="flex:2" onclick="closeModal(\'meta-detail-modal\')">Cerrar</button>'+
+    '</div>';
+
+  openModal('meta-detail-modal');
+}
+
+function openEditMeta(id) {
+  const m = state.metas.find(x => x.id === id);
+  if (!m) return;
+
+  closeModal('meta-detail-modal');
+
+  document.getElementById('meta-edit-id').value = id;
+  document.getElementById('meta-modal-title').textContent = 'Editar meta';
+  document.getElementById('meta-save-btn').textContent = 'Guardar cambios';
+  document.getElementById('meta-save-btn').setAttribute('onclick', 'saveMetaEdit()');
+  document.getElementById('meta-delete-row').style.display = 'flex';
+  document.getElementById('meta-delete-btn').setAttribute('onclick', 'deleteMeta('+id+');closeModal("meta-modal")');
+  
+  document.getElementById('meta-title-input').value = m.title;
+  document.getElementById('meta-desc-input').value = m.description;
+  document.getElementById('meta-why-input').value = m.whyImportant;
+  document.getElementById('meta-due-input').value = m.dueDate || '';
+  document.getElementById('meta-priority-input').value = m.priority;
+  document.getElementById('meta-status-input').value = m.status;
+  document.getElementById('meta-notif-input').value = m.notificationDaysBefore;
+  document.getElementById('meta-notes-input').value = m.notes;
+  
+  populateGoalDropdown('meta-goal-input');
+  document.getElementById('meta-goal-input').value = m.linkedGoalId || '';
+
+  openModal('meta-modal');
+}
+
+function saveMetaEdit() {
+  const id = parseInt(document.getElementById('meta-edit-id').value);
+  const m = state.metas.find(x => x.id === id);
+  if (!m) return;
+
+  const title = document.getElementById('meta-title-input').value.trim();
+  if (!title) { showToast('Escribe el título de la meta'); return; }
+
+  const oldGoalId = m.linkedGoalId;
+  const newGoalId = parseInt(document.getElementById('meta-goal-input').value) || null;
+
+  // Handle goal linking changes
+  if (oldGoalId !== newGoalId) {
+    // Remove from old goal
+    if (oldGoalId) {
+      const oldGoal = state.goals.find(g => g.id === oldGoalId);
+      if (oldGoal && m.linkedMilestoneText) {
+        oldGoal.milestones = oldGoal.milestones.filter(ms => ms.text !== m.linkedMilestoneText);
+      }
+    }
+
+    // Add to new goal
+    if (newGoalId) {
+      const newGoal = state.goals.find(g => g.id === newGoalId);
+      if (newGoal) {
+        newGoal.milestones.push({ text: title, done: m.done });
+        m.linkedMilestoneText = title;
+      }
+    } else {
+      m.linkedMilestoneText = null;
+    }
+
+    m.linkedGoalId = newGoalId;
+  } else if (oldGoalId && m.linkedMilestoneText !== title) {
+    // Title changed, update milestone text
+    const goal = state.goals.find(g => g.id === oldGoalId);
+    if (goal) {
+      const ms = goal.milestones.find(mile => mile.text === m.linkedMilestoneText);
+      if (ms) ms.text = title;
+    }
+    m.linkedMilestoneText = title;
+  }
+
+  m.title = title;
+  m.description = document.getElementById('meta-desc-input').value.trim();
+  m.whyImportant = document.getElementById('meta-why-input').value.trim();
+  m.dueDate = document.getElementById('meta-due-input').value;
+  m.priority = document.getElementById('meta-priority-input').value;
+  m.status = document.getElementById('meta-status-input').value;
+  m.notificationDaysBefore = parseInt(document.getElementById('meta-notif-input').value);
+  m.notes = document.getElementById('meta-notes-input').value.trim();
+
+  closeModal('meta-modal');
+  renderMetas();
+  renderGoals();
+  showToast('¡Meta actualizada!');
+}
+
+function toggleMetaCompletion(id) {
+  const m = state.metas.find(x => x.id === id);
+  if (!m) return;
+
+  m.done = !m.done;
+  m.status = m.done ? 'completed' : 'active';
+
+  // Sync with linked goal milestone
+  if (m.linkedGoalId && m.linkedMilestoneText) {
+    const goal = state.goals.find(g => g.id === m.linkedGoalId);
+    if (goal) {
+      const ms = goal.milestones.find(mile => mile.text === m.linkedMilestoneText);
+      if (ms) ms.done = m.done;
+    }
+  }
+
+  renderMetas();
+  renderGoals();
+  showToast(m.done ? '✓ Meta completada' : 'Meta marcada como incompleta');
+}
+
+function deleteMeta(id) {
+  const m = state.metas.find(x => x.id === id);
+  if (!m) return;
+
+  // Check if milestone is completed
+  let milestoneIsCompleted = false;
+  if (m.linkedGoalId && m.linkedMilestoneText) {
+    const goal = state.goals.find(g => g.id === m.linkedGoalId);
+    if (goal) {
+      const ms = goal.milestones.find(mile => mile.text === m.linkedMilestoneText);
+      if (ms && ms.done) {
+        milestoneIsCompleted = true;
+      }
+    }
+  }
+
+  const confirmMsg = milestoneIsCompleted 
+    ? '¿Eliminar esta meta? (El paso en el objetivo permanecerá porque ya está completado)'
+    : '¿Eliminar esta meta? Se quitará también del objetivo vinculado.';
+
+  if (!confirm(confirmMsg)) return;
+
+  // Only remove milestone if it's NOT completed
+  if (m.linkedGoalId && m.linkedMilestoneText && !milestoneIsCompleted) {
+    const goal = state.goals.find(g => g.id === m.linkedGoalId);
+    if (goal) {
+      goal.milestones = goal.milestones.filter(ms => ms.text !== m.linkedMilestoneText);
+    }
+  }
+
+  state.metas = state.metas.filter(x => x.id !== id);
+  closeModal('meta-detail-modal');
+  renderMetas();
+  renderGoals();
+  showToast('Meta eliminada');
+}
+
+/* ================================================================
+   SWIPE NAVIGATION - BACK TO HOME
+================================================================ */
+(function() {
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+  const swipeThreshold = 100;
+  
+  document.addEventListener('pointerdown', e => {
+    swipeStartX = e.clientX;
+    swipeStartY = e.clientY;
+  }, true);
+  
+  document.addEventListener('pointerup', e => {
+    if (swipeStartX === 0) return;
+    
+    const currentScreen = document.querySelector('.screen.active');
+    if (!currentScreen || currentScreen.id === 'screen-home') {
+      swipeStartX = 0;
+      swipeStartY = 0;
+      return;
+    }
+    
+    const deltaX = swipeStartX - e.clientX;
+    const deltaY = Math.abs(swipeStartY - e.clientY);
+    
+    if (deltaX > swipeThreshold && deltaY < 50) {
+      navigateTo('home');
+    }
+    
+    swipeStartX = 0;
+    swipeStartY = 0;
+  }, true);
+})();
 /* ================================================================
    INIT
 ================================================================ */
@@ -7278,6 +8323,7 @@ renderGoals();
 renderSettings();
 checkAutoBackup();
 checkAndShowBackupReminder();
+initializeHabitDragListeners();
 </script>
 </body>
 </html>
