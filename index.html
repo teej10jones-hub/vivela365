@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Vívela365</title>
@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 :root {
+  --safe-t: env(safe-area-inset-top, 0px);
   --gold:        #C4B88E;
   --gold-light:  #F3EFE4;
   --gold-mid:    #D9CFA8;
@@ -59,7 +60,8 @@ body {
 .screen {
   display: none;
   flex-direction: column;
-  height: calc(100vh - var(--nav-h) - var(--safe-b));
+  height: 100dvh;
+  padding-bottom: 0;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -69,7 +71,7 @@ body {
 
 /* SHARED COMPONENTS */
 .screen-header {
-  padding: 34px 24px 12px;
+  padding: calc(14px + var(--safe-t)) 24px 12px;
   background: var(--surface);
   border-bottom: 0.5px solid var(--border);
   flex-shrink: 0;
@@ -83,7 +85,32 @@ body {
 .back-arrow:active { background:var(--surface2); }
 .back-arrow svg { width:20px;height:20px;stroke:var(--text-1);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
 .screen-header-row { display:flex;align-items:center; }
-.screen-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.screen-body {
+  padding: 20px 20px calc(110px + var(--safe-b));
+}
+/* Spacing between content cards */
+#habits-body > .card + .card {
+  margin-top: 16px;
+}
+    
+/* Objectives page */
+#goals-body > .goal-card + .goal-card {
+  margin-top: 16px;
+}
+
+#goals-body > .goal-card + .goal-archive-section,
+#goals-body > .goal-archive-section + .goal-archive-section {
+  margin-top: 16px;
+}
+
+#meditation-body > .meditation-pill + .meditation-pill {
+  margin-top: 16px;
+}
+
+#gratitude-body > .gratitude-day-section + .gratitude-day-section,
+#notes-body > .gratitude-day-section + .gratitude-day-section {
+  margin-top: 16px;
+}
 .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 16px; }
 .card-title { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
 .pill { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
@@ -114,7 +141,20 @@ body {
   transform: translateY(0);
   will-change: transform;
 }
-.modal-handle { width:36px;height:4px;border-radius:2px;background:var(--border-mid);margin:0 auto 20px;cursor:grab; }
+.modal-handle {
+  width:36px; height:4px; border-radius:2px;
+  background:var(--border-mid);
+  margin:0 auto 20px;
+  cursor:grab;
+  position:relative;
+  touch-action:none;   /* lets us own the gesture instead of the browser */
+}
+/* Invisible, larger touch area around the handle */
+.modal-handle::before {
+  content:'';
+  position:absolute;
+  inset:-16px -60px;
+}
 .modal-title { font-size:18px;font-weight:600;margin-bottom:20px; }
 .form-group { display:flex;flex-direction:column;gap:6px;margin-bottom:16px; }
 .form-label { font-size:12px;font-weight:500;color:var(--text-2); }
@@ -128,28 +168,66 @@ body {
 .toast { position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--dark);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:20px;opacity:0;transition:all .25s ease;pointer-events:none;white-space:nowrap;z-index:300; }
 .toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
 
-/* NAV BAR */
-.nav-bar { position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(255,255,255,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;align-items:flex-start;padding-top:10px;z-index:100; }
-.nav-item { display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;padding:4px 10px;transition:transform .15s; }
-.nav-item:active { transform:scale(.9); }
+/* NAV BAR — liquid glass style */
+.nav-bar {
+  position:fixed;
+  bottom:calc(var(--safe-b) + 8px);
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 48px);
+  max-width:382px;
+  height:64px;
+  padding:6px;
+  border-radius:32px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  z-index:100;
+  background:rgba(255,255,255,.32);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:0.5px solid rgba(255,255,255,.55);
+  box-shadow:
+    0 8px 32px rgba(26,30,42,.18),
+    inset 0 1px 0 rgba(255,255,255,.8),
+    inset 0 -1px 0 rgba(255,255,255,.25);
+}
+.nav-item {
+  flex:1;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  border-radius:26px;
+  cursor:pointer;
+  transition:background .25s, transform .15s;
+}
+.nav-item:active { transform:scale(.94); }
 .nav-icon { width:26px;height:26px;display:flex;align-items:center;justify-content:center; }
-.nav-icon svg { width:22px;height:22px;stroke:var(--text-3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s; }
-.nav-label { font-size:10px;font-weight:500;color:var(--text-3);transition:color .2s; }
+.nav-icon svg { width:22px;height:22px;stroke:var(--text-2);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s; }
+.nav-label { font-size:10px;font-weight:500;color:var(--text-2);transition:color .2s; }
+.nav-item.active {
+  background:rgba(255,255,255,.55);
+  box-shadow:0 2px 10px rgba(26,30,42,.12), inset 0 1px 0 rgba(255,255,255,.9);
+}
 .nav-item.active .nav-icon svg { stroke:var(--dark); }
 .nav-item.active .nav-label { color:var(--dark);font-weight:600; }
-.nav-dot { width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;transition:opacity .2s;margin-top:-2px; }
-.nav-item.active .nav-dot { opacity:1; }
+.nav-dot { display:none; }
 
 /* HOME */
 #screen-home { background:var(--bg); }
-.home-hero { background:var(--dark);padding:42px 28px 26px;position:relative;overflow:hidden;flex-shrink:0; }
+.home-hero { background:var(--dark);padding: calc(22px + var(--safe-t)) 28px 26px; position:relative;overflow:hidden;flex-shrink:0; }
 .home-hero::before { content:'';position:absolute;top:-50px;right:-50px;width:240px;height:240px;border-radius:50%;background:rgba(196,184,142,.10); }
 .home-hero::after  { content:'';position:absolute;bottom:-70px;left:10px;width:160px;height:160px;border-radius:50%;background:rgba(196,184,142,.06); }
 .brand-tag { display:block;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px; }
 .home-hero h1 { font-size:28px;font-weight:600;color:#fff;line-height:1.18;margin-bottom:6px; }
 .home-hero h1 em { color:var(--gold);font-style:italic;font-weight:300; }
 .home-hero p { font-size:13px;color:rgba(255,255,255,.55);font-weight:300;line-height:1.65;max-width:270px; }
-.home-content { padding:20px;flex:1;overflow-y:auto; }
+.home-content {
+  padding: 20px 20px calc(110px + var(--safe-b));
+}
 .home-intro { font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:16px; }
 
 .feature-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
@@ -231,7 +309,10 @@ body {
 .meditation-delete-prompt-btn:hover { opacity: 0.8; }
 .meditation-delete-prompt-btn:active { transform: scale(0.9); }
 .meditation-delete-prompt-btn svg { width: 14px; height: 14px; }
-
+/* Keep meditation content clear of the bottom navigation */
+#meditation-body {
+  padding-bottom: calc(88px + var(--safe-b)) !important;
+}
 /* HABITS */
 .week-grid-header { display:grid;grid-template-columns:1fr repeat(7, 28px);gap:4px;align-items:center;margin-bottom:6px; }
 .week-grid-header span { font-size:10px;font-weight:500;color:var(--text-3);text-align:center; }
@@ -270,7 +351,7 @@ body {
 .check-time-pill { font-size:11px;color:var(--text-3);background:var(--surface2);padding:2px 8px;border-radius:10px;margin-right:2px; }
 .fab { 
   position:fixed;
-  bottom:calc(var(--nav-h) + 20px);
+  bottom:calc(var(--nav-h) + var(--safe-b) + 20px);
   right:40px;
   width:46px;
   height:46px;
@@ -339,6 +420,15 @@ body {
 .goal-card.archived-espera  { border-left:3px solid var(--amber);opacity:.9; }
 
 /* CALENDAR */
+    
+/* Keep the calendar's bottom bar above the navigation */
+#screen-calendar {
+  padding-bottom: 0;
+}
+
+#screen-calendar .upcoming-bottom-bar {
+  margin-bottom: calc(72px + var(--safe-b));
+}
 .cal-toggle { display:flex;background:var(--surface2);border-radius:var(--r-sm);padding:3px;gap:3px;margin:10px 20px 0;flex-shrink:0; }
 .cal-tab { flex:1;padding:7px;text-align:center;font-size:13px;font-weight:500;color:var(--text-2);border-radius:var(--r-sm);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .18s; }
 .cal-tab.active { background:var(--surface);color:var(--text-1); }
@@ -456,6 +546,12 @@ body {
 .danger-row span { font-size:12px;color:var(--text-3); }
 
 /* BOOKS */
+    
+/* Allow the last book to scroll fully above the bottom navigation */
+#books-content {
+  padding-bottom: calc(88px + var(--safe-b));
+}
+    
 .books-toggle { display:flex;background:var(--surface2);border-radius:var(--r-sm);padding:3px;gap:3px;margin:10px 20px 0;flex-shrink:0; }
 .books-tab { flex:1;padding:7px;text-align:center;font-size:13px;font-weight:500;color:var(--text-2);border-radius:var(--r-sm);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .18s; }
 .books-tab.active { background:var(--surface);color:var(--text-1); }
@@ -495,6 +591,16 @@ body {
 .add-learning-row input:focus { border-color:var(--gold); }
 
 /* AFFIRMATIONS */
+    
+/* Keep affirmations controls above the bottom navigation */
+#screen-affirmations {
+  padding-bottom: 0;
+}
+
+#screen-affirmations .aff-nav-row {
+  margin-bottom: calc(72px + var(--safe-b));
+}
+    
 .affirmations-page-controls { padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--surface);border-bottom:0.5px solid var(--border); }
 .affirmations-page-controls .control-label { font-size:13px;font-weight:500;color:var(--text-2); }
 .aff-card-wrap { flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;position:relative; }
@@ -680,7 +786,7 @@ body {
 }
 
 .camera-scanner-top {
-  padding: 16px;
+  padding: calc(16px + var(--safe-t)) 16px 16px;
   background: rgba(0,0,0,0.7);
   color: #fff;
   z-index: 5;
@@ -1033,15 +1139,12 @@ body {
     </div>
   </div>
   <div class="screen-body">
-    <div style="display:flex;gap:10px;margin-top:10px">
-      <button class="btn-gold" style="flex:1;font-size:14px" onclick="openCameraScanner()">📷 Usar cámara</button>
-      <button class="btn-outline" style="flex:1;font-size:14px" onclick="triggerDirectImageUpload()">📁 Subir imagen</button>
+    <div id="scan-status" style="display:none;text-align:center;color:var(--text-3);font-size:14px;padding:40px 0"></div>
+
+    <div id="scan-actions" style="display:none;gap:10px;margin-top:10px">
+      <button class="btn-gold" style="flex:1;font-size:14px" onclick="openCameraScanner()">📷 Escanear</button>
     </div>
-    <div class="response-box">
-      <span class="section-label">Pegar respuesta de Gemini</span>
-      <textarea id="gemini-response" placeholder="Pega aquí el JSON que te devolvió Gemini..."></textarea>
-      <button class="btn-gold" onclick="parseGeminiResponse()">Procesar e importar →</button>
-    </div>
+
     <div class="parsed-result" id="parsed-result">
       <div id="parsed-content"></div>
       <div class="parsed-actions" id="parsed-actions"></div>
@@ -1130,7 +1233,7 @@ body {
   <!-- MONTH VIEW -->
   <div id="cal-month-view" style="flex:1;display:flex;flex-direction:column;overflow-y:auto">
     <div class="month-grid">
-      <div class="month-dow"><span>DOM</span><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span></div>
+      <div class="month-dow"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div>
       <div class="month-days" id="month-days-grid"></div>
     </div>
     <div class="day-events-panel" id="day-events-panel">
@@ -1261,14 +1364,6 @@ body {
           </div>
           <span id="gcal-status-badge" class="status-badge disconnected">Desconectado</span>
         </div>
-        <div class="settings-row" onclick="openModal('gemini-modal')">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-          <div class="settings-row-text">
-            <strong>API Gemini</strong>
-            <span id="gemini-api-status">Sin configurar · Para escaneo directo</span>
-          </div>
-          <span class="settings-chevron">›</span>
-        </div>
       </div>
     </div>
 
@@ -1291,7 +1386,7 @@ body {
         </div>
         <div class="settings-row" onclick="openModal('week-start-modal')">
           <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-          <div class="settings-row-text"><strong>Inicio de semana</strong><span id="week-start-preview">Domingo</span></div>
+          <div class="settings-row-text"><strong>Inicio de semana</strong><span id="week-start-preview">Lunes</span></div>
           <span class="settings-chevron">›</span>
         </div>
       </div>
@@ -1359,22 +1454,6 @@ body {
       </div>
     </div>
 
-    <!-- ACERCA DE -->
-    <div class="settings-section">
-      <span class="settings-section-label">Acerca de</span>
-      <div class="settings-list">
-        <div class="settings-row" onclick="showToast('¡Gracias por usar Vívela365! 🙏')">
-          <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-          <div class="settings-row-text"><strong>Calificar la app</strong><span>Tu opinión nos ayuda mucho</span></div>
-          <span class="settings-chevron">›</span>
-        </div>
-        <div class="settings-row">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-          <div class="settings-row-text"><strong>Versión</strong><span>1.0.0 (beta)</span></div>
-        </div>
-      </div>
-    </div>
-
     <!-- ZONA DE RIESGO -->
     <div class="settings-section">
       <span class="settings-section-label">Zona de riesgo</span>
@@ -1395,7 +1474,7 @@ body {
       <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <div class="privacy-note-text">
         <strong>Tu información es 100% privada</strong>
-        Todos tus datos se almacenan únicamente en tu dispositivo. Nada se sube a servidores ni a internet. Vívela365 no recopila, transmite ni comparte tu información personal.
+        Tus hábitos, objetivos, metas, gratitud, notas y grabaciones de voz se guardan únicamente en tu dispositivo. Cuando usas la función de Escanear, la foto de la página se envía de forma segura a nuestro servidor y a la IA de Google (Gemini) únicamente para extraer el texto — junto con los nombres de tus hábitos y libros existentes, para ayudar a emparejarlos correctamente. Esta información no se almacena permanentemente en nuestros servidores.
       </div>
     </div>
 
@@ -1537,10 +1616,24 @@ body {
       <div class="form-group"><label class="form-label">Hora fin</label><input class="form-input" id="event-end-input" type="time"></div>
     </div>
     
-    <!-- NEW: Notification select -->
     <div class="form-group">
-      <label class="form-label">Recordatorio</label>
+      <label class="form-label">Primer recordatorio</label>
       <select class="form-select" id="event-notification-input">
+        <option value="">Sin recordatorio</option>
+        <option value="0" selected>En el momento</option>
+        <option value="15">15 minutos antes</option>
+        <option value="30">30 minutos antes</option>
+        <option value="60">1 hora antes</option>
+        <option value="120">2 horas antes</option>
+        <option value="1440">1 día antes</option>
+        <option value="2880">2 días antes</option>
+        <option value="10080">1 semana antes</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Segundo recordatorio</label>
+      <select class="form-select" id="event-notification2-input">
         <option value="">Sin recordatorio</option>
         <option value="0">En el momento</option>
         <option value="15">15 minutos antes</option>
@@ -1736,11 +1829,11 @@ body {
 </div>
 
 <!-- MODAL: Camera Scanner for Page Number -->
-<div class="modal-overlay" id="camera-scanner-modal" onclick="closeCameraScanner()" style="align-items: stretch; justify-content: stretch;">
+<div class="modal-overlay" id="camera-scanner-modal" onclick="cancelCameraScanner()" style="align-items: stretch; justify-content: stretch;">
   <div class="camera-scanner-container" onclick="event.stopPropagation()">
     <div class="camera-scanner-top">
       <h3>Escanear página</h3>
-      <p>Alinea el número de página en el centro del rectángulo inferior</p>
+      <p>Alinea la página en el rectángulo</p>
     </div>
     <div class="camera-scanner-video-wrap">
       <video id="camera-video" playsinline></video>
@@ -1748,7 +1841,7 @@ body {
     </div>
     <div class="camera-scanner-bottom">
       <button class="btn-capture" onclick="capturePage()">📸 Capturar</button>
-      <button class="btn-cancel" onclick="closeCameraScanner()">Cancelar</button>
+      <button class="btn-cancel" onclick="cancelCameraScanner()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -2087,8 +2180,8 @@ body {
     <div class="modal-title">Inicio de semana</div>
     <p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Esto afecta cómo se muestra la cuadrícula de hábitos y el calendario.</p>
     <div class="week-start-options">
-      <button class="week-start-btn active" id="ws-btn-domingo" onclick="selectWeekStart('Domingo', this)">Domingo</button>
-      <button class="week-start-btn"        id="ws-btn-lunes"   onclick="selectWeekStart('Lunes', this)">Lunes</button>
+      <button class="week-start-btn active"        id="ws-btn-lunes"   onclick="selectWeekStart('Lunes', this)">Lunes</button>
+      <button class="week-start-btn" id="ws-btn-domingo" onclick="selectWeekStart('Domingo', this)">Domingo</button>
       <button class="week-start-btn"        id="ws-btn-sabado"  onclick="selectWeekStart('Sábado', this)">Sábado</button>
     </div>
     <div style="margin-top:24px">
@@ -2157,79 +2250,53 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
-/* ================================================================
-   SWIPE-TO-DISMISS MODALS
-================================================================ */
-(function() {
-  let startY = 0, currentY = 0, isDragging = false;
+    /* ================================================================
+       SWIPE-TO-DISMISS MODALS (delegated, works for every modal)
+    ================================================================ */
+    (function() {
+      let sheet = null, overlay = null, handle = null;
+      let startY = 0, dy = 0, pid = null;
 
-  function initSwipeDismiss(overlayId) {
-    const overlay = document.getElementById(overlayId);
-    if (!overlay) return;
-    const sheet = overlay.querySelector('.modal-sheet');
-    if (!sheet) return;
-    const handle = sheet.querySelector('.modal-handle');
-    const dragTarget = handle || sheet;
+      document.addEventListener('pointerdown', e => {
+        const h = e.target.closest('.modal-handle');
+        if (!h) return;
+        const s = h.closest('.modal-sheet');
+        const o = h.closest('.modal-overlay');
+        if (!s || !o) return;
+        handle = h; sheet = s; overlay = o;
+        startY = e.clientY; dy = 0; pid = e.pointerId;
+        sheet.style.transition = 'none';
+        try { handle.setPointerCapture(pid); } catch (_) {}
+      });
 
-    let startY = 0, currentY = 0, isDragging = false;
-    let capturedPointerId = null;
+      document.addEventListener('pointermove', e => {
+        if (!sheet || e.pointerId !== pid) return;
+        dy = Math.max(0, e.clientY - startY);   // only allow dragging down
+        sheet.style.transform = 'translateY(' + dy + 'px)';
+      });
 
-    dragTarget.addEventListener('pointerdown', e => {
-      // Only capture if the target is the drag target itself (the handle or sheet)
-      // Don't interfere with clicks on child elements
-      if (e.target !== dragTarget && !e.target.closest('.modal-handle')) return;
-      
-      startY = e.clientY; 
-      currentY = 0; 
-      isDragging = true;
-      sheet.style.transition = 'none';
-      dragTarget.setPointerCapture(e.pointerId);
-      capturedPointerId = e.pointerId;
-    });
+      function endDrag(e) {
+        if (!sheet || e.pointerId !== pid) return;
+        const s = sheet, o = overlay;
+        try { handle.releasePointerCapture(pid); } catch (_) {}
+        sheet = overlay = handle = null; pid = null;
 
-    dragTarget.addEventListener('pointermove', e => {
-      if (!isDragging || !capturedPointerId) return;
-      const dy = e.clientY - startY;
-      if (dy < 0) return;
-      currentY = dy;
-      sheet.style.transform = `translateY(${dy}px)`;
-    });
-
-    dragTarget.addEventListener('pointerup', e => {
-      isDragging = false;
-      if (capturedPointerId && dragTarget.hasPointerCapture) {
-        dragTarget.releasePointerCapture(capturedPointerId);
-        capturedPointerId = null;
+        s.style.transition = 'transform 0.25s cubic-bezier(.4,0,.2,1)';
+        if (dy > 100) {
+          s.style.transform = 'translateY(110%)';
+          setTimeout(() => {
+            if (o.id === 'backup-reminder-popup') { o.remove(); return; }
+            closeModal(o.id);   // also resets transform/transition and edit-id fields
+          }, 250);
+        } else {
+          s.style.transform = 'translateY(0)';
+          setTimeout(() => { s.style.transition = ''; s.style.transform = ''; }, 250);
+        }
+        dy = 0;
       }
-      sheet.style.transition = 'transform 0.3s cubic-bezier(.4,0,.2,1)';
-      if (currentY > 100) {
-        sheet.style.transform = 'translateY(110%)';
-        setTimeout(() => {
-          overlay.classList.remove('open');
-          sheet.style.transform = 'translateY(0)';
-          sheet.style.transition = '';
-        }, 300);
-      } else {
-        sheet.style.transform = 'translateY(0)';
-        setTimeout(() => { sheet.style.transition = ''; }, 300);
-      }
-      currentY = 0;
-    });
-  }
-
-  const MODAL_IDS = [
-    'habit-modal','goal-modal','goal-detail-modal','event-modal',
-    'book-modal','book-detail-modal','aff-modal','profile-modal',
-    'gcal-modal','gemini-modal','reminder-time-modal','week-start-modal',
-    'backup-modal','gratitude-modal', 'habit-stats-modal'
-  ];
-  document.addEventListener('DOMContentLoaded', () => {
-    MODAL_IDS.forEach(id => initSwipeDismiss(id));
-  });
-  window.addEventListener('load', () => {
-    MODAL_IDS.forEach(id => initSwipeDismiss(id));
-  });
-})();
+      document.addEventListener('pointerup', endDrag);
+      document.addEventListener('pointercancel', endDrag);
+    })();
 
 /* ================================================================
    SWIPE NAVIGATION
@@ -2389,7 +2456,8 @@ function freqToDays(freq, customDays) {
 }
 
 function isScheduled(habit, dateObj) {
-  return freqToDays(habit.freq, habit.customDays)[dateObj.getDay()];
+  const days = freqToDays(habit.freq, habit.customDays);
+  return days[mondayIndex(dateObj)];
 }
 
 function capitalizeFirst(str) {
@@ -2595,7 +2663,7 @@ settings: {
     gcalEmail: '',
     remindersEnabled: true,
     reminderTime: '08:00',
-    weekStart: 'Domingo',
+    weekStart: 'Lunes',
     appleCalEnabled: true,
     googleCalEnabled: true,
     autoBackupEnabled: true,
@@ -2634,7 +2702,6 @@ state.habits.forEach((h, hi) => {
 ================================================================ */
 
 const GEMINI_WORKER_URL = 'https://vivela365.teej10jones.workers.dev/';
-const GEMINI_ACCESS_CODE = 'AGENDA-2024-001'; // Use one of your valid codes
 
 async function callGeminiWorker(imageBase64, customPrompt) {
   if (!imageBase64) {
@@ -2648,8 +2715,7 @@ async function callGeminiWorker(imageBase64, customPrompt) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         imageBase64: imageBase64,
-        prompt: customPrompt,
-        accessCode: GEMINI_ACCESS_CODE
+        prompt: customPrompt
       })
     });
 
@@ -2733,48 +2799,7 @@ async function extractPageWithGemini(canvas) {
   }
 }
 
-async function triggerDirectImageUpload() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    showToast('Procesando imagen...');
-    
-    const reader = new FileReader();
-    reader.onload = async (evt) => {
-      // evt.target.result is already data:image/...;base64,...
-      const base64 = evt.target.result.split(',')[1];
-      
-      const prompt = buildPlannerPrompt();
-      const result = await callGeminiWorker(base64, prompt);
-      
-      if (result) {
-        try {
-          // Extract text from Gemini response
-          const responseText = result.candidates[0].content.parts[0].text;
-          
-          const cleanedText = responseText
-            .replace(/^```json\s*/i, '')
-            .replace(/^```\s*/i, '')
-            .replace(/\s*```$/i, '')
-            .trim()
-            .replace(/^\uFEFF/, '');
-          
-          const parsedData = JSON.parse(cleanedText);
-          window.geminiImportData = parsedData;
-          showGeminiImportPreview(parsedData);
-        } catch (err) {
-          showToast('Error: ' + err.message);
-        }
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-  input.click();
-}
+
 /* ================================================================
    GEMINI PLANNER PROMPT GENERATION
 ================================================================ */
@@ -3600,13 +3625,34 @@ function extractMetasForPrompt() {
     .slice(0, 50);
 }
 
-function navigateTo(name) {
-  if (state.currentScreen === 'meditation' && name !== 'meditation') {
-    stopMeditationTimer();
-    stopMeditationAudio();
-  }}
+function setScanActionsVisible(visible) {
+  const el = document.getElementById('scan-actions');
+  if (el) el.style.display = visible ? 'flex' : 'none';
+}
 
+function setScanStatus(msg) {
+  const el = document.getElementById('scan-status');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.style.display = msg ? 'block' : 'none';
+}
 
+function resetScanScreen() {
+  const result = document.getElementById('parsed-result');
+  if (result) result.classList.remove('show');
+  const actions = document.getElementById('parsed-actions');
+  if (actions) actions.innerHTML = '';
+  window.geminiImportData = null;
+  setScanActionsVisible(false);
+  setScanStatus('');
+}
+
+// User backed out of the camera without scanning: go home
+function cancelCameraScanner() {
+  closeCameraScanner();
+  setScanStatus('');
+  setScanActionsVisible(true);
+}
 
 async function triggerDirectImageUpload() {
   const input = document.createElement('input');
@@ -3693,7 +3739,8 @@ function navigateTo(name) {
   if (name==='settings')     renderSettings();
   if (name==='gratitude')    renderGratitude();
   if (name==='meditation')   renderMeditation();
-  if (name==='metas')        renderMetas();  // ADD THIS LINE
+  if (name==='metas')        renderMetas();
+  if (name==='scan')         { resetScanScreen(); openCameraScanner(); }
 }
 
 /* ================================================================
@@ -3881,6 +3928,8 @@ function parseGeminiResponse() {
 }
 
 function showGeminiImportPreview(data) {
+  setScanStatus('');
+  setScanActionsVisible(true);
   console.log('📍 showGeminiImportPreview called with:', data);
   
   const resultDiv = document.getElementById('parsed-result');
@@ -4174,16 +4223,36 @@ function normalizeGoalCategory(category) {
 /* ================================================================
    HABITS
 ================================================================ */
-const DAYS_ES = ['D','L','M','M','J','V','S'];
-const DAYS_ES_FULL = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const DAYS_ES = ['L','Ma','Mi','J','V','S','D'];
+const DAYS_ES_FULL = [
+  'Lunes',
+  'Martes',
+  'Miércoles',
+  'Jueves',
+  'Viernes',
+  'Sábado',
+  'Domingo'
+];
+
+function mondayIndex(dateObj) {
+  // Converts JavaScript's Sunday-first index to Monday-first:
+  // Sunday = 6, Monday = 0, ..., Saturday = 5
+  return (dateObj.getDay() + 6) % 7;
+}
 const MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const CAT_COLORS = { salud:'pill-green', mente:'pill-blue', productividad:'pill-gold', relaciones:'pill-amber', otro:'pill-gray' };
 
 function getWeekDates(offset) {
   const d = new Date(today);
-  const dow = d.getDay();
-  d.setDate(d.getDate() - dow + offset*7);
-  return Array.from({length:7}, (_,i) => { const x = new Date(d); x.setDate(d.getDate()+i); return x; });
+  const mondayOffset = mondayIndex(d);
+
+  d.setDate(d.getDate() - mondayOffset + offset * 7);
+
+  return Array.from({ length: 7 }, (_, i) => {
+    const x = new Date(d);
+    x.setDate(d.getDate() + i);
+    return x;
+  });
 }
 
 function renderHabits() {
@@ -4218,7 +4287,7 @@ function renderWeekGrid() {
   let html = '<div class="week-grid-header"><span style="font-size:10px;font-weight:500;color:var(--text-3)">Hábito</span>';
   dates.forEach(d => {
     const isT = fmt(d) === todayStr;
-    html += '<span style="color:'+(isT?'var(--dark)':'var(--text-3)')+';font-weight:'+(isT?'600':'500')+'">'+DAYS_ES[d.getDay()]+'</span>';
+    html += '<span style="color:'+(isT?'var(--dark)':'var(--text-3)')+';font-weight:'+(isT?'600':'500')+'">'+DAYS_ES[mondayIndex(d)]+'</span>';
   });
   html += '</div>';
   
@@ -4370,7 +4439,11 @@ function endHabitDrag(event) {
 function renderHeatmap() {
   const weeks = 26;
   const start = new Date(today);
-  start.setDate(start.getDate() - (weeks*7 - 1));
+  const currentMondayIndex = mondayIndex(start);
+
+  start.setDate(
+    start.getDate() - currentMondayIndex - (weeks - 1) * 7
+  );
   let cols = ''; let lastMonth = -1; let monthLabels = '';
   for (let w = 0; w < weeks; w++) {
     let col = '<div class="heatmap-col">';
@@ -4403,9 +4476,9 @@ function analyzeHabitByDayOfWeek(habitId) {
   if (!h) return null;
 
   // Analyze last 12 weeks
-  const dayStats = [0,1,2,3,4,5,6].map(dow => ({
+  const dayStats = DAYS_ES_FULL.map((dayName, dow) => ({
     dow,
-    dayName: DAYS_ES_FULL[dow],
+    dayName,
     scheduled: 0,
     completed: 0,
     pct: 0
@@ -4417,7 +4490,7 @@ function analyzeHabitByDayOfWeek(habitId) {
   for (let i = 0; i < 84; i++) {
     const d = new Date(startDate);
     d.setDate(startDate.getDate() + i);
-    const dow = d.getDay();
+    const dow = mondayIndex(d);
     const ds = fmt(d);
 
     if (isScheduled(h, d)) {
@@ -4489,7 +4562,7 @@ function renderStreaks() {
   el.innerHTML = sorted.map(h => {
     const catClass  = CAT_COLORS[h.cat] || 'pill-gray';
     const freqLabel = h.freq === 'personalizado'
-      ? (['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].filter((_,i) => h.customDays && h.customDays[i]).join('·') || 'personalizado')
+      ? (['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].filter((_,i) => h.customDays && h.customDays[i]).join('·') || 'personalizado')
       : h.freq;
     return '<div class="streak-row" onclick="openEditHabit('+h.id+')">'+
       '<div class="streak-info"><strong>'+h.name+'</strong>'+
@@ -4549,6 +4622,7 @@ function addHabit() {
   closeModal('habit-modal');
   renderHabits();
   showToast('¡Hábito agregado!');
+  rescheduleAllNotifications();
 }
 
 function openEditHabit(id) {
@@ -4609,6 +4683,7 @@ function saveEditHabit() {
   closeModal('habit-modal');
   renderHabits();
   showToast('¡Hábito actualizado!');
+  rescheduleAllNotifications();
 }
 
 function deleteHabit(id) {
@@ -4617,6 +4692,7 @@ function deleteHabit(id) {
   closeModal('habit-modal');
   renderHabits();
   showToast('Hábito eliminado');
+  rescheduleAllNotifications();
 }
 
 function openHabitTimeEditor(habitId, event) {
@@ -4728,6 +4804,7 @@ function saveHabitCustomTime() {
   closeModal('habit-time-modal');
   renderDailyChecklist();
   showToast('Recordatorio: ' + formatTime12(timeStr));
+  rescheduleAllNotifications();
 }
 
 function clearHabitCustomTime() {
@@ -5363,7 +5440,7 @@ function renderCalendar() {
 function renderMonthGrid() {
   const y = state.calDate.getFullYear(), m = state.calDate.getMonth();
   document.getElementById('cal-month-title').textContent = MONTHS_ES[m]+' '+y;
-  const firstDay   = new Date(y,m,1).getDay();
+  const firstDay = (new Date(y,m,1).getDay() + 6) % 7;
   const daysInMonth = new Date(y,m+1,0).getDate();
   const eventDates = new Set(state.events.map(e => e.date));
   let html = '';
@@ -5497,6 +5574,8 @@ function selectEventColor(el) {
 
 function openAddEvent() {
   document.getElementById('event-edit-id').value = '';
+  document.getElementById('event-notification-input').value = '0';
+  document.getElementById('event-notification2-input').value = '1440';
   openModal('event-modal');
   
   // ADD THIS: Auto-set end time when start time changes
@@ -5527,7 +5606,8 @@ function addEvent() {
     end:      document.getElementById('event-end-input').value,
     notes:    document.getElementById('event-notes-input').value.trim(),
     color:    state.selectedEventColor,
-    notification: document.getElementById('event-notification-input').value || null, // NEW
+    notification: document.getElementById('event-notification-input').value || null,
+    notification2: document.getElementById('event-notification2-input').value || null,  
     sequence: 0,
   });
 
@@ -5535,6 +5615,7 @@ function addEvent() {
   closeModal('event-modal');
   if (state.currentScreen === 'calendar') renderCalendar();
   showToast('¡Evento guardado!');
+  rescheduleAllNotifications();
 }
 
 function openEditEvent(id) {
@@ -5551,7 +5632,11 @@ function openEditEvent(id) {
   document.getElementById('event-start-input').value = e.start || '';
   document.getElementById('event-end-input').value   = e.end   || '';
   document.getElementById('event-notes-input').value = e.notes || '';
-  document.getElementById('event-notification-input').value = e.notification || '';
+  document.getElementById('event-notification-input').value =
+    e.notification ?? '0';
+
+  document.getElementById('event-notification2-input').value =
+    e.notification2 ?? '1440';
   state.selectedEventColor = e.color || '#C4B88E';
   document.querySelectorAll('.ecswatch').forEach(s => {
     s.style.borderColor = s.dataset.color === e.color ? '#1A1E2A' : 'transparent';
@@ -5595,7 +5680,11 @@ function saveEditEvent() {
   e.end          = document.getElementById('event-end-input').value;
   e.notes        = document.getElementById('event-notes-input').value.trim();
   e.color        = state.selectedEventColor;
-  e.notification = document.getElementById('event-notification-input').value || null;
+  e.notification =
+    document.getElementById('event-notification-input').value || null;
+
+  e.notification2 =
+    document.getElementById('event-notification2-input').value || null;
   e.sequence     = (e.sequence || 0) + 1;
   
   closeModal('event-modal');
@@ -5604,6 +5693,7 @@ function saveEditEvent() {
     else renderCalendar();
   }
   showToast('¡Evento actualizado!');
+  rescheduleAllNotifications();
 }
 
 function deleteEvent(id) {
@@ -5614,6 +5704,7 @@ function deleteEvent(id) {
     else renderCalendar();
   }
   showToast('Evento eliminado');
+  rescheduleAllNotifications();
 }
 
 /* ================================================================
@@ -5840,7 +5931,6 @@ function closeBackupReminderPopup() {
 function renderSettings() {
   const s = state.settings;
   document.getElementById('profile-name-preview').textContent = s.profile.name || 'Nombre, foto y datos personales';
-  document.getElementById('gemini-api-status').textContent    = s.geminiKey ? '✓ API key configurada' : 'Sin configurar · Para escaneo directo';
 
   const gcalBadge = document.getElementById('gcal-status-badge');
   const gcalText  = document.getElementById('gcal-status-text');
@@ -5982,6 +6072,7 @@ function toggleApiKeyVisibility() {
 function toggleReminders(on) {
   state.settings.remindersEnabled = on;
   showToast('Recordatorios '+(on?'activados ✓':'desactivados'));
+  rescheduleAllNotifications();
 }
 
 const TIME_OPTIONS = ['06:00','07:00','08:00','09:00','10:00','12:00','18:00','20:00','21:00','22:00'];
@@ -5999,6 +6090,7 @@ function saveReminderTime() {
   closeModal('reminder-time-modal');
   renderSettings();
   showToast('Hora de recordatorio: '+formatTime12(val));
+  rescheduleAllNotifications();
 }
 
 function formatTime12(t) {
@@ -6008,7 +6100,7 @@ function formatTime12(t) {
   return (h%12||12)+':'+ String(m).padStart(2,'0')+' '+period;
 }
 
-let pendingWeekStart = 'Domingo';
+let pendingWeekStart = 'Lunes';
 
 function selectWeekStart(val, btn) {
   pendingWeekStart = val;
@@ -6037,7 +6129,7 @@ function exportHabitsCSV() {
   state.habits.forEach(h => {
     const daysCompleted = Object.values(h.completions).filter(Boolean).length;
     const freqLabel = h.freq==='personalizado'
-      ? (['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].filter((_,i)=>h.customDays&&h.customDays[i]).join(','))
+      ? (['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].filter((_,i)=>h.customDays&&h.customDays[i]).join(','))
       : h.freq;
     rows.push([h.name, h.cat, freqLabel, h.notifTime||state.settings.reminderTime, h.streak, daysCompleted]);
   });
@@ -7348,6 +7440,8 @@ async function initCamera() {
   } catch (err) {
     showToast('Permiso de cámara denegado');
     closeCameraScanner();
+    setScanStatus('No se pudo abrir la cámara. Revisa los permisos por favor.');
+    setScanActionsVisible(true);
   }
 }
 
@@ -7408,15 +7502,16 @@ async function capturePage() {
   // Close camera immediately
   closeCameraScanner();
 
-  // Send to Gemini (same flow as image upload)
-  showToast('Procesando imagen...');
+  setScanStatus('Procesando página...');
   const result = await extractPageWithGemini(canvas);
-  
+  setScanStatus('');
+
   if (result) {
     showToast('¡Página importada!');
+  } else {
+    setScanActionsVisible(true);   // let them retry after an error
   }
 }
-
 
 
 function deleteAffirmation(idx) {
@@ -7490,7 +7585,10 @@ function importGeminiHabits() {
       console.log('✅ Updating existing habit:', capitalizedName);
       // Update frequency from Page 8 data
       if (h.frequency_normalized && h.frequency_normalized.type === 'days_of_week' && h.frequency_normalized.days) {
-        const dayMap = {'D': 0, 'L': 1, 'Ma': 2, 'Mi': 3, 'J': 4, 'V': 5, 'S': 6};
+        const dayMap = {
+          'L': 0, 'Ma': 1, 'Mi': 2, 'J': 3,
+          'V': 4, 'S': 5, 'D': 6
+        };
         const customDays = [false, false, false, false, false, false, false];
         h.frequency_normalized.days.forEach(day => {
           const idx = dayMap[day];
@@ -7513,7 +7611,10 @@ function importGeminiHabits() {
     let freq = 'diario';
 
     if (h.frequency_normalized && h.frequency_normalized.type === 'days_of_week' && h.frequency_normalized.days) {
-      const dayMap = {'D': 0, 'L': 1, 'Ma': 2, 'Mi': 3, 'J': 4, 'V': 5, 'S': 6};
+      const dayMap = {
+        'L': 0, 'Ma': 1, 'Mi': 2, 'J': 3,
+        'V': 4, 'S': 5, 'D': 6
+      };
       h.frequency_normalized.days.forEach(day => {
         const idx = dayMap[day];
         if (idx != null) customDays[idx] = true;
@@ -7581,7 +7682,7 @@ function importGeminiHabits() {
 
       while (currentDate <= endDate) {
         const dayOfWeek = currentDate.getDay();
-        const dayLetter = ['D', 'L', 'Ma', 'Mi', 'J', 'V', 'S'][dayOfWeek];
+        const dayLetter = DAYS_ES[mondayIndex(currentDate)];
 
         if (trackerData.days.includes(dayLetter)) {
           habit.completions[fmt(currentDate)] = true;
@@ -8077,6 +8178,7 @@ function addMeta() {
   renderMetas();
   renderGoals();
   showToast('¡Meta creada!');
+  rescheduleAllNotifications();
 }
 
 function openMetaDetail(id) {
@@ -8220,6 +8322,7 @@ function saveMetaEdit() {
   renderMetas();
   renderGoals();
   showToast('¡Meta actualizada!');
+  rescheduleAllNotifications();
 }
 
 function toggleMetaCompletion(id) {
@@ -8241,6 +8344,7 @@ function toggleMetaCompletion(id) {
   renderMetas();
   renderGoals();
   showToast(m.done ? '✓ Meta completada' : 'Meta marcada como incompleta');
+  rescheduleAllNotifications();
 }
 
 function deleteMeta(id) {
@@ -8278,6 +8382,7 @@ function deleteMeta(id) {
   renderMetas();
   renderGoals();
   showToast('Meta eliminada');
+  rescheduleAllNotifications();
 }
 
 /* ================================================================
@@ -8315,6 +8420,243 @@ function deleteMeta(id) {
   }, true);
 })();
 /* ================================================================
+   LOCAL NOTIFICATIONS (v3 — capacity-based, iOS 64-limit safe)
+   Paste this whole block into your <script> section, right before
+   the "INIT" comment block near the bottom of the file.
+   This REPLACES both earlier versions — only use this one.
+================================================================ */
+
+// Maps our Monday-first day index (0=Mon...6=Sun, same as mondayIndex())
+// to Capacitor's weekday numbering (1=Sunday...7=Saturday)
+const CAP_WEEKDAY = [2, 3, 4, 5, 6, 7, 1];
+
+// Hard ceiling on how many notifications we ever schedule at once.
+// iOS caps pending local notifications at 64 — this stays a safe
+// margin under that. Rather than guessing a time window, we always
+// keep the SOONEST notifications and let later ones get picked up
+// automatically as earlier ones fire and this re-runs.
+const MAX_PENDING_NOTIFICATIONS = 60;
+
+function getLocalNotifications() {
+  return window.Capacitor?.Plugins?.LocalNotifications || null;
+}
+
+async function requestNotificationPermission() {
+  const LN = getLocalNotifications();
+  if (!LN) return false; // not running natively (e.g. plain browser preview)
+  try {
+    const result = await LN.requestPermissions();
+    return result.display === 'granted';
+  } catch (e) {
+    console.error('Notification permission error:', e);
+    return false;
+  }
+}
+
+async function cancelAllScheduledNotifications() {
+  const LN = getLocalNotifications();
+  if (!LN) return;
+  try {
+    const pending = await LN.getPending();
+    if (pending.notifications.length) {
+      await LN.cancel({ notifications: pending.notifications.map(n => ({ id: n.id })) });
+    }
+  } catch (e) {
+    console.error('Error cancelling notifications:', e);
+  }
+}
+
+function timeStringToParts(timeStr) {
+  const [h, m] = (timeStr || '08:00').split(':').map(Number);
+  return { hour: h, minute: m };
+}
+
+// Recurring habit notifications — cheap (one slot per habit, or per
+// selected weekday), so these always get scheduled in full.
+function buildHabitNotifications() {
+  if (!state.settings.remindersEnabled) return [];
+  const notifications = [];
+
+  state.habits.forEach(h => {
+    const timeStr = getEffectiveNotifTime(h);
+    const { hour, minute } = timeStringToParts(timeStr);
+    const days = freqToDays(h.freq, h.customDays);
+    const body = getHabitNotificationText(h);
+    const scheduledCount = days.filter(Boolean).length;
+
+    if (scheduledCount === 7) {
+      // Every single day at the same time — ONE repeating notification
+      // instead of seven, since they'd all fire at the same time anyway.
+      const now = new Date();
+      let firstFire = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute);
+      if (firstFire.getTime() <= now.getTime()) firstFire.setDate(firstFire.getDate() + 1);
+      notifications.push({
+        id: 1000000 + h.id * 10 + 7, // +7 keeps this id distinct from the per-weekday ids below
+        title: 'Vívela365 · Hábito',
+        body,
+        schedule: { at: firstFire, repeats: true, every: 'day', allowWhileIdle: true },
+      });
+    } else {
+      // Specific days only — one repeating notification per selected weekday
+      days.forEach((scheduled, dayIdx) => {
+        if (!scheduled) return;
+        notifications.push({
+          id: 1000000 + h.id * 10 + dayIdx,
+          title: 'Vívela365 · Hábito',
+          body,
+          schedule: {
+            on: { weekday: CAP_WEEKDAY[dayIdx], hour, minute },
+            repeats: true,
+            allowWhileIdle: true,
+          },
+        });
+      });
+    }
+  });
+
+  return notifications;
+}
+
+// One-time event notifications. Returns ALL future candidates —
+// trimming to the safe budget happens later, soonest-first.
+function buildEventNotificationCandidates() {
+  const notifications = [];
+  const nowMs = Date.now();
+
+  state.events.forEach(e => {
+    if (!e.date) return;
+
+    const [year, month, day] = e.date.split('-').map(Number);
+    const [hour, minute] = (e.start || '09:00').split(':').map(Number);
+
+    const eventDate = new Date(year, month - 1, day, hour, minute);
+
+    // Support both reminders independently.
+    // The fallback values also handle events created before this update.
+    const reminders = [
+      { value: e.notification ?? '0', slot: 1 },
+      { value: e.notification2 ?? '1440', slot: 2 }
+    ];
+
+    reminders.forEach(({ value, slot }) => {
+      if (value === '' || value == null) return;
+
+      const minutesBefore = Number(value);
+      if (!Number.isFinite(minutesBefore) || minutesBefore < 0) return;
+
+      const fireDate = new Date(
+        eventDate.getTime() - minutesBefore * 60000
+      );
+
+      const fireMs = fireDate.getTime();
+
+      // Don't schedule notifications in the past.
+      if (fireMs <= nowMs) return;
+
+      notifications.push({
+        // Unique ID for each event AND reminder slot.
+        id: 2000000 + e.id * 10 + slot,
+        title: 'Vívela365 · Evento',
+        body: e.title + (e.start ? ' · ' + e.start : ''),
+        schedule: {
+          at: fireDate,
+          allowWhileIdle: true
+        },
+        _fireMs: fireMs,
+      });
+    });
+  });
+
+  return notifications;
+}
+
+// One-time meta notifications. Same "all candidates, trim later" approach.
+function buildMetaNotificationCandidates() {
+  if (!state.settings.remindersEnabled) return [];
+  const notifications = [];
+  const nowMs = Date.now();
+
+  state.metas.forEach(m => {
+    if (m.done || m.status !== 'active' || !m.dueDate) return;
+    const daysBefore = parseInt(m.notificationDaysBefore);
+    if (isNaN(daysBefore) || daysBefore < 0) return;
+
+    const { hour, minute } = timeStringToParts(state.settings.reminderTime);
+    const [year, month, day] = m.dueDate.split('-').map(Number);
+    const dueDate = new Date(year, month - 1, day, hour, minute);
+    const fireDate = new Date(dueDate.getTime() - daysBefore * 24 * 60 * 60000);
+    const fireMs = fireDate.getTime();
+
+    if (fireMs <= nowMs) return;
+
+    notifications.push({
+      id: 3000000 + m.id,
+      title: 'Vívela365 · Meta',
+      body: m.title,
+      schedule: { at: fireDate, allowWhileIdle: true },
+      _fireMs: fireMs,
+    });
+  });
+
+  return notifications;
+}
+
+async function rescheduleAllNotifications() {
+  const LN = getLocalNotifications();
+  if (!LN) return; // running in a plain browser tab, nothing to schedule
+
+  await cancelAllScheduledNotifications();
+
+  // Recurring habit notifications are cheap and always fully scheduled.
+  const habitNotifications = buildHabitNotifications();
+
+  // One-time notifications (events, metas) get sorted soonest-first,
+  // then trimmed to whatever budget remains. As soon-to-fire ones
+  // expire and this function re-runs (on resume, or after any edit),
+  // the next-in-line candidates get picked up automatically.
+  const oneTimeCandidates = [
+    ...buildEventNotificationCandidates(),
+    ...buildMetaNotificationCandidates(),
+  ].sort((a, b) => a._fireMs - b._fireMs);
+
+  const remainingBudget = Math.max(0, MAX_PENDING_NOTIFICATIONS - habitNotifications.length);
+  const oneTimeToSchedule = oneTimeCandidates.slice(0, remainingBudget).map(n => {
+    const { _fireMs, ...clean } = n; // strip our internal sort key before sending to the plugin
+    return clean;
+  });
+
+  const all = [...habitNotifications, ...oneTimeToSchedule];
+
+  if (all.length) {
+    try {
+      await LN.schedule({ notifications: all });
+      console.log(
+        'Scheduled ' + all.length + ' notifications (' +
+        oneTimeCandidates.length + ' one-time candidates found, ' +
+        oneTimeToSchedule.length + ' fit in budget)'
+      );
+    } catch (e) {
+      console.error('Error scheduling notifications:', e);
+    }
+  }
+}
+
+// Kick things off: ask permission (if not already granted), do an
+// initial schedule pass, and re-run every time the app comes back to
+// the foreground so expired one-time notifications get replaced by
+// the next ones in line.
+(async function initNotifications() {
+  const granted = await requestNotificationPermission();
+  if (granted) {
+    await rescheduleAllNotifications();
+  }
+
+  const CapApp = window.Capacitor?.Plugins?.App;
+  if (CapApp) {
+    CapApp.addListener('resume', () => { rescheduleAllNotifications(); });
+  }
+})();
+/* ================================================================
    INIT
 ================================================================ */
 document.getElementById('event-date-input').value = todayStr;
@@ -8327,3 +8669,7 @@ initializeHabitDragListeners();
 </script>
 </body>
 </html>
+
+
+
+
