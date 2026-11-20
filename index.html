@@ -2338,12 +2338,17 @@ async function callGeminiWorker(imageBase64, customPrompt) {
   }
 
   try {
+    const token = await getStoredToken();
     const response = await fetch(GEMINI_WORKER_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (token || ''),
+      },
       body: JSON.stringify({
         imageBase64: imageBase64,
-        prompt: customPrompt
+        prompt: customPrompt,
+        token: token,
       })
     });
 
