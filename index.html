@@ -19,8 +19,6 @@
   --dark:        #1A1E2A;
   --dark-mid:    #2D3245;
   --dark-soft:   #3D4358;
-  --tile-background: #5b6178;
-  --white:       #FFFFFF;
   --bg:          #F7F6F2;
   --surface:     #FFFFFF;
   --surface2:    #F0EDE5;
@@ -120,8 +118,6 @@ body {
 .pill-amber { background: var(--amber-light); color: #9a7018; }
 .pill-red   { background: var(--red-light);   color: #8a3d35; }
 .pill-gray  { background: var(--surface2);    color: var(--text-2); }
-.btn-primary { display:block;width:100%;padding:14px;border:none;border-radius:var(--r-md);background:var(--dark);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .15s; }
-.btn-primary:active { opacity:.75; }
 .btn-gold { display:block;width:100%;padding:14px;border:none;border-radius:var(--r-md);background:var(--gold);color:var(--dark);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .15s; }
 .btn-gold:active { opacity:.75; }
 .btn-outline { display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:transparent;color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s; }
@@ -249,22 +245,9 @@ body {
 .ft-text span { font-size:11px;color:var(--text-3);line-height:1.3; }
 
 /* SCAN */
-.scan-area { border:1.5px dashed rgba(196,184,142,.55);border-radius:var(--r-xl);padding:36px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;background:var(--gold-light);text-align:center;cursor:pointer; }
 .scan-area:active { opacity:.85; }
-.scan-area svg { width:40px;height:40px;stroke:var(--gold-dark);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round; }
-.scan-area h3 { font-size:15px;font-weight:500; }
-.scan-area p  { font-size:13px;color:var(--text-2);line-height:1.55; }
-.prompt-box { background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px; }
-.section-label { font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:10px; }
-.prompt-text { font-size:12px;color:var(--text-2);line-height:1.65;background:var(--bg);border-radius:10px;padding:12px;border:0.5px solid var(--border);max-height:160px;overflow-y:auto;font-family:'DM Sans',sans-serif; }
-.response-box { background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:10px; }
-.response-box textarea { width:100%;height:120px;border:0.5px solid var(--border-mid);border-radius:var(--r-sm);padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-1);background:var(--bg);resize:none;outline:none; }
-.response-box textarea:focus { border-color:var(--gold); }
 .parsed-result { display:none;background:var(--green-light);border:0.5px solid rgba(107,170,142,.3);border-radius:var(--r-md);padding:14px;gap:10px;flex-direction:column; }
 .parsed-result.show { display:flex; }
-.parsed-section { display:flex;flex-direction:column;gap:5px; }
-.parsed-section-title { font-size:11px;font-weight:600;color:#3d7a60;text-transform:uppercase;letter-spacing:.08em; }
-.parsed-item { font-size:13px;color:var(--text-1);padding-left:10px;position:relative;line-height:1.45; }
 .parsed-item::before { content:'·';position:absolute;left:0;color:var(--green); }
 .parsed-actions { display:flex;gap:8px;flex-wrap:wrap; }
 
@@ -276,8 +259,6 @@ body {
 .meditation-nav-btn:active { background:var(--gold-light);transform:scale(.9); }
 .meditation-prompt-text { font-size:16px;font-weight:500;color:var(--text-1);line-height:1.5;margin:0 12px;flex:1;display:flex;align-items:center;justify-content:center;min-height:0; }
 .meditation-timer-display { font-size:48px;font-weight:300;font-variant-numeric:tabular-nums;color:var(--dark);letter-spacing:-1px; }
-.meditation-timer-input { width:100%;padding:8px;border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--bg);color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:13px;text-align:center;outline:none; }
-.meditation-timer-input:focus { border-color:var(--gold); }
 .meditation-timer-controls { display:flex;gap:8px;justify-content:center;width:100%; }
 .meditation-timer-btn { padding:8px 16px;border:0.5px solid var(--border-mid);border-radius:var(--r-sm);background:var(--surface2);color:var(--text-1);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;flex-shrink:0; }
 .meditation-timer-btn:active { background:var(--gold-light); }
@@ -511,30 +492,6 @@ body {
 .privacy-note-text { font-size:12px;color:var(--text-2);line-height:1.6; }
 .privacy-note-text strong { display:block;font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:2px; }
 
-/* PROFILE AVATAR */
-.avatar-wrap { display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 0 20px; }
-.avatar-circle { width:80px;height:80px;border-radius:50%;background:var(--dark-mid);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;border:3px solid var(--gold-light); }
-.avatar-circle img { width:100%;height:100%;object-fit:cover; }
-.avatar-initials { font-size:26px;font-weight:600;color:var(--gold);letter-spacing:.02em; }
-.avatar-edit-badge { position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff; }
-.avatar-edit-badge svg { width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2.5; }
-.avatar-name { font-size:17px;font-weight:600; }
-.avatar-tagline { font-size:12px;color:var(--text-3); }
-
-.api-key-field { position:relative; }
-.api-key-field input { padding-right:44px; }
-.api-key-toggle { position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-3);font-size:14px;padding:4px; }
-
-.status-badge { display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px; }
-.status-badge.connected { background:var(--green-light);color:#3d7a60; }
-.status-badge.connected::before { content:'';width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0; }
-.status-badge.disconnected { background:var(--surface2);color:var(--text-3); }
-.status-badge.disconnected::before { content:'';width:6px;height:6px;border-radius:50%;background:var(--text-3);flex-shrink:0; }
-
-.week-start-options { display:flex;gap:6px; }
-.week-start-btn { flex:1;padding:9px 4px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:var(--bg);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center; }
-.week-start-btn.active { background:var(--dark);color:#fff;border-color:var(--dark); }
-
 .time-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
 .time-option { padding:10px 8px;border-radius:var(--r-sm);border:0.5px solid var(--border-mid);background:var(--bg);color:var(--text-2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center; }
 .time-option.active { background:var(--dark);color:#fff;border-color:var(--dark); }
@@ -675,9 +632,6 @@ body {
   z-index:10;
   flex-shrink:0;
 }
-
-/* SVG CAL ICONS */
-.apple-cal-icon { display:inline-flex;align-items:center;justify-content:center; }
 
 /* GRATITUDE */
 .gratitude-day-section { 
@@ -841,96 +795,6 @@ body {
 .btn-cancel:active { background: rgba(255,255,255,0.3); }
 
 
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.page-number-preview {
-  background: var(--gold-light);
-  border: 2px solid var(--gold);
-  border-radius: var(--r-lg);
-  padding: 20px;
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.page-number-preview-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 8px; }
-
-.page-number-preview-value { font-size: 48px; font-weight: 300; font-variant-numeric: tabular-nums; color: var(--dark); }
-
-.page-number-confirm-actions {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.page-number-confirm-actions button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: var(--r-md);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .15s;
-}
-
-.btn-confirm-yes {
-  background: var(--dark);
-  color: #fff;
-}
-
-.btn-confirm-yes:active { opacity: 0.8; }
-
-.btn-confirm-edit {
-  background: var(--surface2);
-  color: var(--text-1);
-}
-
-.btn-confirm-edit:active { background: var(--gold-light); }
-
-.page-number-edit-section {
-  display: none;
-  margin-top: 12px;
-}
-
-.page-number-edit-section.show {
-  display: block;
-}
-
-.page-number-edit-input {
-  width: 100%;
-  padding: 12px;
-  border: 0.5px solid var(--border-mid);
-  border-radius: var(--r-md);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: .1em;
-  margin-bottom: 10px;
-  outline: none;
-}
-
-.page-number-edit-input:focus {
-  border-color: var(--gold);
-  background: var(--gold-light);
-}
-
-.page-number-edit-section button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: var(--r-md);
-  background: var(--gold);
-  color: var(--dark);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
 .check-stats-pill {
   font-size: 11px;
   font-weight: 600;
@@ -942,8 +806,6 @@ body {
   transition: opacity .15s;
 }
 .check-stats-pill:active { opacity: 0.7; }
-
-.page-number-edit-section button:active { opacity: 0.8; }
 
 .activation-gate {
   position: fixed; inset: 0; z-index: 9999;
@@ -970,8 +832,6 @@ body {
 .activation-gate button:disabled { opacity: .5; }
 .activation-gate .ag-error { font-size: 12px; color: #E8A9A2; margin-top: 12px; min-height: 16px; }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 
@@ -1012,7 +872,7 @@ body {
         <div class="ft-icon ft-gold">
           <img src="icons/objetivos.png" alt="Objetivos">
         </div>
-        <div class="ft-text"><strong>Objetivos</strong><span>Objetivos e pasos</span></div>
+        <div class="ft-text"><strong>Objetivos</strong><span>Objetivos y pasos</span></div>
       </div>
       <div class="feature-tile" onclick="navigateTo('metas')">
         <div class="ft-icon ft-gold">
@@ -1048,7 +908,7 @@ body {
       </div>
       <div class="feature-tile" onclick="navigateTo('settings')" style="grid-column:span 2;aspect-ratio:auto;flex-direction:row;justify-content:flex-start;padding:16px 20px;text-align:left;gap:14px;">
         <div class="ft-icon ft-dark" style="flex-shrink:0"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-        <div class="ft-text" style="text-align:left"><strong>Configuración</strong><span>Perfil, integraciones y preferencias</span></div>
+        <div class="ft-text" style="text-align:left"><strong>Configuración</strong><span>Preferenciasby respaldo</span></div>
         <span style="font-size:18px;color:var(--text-3);margin-left:auto;font-weight:300">›</span>
       </div>
     </div>
@@ -1313,18 +1173,6 @@ body {
   </div>
   <div class="screen-body">
 
-    <!-- CUENTA -->
-    <div class="settings-section">
-      <span class="settings-section-label">Cuenta</span>
-      <div class="settings-list">
-        <div class="settings-row" onclick="openModal('profile-modal')">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-          <div class="settings-row-text"><strong>Perfil</strong><span id="profile-name-preview">Nombre, foto y datos personales</span></div>
-          <span class="settings-chevron">›</span>
-        </div>
-      </div>
-    </div>
-
     <!-- CALENDARIOS -->
     <div class="settings-section">
       <span class="settings-section-label">Calendarios</span>
@@ -1333,7 +1181,7 @@ body {
           <div class="settings-icon si-dark">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
           </div>
-          <div class="settings-row-text"><strong>Apple Calendar</strong><span>Mostrar botones de Apple Cal</span></div>
+          <div class="settings-row-text"><strong>Archivo de calendario (.ics)</strong><span>Apple, Android y otros calendarios</span></div>
           <label class="toggle-switch" onclick="event.stopPropagation()">
             <input type="checkbox" id="apple-cal-toggle" checked onchange="toggleCalProvider('apple', this.checked)">
             <span class="toggle-slider"></span>
@@ -1348,21 +1196,6 @@ body {
             <input type="checkbox" id="google-cal-toggle" checked onchange="toggleCalProvider('google', this.checked)">
             <span class="toggle-slider"></span>
           </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- INTEGRACIÓN -->
-    <div class="settings-section">
-      <span class="settings-section-label">Integración</span>
-      <div class="settings-list">
-        <div class="settings-row" onclick="openModal('gcal-modal')">
-          <div class="settings-icon si-blue"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-          <div class="settings-row-text">
-            <strong>Google Calendar</strong>
-            <span id="gcal-status-text">Sin conectar</span>
-          </div>
-          <span id="gcal-status-badge" class="status-badge disconnected">Desconectado</span>
         </div>
       </div>
     </div>
@@ -1384,11 +1217,6 @@ body {
           <div class="settings-row-text"><strong>Hora de recordatorio</strong><span id="reminder-time-preview">8:00 AM</span></div>
           <span class="settings-chevron">›</span>
         </div>
-        <div class="settings-row" onclick="openModal('week-start-modal')">
-          <div class="settings-icon si-dark"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-          <div class="settings-row-text"><strong>Inicio de semana</strong><span id="week-start-preview">Lunes</span></div>
-          <span class="settings-chevron">›</span>
-        </div>
       </div>
     </div>
 
@@ -1403,7 +1231,7 @@ body {
         </div>
         <div class="settings-row" onclick="exportGoalsCSV()">
           <div class="settings-icon si-gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-          <div class="settings-row-text"><strong>Exportar objetivos</strong><span>Objetivos e pasos en CSV</span></div>
+          <div class="settings-row-text"><strong>Exportar objetivos</strong><span>Objetivos y pasos en CSV</span></div>
           <span style="font-size:12px;color:var(--text-3);font-weight:500">CSV ⬇</span>
         </div>
         <div class="settings-row" onclick="exportBooksCSV()">
@@ -1544,17 +1372,14 @@ body {
   <div class="nav-item active" data-screen="home" onclick="navigateTo('home')">
     <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
     <span class="nav-label">Inicio</span>
-    <div class="nav-dot"></div>
   </div>
   <div class="nav-item" data-screen="scan" onclick="navigateTo('scan')">
     <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
     <span class="nav-label">Escanear</span>
-    <div class="nav-dot"></div>
   </div>
   <div class="nav-item" data-screen="settings" onclick="navigateTo('settings')">
     <div class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
     <span class="nav-label">Ajustes</span>
-    <div class="nav-dot"></div>
   </div>
 </nav>
 
@@ -1620,12 +1445,12 @@ body {
       <label class="form-label">Primer recordatorio</label>
       <select class="form-select" id="event-notification-input">
         <option value="">Sin recordatorio</option>
-        <option value="0" selected>En el momento</option>
+        <option value="0">En el momento</option>
         <option value="15">15 minutos antes</option>
         <option value="30">30 minutos antes</option>
         <option value="60">1 hora antes</option>
         <option value="120">2 horas antes</option>
-        <option value="1440">1 día antes</option>
+        <option value="1440" selected>1 día antes</option>
         <option value="2880">2 días antes</option>
         <option value="10080">1 semana antes</option>
       </select>
@@ -1635,12 +1460,12 @@ body {
       <label class="form-label">Segundo recordatorio</label>
       <select class="form-select" id="event-notification2-input">
         <option value="">Sin recordatorio</option>
-        <option value="0">En el momento</option>
+        <option value="0" selected>En el momento</option>
         <option value="15">15 minutos antes</option>
         <option value="30">30 minutos antes</option>
         <option value="60">1 hora antes</option>
         <option value="120">2 horas antes</option>
-        <option value="1440" selected>1 día antes</option>
+        <option value="1440">1 día antes</option>
         <option value="2880">2 días antes</option>
         <option value="10080">1 semana antes</option>
       </select>
@@ -1680,56 +1505,18 @@ body {
   </div>
 </div>
 
-<!-- MODAL: Add Habit -->
-<div class="modal-overlay" id="habit-modal" onclick="modalOverlayClick(event,'habit-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="habit-modal-title">Nuevo hábito</div>
-    <div class="form-group"><label class="form-label">Nombre del hábito</label><input class="form-input" id="habit-name-input" type="text" placeholder="Ej. Meditar 10 min"></div>
-    <div class="form-group">
-      <label class="form-label">Frecuencia</label>
-      <select class="form-select" id="habit-freq-input" onchange="onFreqChange(this.value)">
-        <option value="diario">Diario</option>
-        <option value="lunes-viernes">Lunes a viernes</option>
-        <option value="semanal">Semanal</option>
-        <option value="personalizado">Personalizado</option>
-      </select>
-    </div>
-    <div class="form-group" id="habit-improvement-strategy-group" style="display:none">
-      <div id="habit-strategy-display"></div>
-    </div>
-    <div class="form-group" id="custom-days-group" style="display:none">
-      <label class="form-label">Días de la semana</label>
-      <div class="custom-days-picker">
-        <button type="button" class="day-toggle-btn" data-day="0" onclick="toggleDay(this)">Dom</button>
-        <button type="button" class="day-toggle-btn" data-day="1" onclick="toggleDay(this)">Lun</button>
-        <button type="button" class="day-toggle-btn" data-day="2" onclick="toggleDay(this)">Mar</button>
-        <button type="button" class="day-toggle-btn" data-day="3" onclick="toggleDay(this)">Mié</button>
-        <button type="button" class="day-toggle-btn" data-day="4" onclick="toggleDay(this)">Jue</button>
-        <button type="button" class="day-toggle-btn" data-day="5" onclick="toggleDay(this)">Vie</button>
-        <button type="button" class="day-toggle-btn" data-day="6" onclick="toggleDay(this)">Sáb</button>
-      </div>
-    </div>
-    <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="habit-cat-input"><option value="salud">Salud</option><option value="mente">Mente</option><option value="productividad">Productividad</option><option value="relaciones">Relaciones</option><option value="otro">Otro</option></select></div>
-    <div class="form-group">
-      <label class="form-label">¿Por qué quiero este hábito? <span style="color:var(--text-3);font-weight:400">(opcional)</span></label>
-      <input class="form-input" id="habit-why-input" type="text" placeholder="Ej. Para tener mejor salud mental, mejorar mi energía...">
-      <span style="font-size:11px;color:var(--text-3);margin-top:3px">Esto se usará en tus recordatorios para motivarte</span>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <button class="btn-outline" style="flex:1" onclick="closeModal('habit-modal')">Cancelar</button>
-      <button class="btn-gold" id="habit-save-btn" style="flex:2" onclick="addHabit()">Guardar hábito</button>
-    </div>
-  </div>
-</div>
-
 <!-- MODAL: Add / Edit Habit -->
 <div class="modal-overlay" id="habit-modal" onclick="modalOverlayClick(event,'habit-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <input type="hidden" id="habit-edit-id" value="">
     <div class="modal-title" id="habit-modal-title">Nuevo hábito</div>
-    <div class="form-group"><label class="form-label">Nombre del hábito</label><input class="form-input" id="habit-name-input" type="text" placeholder="Ej. Meditar 10 min"></div>
+
+    <div class="form-group">
+      <label class="form-label">Nombre del hábito</label>
+      <input class="form-input" id="habit-name-input" type="text" placeholder="Ej. Meditar 10 min">
+    </div>
+
     <div class="form-group">
       <label class="form-label">Frecuencia</label>
       <select class="form-select" id="habit-freq-input" onchange="onFreqChange(this.value)">
@@ -1739,6 +1526,11 @@ body {
         <option value="personalizado">Personalizado</option>
       </select>
     </div>
+
+    <div class="form-group" id="habit-improvement-strategy-group" style="display:none">
+      <div id="habit-strategy-display"></div>
+    </div>
+
     <div class="form-group" id="custom-days-group" style="display:none">
       <label class="form-label">Días de la semana</label>
       <div class="custom-days-picker">
@@ -1751,15 +1543,34 @@ body {
         <button type="button" class="day-toggle-btn" data-day="6" onclick="toggleDay(this)">Sáb</button>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="habit-cat-input"><option value="salud">Salud</option><option value="mente">Mente</option><option value="productividad">Productividad</option><option value="relaciones">Relaciones</option><option value="otro">Otro</option></select></div>
+
+    <div class="form-group">
+      <label class="form-label">Categoría</label>
+      <select class="form-select" id="habit-cat-input">
+        <option value="salud">Salud</option>
+        <option value="mente">Mente</option>
+        <option value="productividad">Productividad</option>
+        <option value="relaciones">Relaciones</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">¿Por qué quiero este hábito? <span style="color:var(--text-3);font-weight:400">(opcional)</span></label>
+      <input class="form-input" id="habit-why-input" type="text" placeholder="Ej. Para tener mejor salud mental, mejorar mi energía...">
+      <span style="font-size:11px;color:var(--text-3);margin-top:3px">Esto se usará en tus recordatorios para motivarte</span>
+    </div>
+
     <div class="form-group">
       <label class="form-label">Hora de notificación <span style="color:var(--text-3);font-weight:400">(opcional)</span></label>
       <input class="form-input" id="habit-time-input" type="time">
       <span style="font-size:11px;color:var(--text-3);margin-top:3px">Si no se ingresa, se usará la hora global de recordatorio</span>
     </div>
+
     <div id="habit-delete-row" style="display:none;margin-bottom:12px">
       <button class="btn-outline" id="habit-delete-btn" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)">Eliminar hábito</button>
     </div>
+
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('habit-modal')">Cancelar</button>
       <button class="btn-gold" id="habit-save-btn" style="flex:2" onclick="addHabit()">Guardar hábito</button>
@@ -1955,8 +1766,8 @@ body {
         <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dark)">Grabadora de voz</div>
         <div id="note-recorder-display" style="font-size:18px;font-weight:300;font-family:monospace;color:var(--text-1)">0:00</div>
         <div style="display:flex;gap:8px">
-          <button class="meditation-timer-btn" id="note-rec-start-btn" onclick="startNoteRecording()">⏺ Grabar</button>
-          <button class="meditation-timer-btn" id="note-rec-stop-btn" onclick="stopNoteRecording()" style="display:none">⏹ Detener</button>
+          <button class="meditation-timer-btn" id="note-rec-start-btn" onclick="startNoteRecording()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;display:inline"><circle cx="12" cy="12" r="7"/></svg>Grabar</button>
+          <button class="meditation-timer-btn" id="note-rec-stop-btn" onclick="stopNoteRecording()" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:6px;display:inline"><rect x="6" y="6" width="12" height="12"/></svg>Detener</button>
         </div>
       </div>
       <div id="note-recorded-status" style="display:none;background:var(--green-light);border-radius:var(--r-md);padding:10px;text-align:center;font-size:12px;color:#3d7a60">✓ Grabación guardada</div>
@@ -2065,95 +1876,6 @@ body {
   </div>
 </div>
 
-<!-- MODAL: Profile -->
-<div class="modal-overlay" id="profile-modal" onclick="modalOverlayClick(event,'profile-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Mi perfil</div>
-    <div class="avatar-wrap">
-      <div class="avatar-circle" onclick="triggerAvatarUpload()">
-        <div class="avatar-initials" id="profile-avatar-initials">VL</div>
-        <div class="avatar-edit-badge"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-      </div>
-      <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
-      <div>
-        <div class="avatar-name" id="profile-display-name">Tu nombre</div>
-        <div class="avatar-tagline" id="profile-display-tagline">vivela365.app</div>
-      </div>
-    </div>
-    <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="profile-name-input" type="text" placeholder="Tu nombre completo"></div>
-    <div class="form-group"><label class="form-label">Frase o intención del año</label><input class="form-input" id="profile-tagline-input" type="text" placeholder="Ej. Este año vivo con propósito"></div>
-    <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" id="profile-email-input" type="email" placeholder="tu@correo.com"></div>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <button class="btn-outline" style="flex:1" onclick="closeModal('profile-modal')">Cancelar</button>
-      <button class="btn-gold"    style="flex:2" onclick="saveProfile()">Guardar perfil</button>
-    </div>
-    <div class="privacy-note" style="margin-top:16px">
-      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <div class="privacy-note-text">
-        <strong>Información privada</strong>
-        Tus datos personales nunca salen de tu dispositivo. Nada se sube a internet.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Google Calendar -->
-<div class="modal-overlay" id="gcal-modal" onclick="modalOverlayClick(event,'gcal-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Google Calendar</div>
-    <div style="background:var(--blue-light);border-radius:var(--r-md);padding:16px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3a5f8a" stroke-width="1.8" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p style="font-size:13px;color:#3a5f8a;line-height:1.55">La sincronización directa con Google Calendar requiere OAuth y estará disponible en la versión final. Por ahora puedes exportar tus eventos como .ics e importarlos manualmente.</p>
-    </div>
-    <div id="gcal-connected-section" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--green-light);border-radius:var(--r-md);margin-bottom:16px">
-        <span class="status-badge connected">Conectado</span>
-        <span style="font-size:13px;color:#3d7a60;flex:1" id="gcal-connected-email"></span>
-        <button class="btn-outline" style="padding:5px 10px;font-size:11px;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="disconnectGCal()">Desconectar</button>
-      </div>
-    </div>
-    <div id="gcal-disconnected-section">
-      <div class="form-group"><label class="form-label">Correo de Google Calendar</label><input class="form-input" id="gcal-email-input" type="email" placeholder="tu@gmail.com"></div>
-      <button class="btn-gold" style="margin-bottom:12px" onclick="connectGCal()">Simular conexión</button>
-    </div>
-    <div style="border-top:0.5px solid var(--border);padding-top:16px;margin-top:4px">
-      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">Exportar eventos</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn-outline" style="flex:1" onclick="exportAllToICS();closeModal('gcal-modal')">⬇ Descargar .ics</button>
-        <button class="btn-outline" style="flex:1" onclick="closeModal('gcal-modal')">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Gemini API -->
-<div class="modal-overlay" id="gemini-modal" onclick="modalOverlayClick(event,'gemini-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">API de Gemini</div>
-    <div style="background:var(--gold-light);border-radius:var(--r-md);padding:16px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-dark)" stroke-width="1.8" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p style="font-size:13px;color:var(--gold-dark);line-height:1.55">Con tu API key de Gemini podrás fotografiar y procesar páginas de tu agenda directamente desde la app. Obtén tu clave gratuita en <strong>aistudio.google.com</strong>.</p>
-    </div>
-    <div class="form-group">
-      <label class="form-label">API Key de Gemini</label>
-      <div class="api-key-field" style="position:relative">
-        <input class="form-input" id="gemini-key-input" type="password" placeholder="AIza..." style="padding-right:44px">
-        <button class="api-key-toggle" onclick="toggleApiKeyVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-3);font-size:14px">👁</button>
-      </div>
-    </div>
-    <div id="gemini-key-status" style="display:none;margin-bottom:12px"></div>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <button class="btn-outline" style="flex:1" onclick="closeModal('gemini-modal')">Cancelar</button>
-      <button class="btn-gold"    style="flex:2" onclick="saveGeminiKey()">Guardar clave</button>
-    </div>
-    <div id="gemini-key-saved-actions" style="display:none;margin-top:12px;padding-top:12px;border-top:0.5px solid var(--border)">
-      <button class="btn-outline" style="width:100%;color:var(--red);border-color:rgba(196,100,90,.3)" onclick="removeGeminiKey()">Eliminar clave guardada</button>
-    </div>
-  </div>
-</div>
 
 <!-- MODAL: Reminder Time -->
 <div class="modal-overlay" id="reminder-time-modal" onclick="modalOverlayClick(event,'reminder-time-modal')">
@@ -2169,23 +1891,6 @@ body {
     <div style="display:flex;gap:10px;margin-top:4px">
       <button class="btn-outline" style="flex:1" onclick="closeModal('reminder-time-modal')">Cancelar</button>
       <button class="btn-gold"    style="flex:2" onclick="saveReminderTime()">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Week Start -->
-<div class="modal-overlay" id="week-start-modal" onclick="modalOverlayClick(event,'week-start-modal')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Inicio de semana</div>
-    <p style="font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Esto afecta cómo se muestra la cuadrícula de hábitos y el calendario.</p>
-    <div class="week-start-options">
-      <button class="week-start-btn active"        id="ws-btn-lunes"   onclick="selectWeekStart('Lunes', this)">Lunes</button>
-      <button class="week-start-btn" id="ws-btn-domingo" onclick="selectWeekStart('Domingo', this)">Domingo</button>
-      <button class="week-start-btn"        id="ws-btn-sabado"  onclick="selectWeekStart('Sábado', this)">Sábado</button>
-    </div>
-    <div style="margin-top:24px">
-      <button class="btn-gold" onclick="saveWeekStart()">Aplicar cambio</button>
     </div>
   </div>
 </div>
@@ -2298,31 +2003,6 @@ body {
       document.addEventListener('pointercancel', endDrag);
     })();
 
-/* ================================================================
-   SWIPE NAVIGATION
-================================================================ */
-(function() {
-  let startX = 0;
-  
-  document.addEventListener('pointerdown', e => {
-    const screen = document.querySelector('.screen.active');
-    if (screen && screen.id !== 'screen-home') {
-      startX = e.clientX;
-    }
-  }, true);
-  
-  document.addEventListener('pointerend', e => {
-    if (!startX) return;
-    const endX = e.clientX;
-    const diff = startX - endX;
-    
-    const screen = document.querySelector('.screen.active');
-    if (screen && screen.id !== 'screen-home' && diff > 100) { // Swipe left threshold: 100px
-      navigateTo('home');
-    }
-    startX = 0;
-  }, true);
-})();
 /* ================================================================
    ACTIVATION GATE
 ================================================================ */
@@ -2468,40 +2148,21 @@ function capitalizeFirst(str) {
 const state = {
   currentScreen: 'home',
   habits: [
-    { id:1, name:'Meditar',      freq:'diario',        cat:'mente',         notifTime:'', customDays:null, streak:7,  completions:{}, improvementStrategy:'', why:''  },
-    { id:2, name:'Ejercicio',    freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:14, completions:{}, improvementStrategy:'', why:''  },
-    { id:3, name:'Leer 30 min',  freq:'lunes-viernes', cat:'mente',         notifTime:'', customDays:null, streak:3,  completions:{}, improvementStrategy:'', why:''  },
-    { id:4, name:'Agua 2L',      freq:'diario',        cat:'salud',         notifTime:'', customDays:null, streak:21, completions:{}, improvementStrategy:'', why:''  },
-    { id:5, name:'Journaling',   freq:'personalizado', cat:'productividad', notifTime:'09:00', customDays:[false,true,true,false,true,true,false], streak:5, completions:{}, improvementStrategy:''  },
+    { id:1, name:'Meditar', freq:'diario', cat:'mente', notifTime:'', customDays:null, streak:0, completions:{}, improvementStrategy:'', why:'' },
   ],
   goals: [
     { id:1, title:'Leer 12 libros este año', cat:'Aprendizaje', desc:'Un libro por mes para crecer personal y profesionalmente.', status:'active', milestones:[
-      {text:'Libro 1: Hábitos atómicos', done:true},
-      {text:'Libro 2: El poder del ahora', done:true},
-      {text:'Libro 3: Ikigai', done:false},
-      {text:'Libro 4: La magia del orden', done:false},
-    ]},
-    { id:2, title:'Correr mi primer 5K', cat:'Salud', desc:'Completar una carrera de 5K antes de fin de año.', status:'active', milestones:[
-      {text:'Correr 1K sin parar', done:true},
-      {text:'Semana de entrenamiento consistente', done:false},
-      {text:'Inscribirme en carrera oficial', done:false},
-    ]},
-    { id:3, title:'Lanzar Vívela365', cat:'Profesional', desc:'Llevar la agenda y la app companion al mercado.', status:'active', milestones:[
-      {text:'Diseño de agenda terminado', done:true},
-      {text:'App companion lista', done:false},
-      {text:'Publicar en App Store y Play Store', done:false},
+      {text:'Hábitos atómicos', done:false},
     ]},
   ],
   events: [],
   habitDragIndex: null,
-  habitDragStartY: 0,
   calView: 'month',
   calDate: new Date(today.getFullYear(), today.getMonth(), 1),
   selectedDay: todayStr,
   weekOffset: 0,
   meditation: {
     linkedHabitId: null,
-    lastLinkPromptDate: null,
     customPrompts: [],
     promptIndex: 0,
     soundIndex: 0,
@@ -2510,7 +2171,6 @@ const state = {
     timerRunning: false,
     timerCountingUp: false,
     timerIntervalId: null,
-    audioPlaying: false,
     savedTimerMinutes: 5,      
     savedTimerSeconds: 0,   
   },
@@ -2652,20 +2312,12 @@ const state = {
   ],
   bookView: 'shelf',
   books: [
-    { id:1, title:'Hábitos atómicos', author:'James Clear',dateStarted: null, color: null, cover:null, totalPages:320, currentPage:280, status:'reading', rating:0, freeNotes:'Un libro transformador sobre sistemas vs metas.', quotes:['Pequeños cambios, resultados extraordinarios.'], lessons:['Los hábitos son el compound interest de la superación personal.'], actions:['Rediseñar mi entorno para que los buenos hábitos sean obvios.'] },
-    { id:2, title:'El poder del ahora', author:'Eckhart Tolle',dateStarted: null, color: null, cover:null, totalPages:240, currentPage:240, status:'finished', rating:5, freeNotes:'', quotes:['"El momento presente es lo único que siempre será."'], lessons:['La mente es una herramienta, no quien eres.'], actions:['Practicar presencia consciente 5 min al día.'] },
-    { id:3, title:'Ikigai', author:'Héctor García',dateStarted: null, color: null, cover:null, totalPages:208, currentPage:0, status:'not-started', rating:0, freeNotes:'', quotes:[], lessons:[], actions:[] },
+    { id:1, title:'Hábitos atómicos', author:'James Clear', dateStarted:null, color:null, cover:null, totalPages:320, currentPage:280, status:'reading', rating:0, freeNotes:'Un libro transformador sobre sistemas vs metas.', quotes:['Pequeños cambios, resultados extraordinarios.'], lessons:['Los hábitos son el compound interest de la superación personal.'], actions:['Rediseñar mi entorno para que los buenos hábitos sean obvios.'] },
   ],
 settings: {
-    profile: { name:'', tagline:'', email:'', avatarDataUrl:null },
-    geminiKey: '',
-    gcalConnected: false,
-    gcalEmail: '',
     remindersEnabled: true,
     reminderTime: '08:00',
-    weekStart: 'Lunes',
     appleCalEnabled: true,
-    googleCalEnabled: true,
     autoBackupEnabled: true,
     autoBackupDays: 7,
     lastBackupDate: null,
@@ -2677,25 +2329,10 @@ settings: {
   notes: [],
   nextNoteId: 1,
   noteSearch: '',
-  noteVoiceChunks: [],
   noteRecordings: {},  // { 'note_123': ObjectURL, ... }
-  planner_habits: [],
-  planner_objetivos: [],
-  planner_metas: [],
   metas: [],
   nextMetaId: 1,
 };
-
-/* Seed habit completions */
-state.habits.forEach((h, hi) => {
-  for (let i = 0; i < 180; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    if (!isScheduled(h, d)) continue;
-    const threshold = hi===1 ? 0.08 : hi===3 ? 0.12 : 0.28;
-    if (Math.random() > threshold) h.completions[fmt(d)] = true;
-  }
-});
 
 /* ================================================================
    GEMINI API INTEGRATION
@@ -3119,7 +2756,7 @@ Pages 9-10 - Annual Objectives
 
 For each objective with content, extract:
 - category name (one of the 6 categories mentioned above)
-- objective text (from "Mi objetivo en una oración")
+- extracted_objetivo (text from "Mi objetivo en una oración")
 - why_important text (from "Por qué es importante para mí?")
 - matched_objetivo_id (match against existing objetivos in app)
 - match_confidence (high/medium/low/no_match)
@@ -3654,72 +3291,6 @@ function cancelCameraScanner() {
   setScanActionsVisible(true);
 }
 
-async function triggerDirectImageUpload() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    showToast('Procesando imagen...');
-    
-    const reader = new FileReader();
-    reader.onload = async (evt) => {
-      // evt.target.result is already data:image/...;base64,...
-      const base64 = evt.target.result.split(',')[1];
-      
-      const prompt = buildPlannerPrompt();
-      const result = await callGeminiWorker(base64, prompt);
-      
-      if (result) {
-        try {
-          // Extract text from Gemini response
-          const responseText = result.candidates[0].content.parts[0].text;
-          
-          const cleanedText = responseText
-            .replace(/^```json\s*/i, '')
-            .replace(/^```\s*/i, '')
-            .replace(/\s*```$/i, '')
-            .trim()
-            .replace(/^\uFEFF/, '');
-          
-          const parsedData = JSON.parse(cleanedText);
-          window.geminiImportData = parsedData;
-          showGeminiImportPreview(parsedData);
-        } catch (err) {
-          showToast('Error: ' + err.message);
-        }
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-  input.click();
-}
-
-/* Seed events */
-(function(){
-  const colors = ['#C4B88E','#6BAA8E','#5B82B4','#C4645A','#1A1E2A'];
-  const titles = ['Reunión de equipo','Entrega de agenda','Llamada con distribuidora','Meditación grupal','Revisión mensual','Sesión fotográfica','Llamada con diseñadora','Presentación de proyecto','Cita médica','Almuerzo con socia'];
-  for (let i = -8; i <= 35; i++) {
-    if (Math.random() < 0.3) {
-      const d = new Date(today);
-      d.setDate(d.getDate() + i);
-      const h = 8 + Math.floor(Math.random()*10);
-      state.events.push({
-        id:       state.nextEventId++,
-        title:    titles[Math.floor(Math.random()*titles.length)],
-        date:     fmt(d),
-        start:    String(h).padStart(2,'0')+':00',
-        end:      String(h+1).padStart(2,'0')+':00',
-        notes:    '',
-        color:    colors[Math.floor(Math.random()*colors.length)],
-        sequence: 0,
-      });
-    }
-  }
-})();
-
 
 /* ================================================================
    NAV
@@ -3741,6 +3312,7 @@ function navigateTo(name) {
   if (name==='meditation')   renderMeditation();
   if (name==='metas')        renderMetas();
   if (name==='scan')         { resetScanScreen(); openCameraScanner(); }
+  if (name==='notes')        renderNotes();
 }
 
 /* ================================================================
@@ -3771,6 +3343,8 @@ function openModal(id) {
       document.getElementById('habit-cat-input').value  = 'salud';
       document.getElementById('custom-days-group').style.display = 'none';
       document.querySelectorAll('.day-toggle-btn').forEach(b => b.classList.add('selected'));
+      document.getElementById('habit-why-input').value = '';
+      document.getElementById('habit-improvement-strategy-group').style.display = 'none';
     }
   }
   if (id === 'event-modal') {
@@ -3782,6 +3356,7 @@ function openModal(id) {
       document.getElementById('event-edit-id').value = '';
       state.selectedEventColor = '#C4B88E';
       document.getElementById('event-notification-input').value = '1440';
+      document.getElementById('event-notification2-input').value = '0';
       document.querySelectorAll('.ecswatch').forEach(s => {
         s.style.borderColor = s.dataset.color === '#C4B88E' ? '#1A1E2A' : 'transparent';
       });
@@ -3804,33 +3379,7 @@ function openModal(id) {
     else if (freqVal === 30) document.getElementById('reminder-monthly-btn').classList.add('active');
     else if (freqVal === 0) document.getElementById('reminder-never-btn').classList.add('active');
   }
-  if (id === 'week-start-modal') {
-    pendingWeekStart = state.settings.weekStart;
-    setTimeout(() => {
-      document.querySelectorAll('.week-start-btn').forEach(b => {
-        b.classList.toggle('active', b.textContent.trim() === state.settings.weekStart);
-      });
-    }, 10);
-  }
-  if (id === 'gemini-modal') {
-    const keyStatus    = document.getElementById('gemini-key-status');
-    const savedActions = document.getElementById('gemini-key-saved-actions');
-    if (state.settings.geminiKey) {
-      document.getElementById('gemini-key-input').value = '••••••••••••••••';
-      document.getElementById('gemini-key-input').type  = 'password';
-      if (keyStatus) { keyStatus.style.display='block'; keyStatus.innerHTML='<div style="background:var(--green-light);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:#3d7a60;display:flex;align-items:center;gap:8px"><span>✓</span><span>API key ya configurada</span></div>'; }
-      if (savedActions) savedActions.style.display = 'block';
-    } else {
-      document.getElementById('gemini-key-input').value = '';
-      if (keyStatus)    keyStatus.style.display    = 'none';
-      if (savedActions) savedActions.style.display = 'none';
-    }
-  }
-  if (id === 'gcal-modal') {
-    document.getElementById('gcal-connected-section').style.display    = state.settings.gcalConnected ? 'block' : 'none';
-    document.getElementById('gcal-disconnected-section').style.display = state.settings.gcalConnected ? 'none'  : 'block';
-    if (state.settings.gcalConnected) document.getElementById('gcal-connected-email').textContent = state.settings.gcalEmail;
-  }
+
   if (id === 'backup-modal') {
     const infoEl = document.getElementById('backup-last-info');
     if (infoEl) {
@@ -3883,16 +3432,6 @@ function modalOverlayClick(e, id) { if (e.target === document.getElementById(id)
 /* ================================================================
    SCAN
 ================================================================ */
-async function copyPrompt() {
-  try {
-    const fullPrompt = buildPlannerPrompt();
-    await navigator.clipboard.writeText(fullPrompt);
-    showToast('✓ Prompt de extracción copiado');
-  } catch (error) {
-    console.error('Failed to copy prompt:', error);
-    showToast('Error copiando prompt. Intenta de nuevo.');
-  }
-}
 
 function parseGeminiResponse() {
   const input = document.getElementById('gemini-response');  
@@ -4068,12 +3607,10 @@ function importGeminiObjectives() {
     if (data.objectives?.length) {
       console.log('📋 STEP 5 - Processing regular objectives...');
       data.objectives.forEach((obj) => {
-        if (!obj.objective) {
-          console.log('  ⚠️ Skipping objective with no text');
-          return;
-        }
+        const text = obj.extracted_objetivo || obj.objective;
+        if (!text) return;
 
-        const capitalizedTitle = capitalizeFirst(obj.objective);
+        const capitalizedTitle = capitalizeFirst(text);
         console.log('  Checking if exists:', capitalizedTitle);
         
         const exists = state.goals.find(
@@ -4190,10 +3727,11 @@ function importGeminiEvents() {
       id: state.nextEventId++,
       title: e.title,
       date: dateStr,
-      time: timeStr,
-      color: 'blue',
-      description: e.day_of_week ? `${e.day_of_week}` : '',
-      allDay: false
+      start: timeStr,
+      end: '',
+      notes: e.day_of_week || '',
+      color: '#C4B88E',
+      sequence: 0,
     });
 
     added++;
@@ -4202,20 +3740,6 @@ function importGeminiEvents() {
   if (added > 0) {
     showToast(added + ' evento(s) importado(s)');
   }
-}
-
-
-function normalizeGoalCategory(category) {
-  const value = String(category || '').toLowerCase();
-
-  if (value.includes('salud')) return 'Salud';
-  if (value.includes('profes')) return 'Profesional';
-  if (value.includes('finan')) return 'Finanzas';
-  if (value.includes('relac')) return 'Relaciones';
-  if (value.includes('aprend')) return 'Aprendizaje';
-  if (value.includes('personal')) return 'Personal';
-
-  return 'Otro';
 }
 
 
@@ -4617,7 +4141,7 @@ function addHabit() {
     streak:   0,
     completions: {},
     improvementStrategy: '',
-    why: '',
+    why: document.getElementById('habit-why-input').value.trim(),
   });
   closeModal('habit-modal');
   renderHabits();
@@ -4654,6 +4178,8 @@ function openEditHabit(id) {
       '<div style="font-size:11px;font-weight:600;color:var(--gold-dark);margin-bottom:4px">📊 Tu estrategia de mejora:</div>'+
       '<div style="font-size:12px;color:var(--text-1)">'+escHtml(h.improvementStrategy)+'</div>'+
       '</div>';
+  } else if (strategyGroup) {
+    strategyGroup.style.display = 'none';
   }
   document.getElementById('habit-modal').classList.add('open');
 }
@@ -5283,7 +4809,6 @@ function stopMeditationTimer() {
 
 function startMeditationTimer() {
   state.meditation.timerRunning = true;
-  document.getElementById('meditation-play-btn').textContent = '⏸ Pausar';
   state.meditation.timerIntervalId = setInterval(() => {
     if (state.meditation.timerCountingUp) {
       state.meditation.timerSeconds++;
@@ -5357,7 +4882,6 @@ function stopMeditationAudio() {
   updateMeditationAudioBtn();
 }
 function openMeditationAddPrompt() { openModal('meditation-add-prompt-modal'); }
-function openMeditationHabitLink() { openModal('meditation-link-modal'); }
 
 function addMeditationPrompt() {
   const text = document.getElementById('meditation-new-prompt-input').value.trim();
@@ -5404,7 +4928,7 @@ const tmrw = new Date(today); tmrw.setDate(tmrw.getDate()+1);
 const tmrwStr = fmt(tmrw);
 
 function appleCalSVG(size) {
-  return '🍎';
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M12 13v5M9.5 15.5L12 18l2.5-2.5"/></svg>';
 }
 
 function setCalView(v) {
@@ -5478,7 +5002,6 @@ function showDayEvents(ds) {
   if (headerBtns) {
     let h = '';
     if (apple)  h += '<button class="btn-outline" style="padding:5px 10px;font-size:11px;gap:4px" onclick="exportAllToICS()">'+appleCalSVG(13)+' Todos</button>';
-    if (google) h += '<button class="btn-outline" style="padding:5px 10px;font-size:11px" onclick="addAllToGoogle()">G Todos</button>';
     headerBtns.innerHTML = h;
   }
 
@@ -5562,7 +5085,6 @@ function renderUpcomingBottomBar() {
   const google = state.settings.googleCalEnabled;
   let h = '';
   if (apple)  h += '<button class="btn-outline" style="flex:1;font-size:12px;gap:5px" onclick="exportAllToICS()">'+appleCalSVG(14)+' Agregar todos</button>';
-  if (google) h += '<button class="btn-outline" style="flex:1;font-size:12px" onclick="addAllToGoogle()">G Agregar todos</button>';
   el.innerHTML = h;
 }
 
@@ -5574,8 +5096,8 @@ function selectEventColor(el) {
 
 function openAddEvent() {
   document.getElementById('event-edit-id').value = '';
-  document.getElementById('event-notification-input').value = '0';
-  document.getElementById('event-notification2-input').value = '1440';
+  document.getElementById('event-notification-input').value = '1440';
+  document.getElementById('event-notification2-input').value = '0';
   openModal('event-modal');
   
   // ADD THIS: Auto-set end time when start time changes
@@ -5606,8 +5128,8 @@ function addEvent() {
     end:      document.getElementById('event-end-input').value,
     notes:    document.getElementById('event-notes-input').value.trim(),
     color:    state.selectedEventColor,
-    notification: document.getElementById('event-notification-input').value || null,
-    notification2: document.getElementById('event-notification2-input').value || null,  
+    notification: document.getElementById('event-notification-input').value,
+    notification2: document.getElementById('event-notification2-input').value,
     sequence: 0,
   });
 
@@ -5633,10 +5155,10 @@ function openEditEvent(id) {
   document.getElementById('event-end-input').value   = e.end   || '';
   document.getElementById('event-notes-input').value = e.notes || '';
   document.getElementById('event-notification-input').value =
-    e.notification ?? '0';
+    e.notification ?? '1440';
 
   document.getElementById('event-notification2-input').value =
-    e.notification2 ?? '1440';
+    e.notification2 ?? '0';
   state.selectedEventColor = e.color || '#C4B88E';
   document.querySelectorAll('.ecswatch').forEach(s => {
     s.style.borderColor = s.dataset.color === e.color ? '#1A1E2A' : 'transparent';
@@ -5680,11 +5202,8 @@ function saveEditEvent() {
   e.end          = document.getElementById('event-end-input').value;
   e.notes        = document.getElementById('event-notes-input').value.trim();
   e.color        = state.selectedEventColor;
-  e.notification =
-    document.getElementById('event-notification-input').value || null;
-
-  e.notification2 =
-    document.getElementById('event-notification2-input').value || null;
+  e.notification  = document.getElementById('event-notification-input').value;
+  e.notification2 = document.getElementById('event-notification2-input').value;
   e.sequence     = (e.sequence || 0) + 1;
   
   closeModal('event-modal');
@@ -5753,31 +5272,107 @@ function openInGoogleCalendar(e) {
 }
 
 function exportAllToICS()  { exportToICS(state.events); }
-function addAllToGoogle()  { state.events.forEach(e => openInGoogleCalendar(e)); }
+
+/* ================================================================
+   PERSISTENCE
+================================================================ */
+const STORAGE_KEY = 'vivela365_state_v1';
+const COUNTER_KEYS = ['nextHabitId','nextGoalId','nextEventId','nextBookId','nextAffId',
+                      'nextGratitudeId','nextNoteId','nextMetaId'];
+
+async function storageGet(key) {
+  try {
+    const P = window.Capacitor?.Plugins?.Preferences;
+    if (P) { const r = await P.get({ key }); return r?.value ?? null; }
+  } catch (e) {}
+  return localStorage.getItem(key);
+}
+
+async function storageSet(key, value) {
+  try {
+    const P = window.Capacitor?.Plugins?.Preferences;
+    if (P) { await P.set({ key, value }); return; }
+  } catch (e) {}
+  localStorage.setItem(key, value);
+}
+
+function snapshotState() {
+  const counters = {};
+  COUNTER_KEYS.forEach(k => counters[k] = state[k]);
+  return {
+    habits: state.habits,
+    goals: state.goals,
+    events: state.events,
+    books: state.books,
+    affirmations: state.affirmations,
+    settings: state.settings,
+    gratitudeEntries: state.gratitudeEntries,
+    notes: state.notes,
+    metas: state.metas,
+    eventCategories: state.eventCategories,
+    customMeditationPrompts: state.meditation.customPrompts,
+    counters,
+  };
+}
+
+function applySnapshot(d) {
+  if (d.habits)           state.habits = d.habits;
+  if (d.goals)            state.goals = d.goals;
+  if (d.events)           state.events = d.events;
+  if (d.books)            state.books = d.books;
+  if (d.affirmations)     state.affirmations = d.affirmations;
+  if (d.gratitudeEntries) state.gratitudeEntries = d.gratitudeEntries;
+  if (d.notes)            state.notes = d.notes;
+  if (d.metas)            state.metas = d.metas;
+  if (d.eventCategories)  state.eventCategories = d.eventCategories;
+  if (d.settings)         Object.assign(state.settings, d.settings);
+  if (Array.isArray(d.customMeditationPrompts)) {
+    state.meditation.customPrompts = d.customMeditationPrompts;
+    state.meditationPrompts = state.meditationPrompts.slice(0, 10).concat(d.customMeditationPrompts);
+  }
+  const c = d.counters || {};
+  COUNTER_KEYS.forEach(k => { if (c[k]) state[k] = c[k]; });
+}
+
+async function loadState() {
+  try {
+    const raw = await storageGet(STORAGE_KEY);
+    if (!raw) return false;
+    applySnapshot(JSON.parse(raw));
+    return true;
+  } catch (e) {
+    console.error('Load failed:', e);
+    return false;
+  }
+}
+
+let lastSavedJson = '';
+async function saveState() {
+  try {
+    const json = JSON.stringify(snapshotState());
+    if (json === lastSavedJson) return;          // nothing changed
+    await storageSet(STORAGE_KEY, json);
+    lastSavedJson = json;
+  } catch (e) {
+    console.error('Save failed:', e);
+  }
+}
+
+function startAutoSave() {
+  setInterval(saveState, 3000);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) saveState(); });
+  window.Capacitor?.Plugins?.App?.addListener('pause', saveState);
+}
 
 /* ================================================================
    BACKUP & RESTORE
 ================================================================ */
 function buildBackupPayload() {
   return {
-    version: '1.0.0',
+    version: '1.1.0',
     exportDate: new Date().toISOString(),
     appId: 'vivela365',
-    data: {
-      habits:       state.habits,
-      goals:        state.goals,
-      events:       state.events,
-      books:        state.books,
-      affirmations: state.affirmations,
-      settings:     state.settings,
-      counters: {
-        nextHabitId: state.nextHabitId,
-        nextGoalId:  state.nextGoalId,
-        nextEventId: state.nextEventId,
-        nextBookId:  state.nextBookId,
-        nextAffId:   state.nextAffId,
-      }
-    }
+    data: snapshotState(),
   };
 }
 
@@ -5814,27 +5409,10 @@ function importFullBackup(event) {
         event.target.value = '';
         return;
       }
-      const d = payload.data;
-      state.habits       = d.habits       || [];
-      state.goals        = d.goals        || [];
-      state.events       = d.events       || [];
-      state.books        = d.books        || [];
-      state.affirmations = d.affirmations || state.affirmations;
-      if (d.settings) {
-        Object.assign(state.settings, d.settings);
-      }
-      if (d.counters) {
-        state.nextHabitId = d.counters.nextHabitId || 100;
-        state.nextGoalId  = d.counters.nextGoalId  || 100;
-        state.nextEventId = d.counters.nextEventId || 100;
-        state.nextBookId  = d.counters.nextBookId  || 100;
-        state.nextAffId   = d.counters.nextAffId   || 200;
-      }
-      if (state.currentScreen === 'habits')       renderHabits();
-      if (state.currentScreen === 'goals')        renderGoals();
-      if (state.currentScreen === 'calendar')     renderCalendar();
-      if (state.currentScreen === 'books')        renderBooks();
-      if (state.currentScreen === 'settings')     renderSettings();
+      applySnapshot(payload.data);
+      renderHabits(); renderGoals(); renderSettings(); renderBooks();
+      rescheduleAllNotifications();
+      saveState();
       closeModal('backup-modal');
       showToast('¡Datos restaurados correctamente!');
     } catch(err) {
@@ -5845,8 +5423,39 @@ function importFullBackup(event) {
   reader.readAsText(file);
 }
 
-function checkAutoBackup() {
-  // Stub for auto-backup check
+async function runAutoBackupIfDue() {
+  const s = state.settings;
+  if (!s.autoBackupEnabled) return;
+  const FS = window.Capacitor?.Plugins?.Filesystem;
+  if (!FS) return;                                   // not running natively
+
+  const intervalMs = (s.autoBackupDays || 7) * 86400000;
+  if (s.lastAutoBackupDate && Date.now() - s.lastAutoBackupDate < intervalMs) return;
+
+  try {
+    const name = 'vivela365-auto-' + new Date().toISOString().slice(0, 10) + '.json';
+    await FS.writeFile({
+      path: 'Vivela365/' + name,
+      data: JSON.stringify(buildBackupPayload()),
+      directory: 'DOCUMENTS',
+      encoding: 'utf8',
+      recursive: true,
+    });
+    s.lastAutoBackupDate = Date.now();
+
+    // keep only the 3 newest automatic backups
+    const list = await FS.readdir({ path: 'Vivela365', directory: 'DOCUMENTS' });
+    const autos = list.files
+      .map(f => f.name || f)
+      .filter(n => n.startsWith('vivela365-auto-'))
+      .sort();
+    for (const n of autos.slice(0, -3)) {
+      await FS.deleteFile({ path: 'Vivela365/' + n, directory: 'DOCUMENTS' });
+    }
+    saveState();
+  } catch (e) {
+    console.error('Auto-backup failed:', e);
+  }
 }
 
 function toggleAutoBackup(on) {
@@ -5868,18 +5477,18 @@ function setBackupReminderFreq(days, btn) {
 }
 
 function checkAndShowBackupReminder() {
-  const freq = state.settings.autoBackupReminderFreq;
-  if (freq === 0) return; // Never show reminders
-  
-  const lastShown = state.settings.autoBackupReminderLastShown;
-  if (!lastShown) return; // Don't show on first app startup
-  
+  const s = state.settings;
+  const freq = s.autoBackupReminderFreq;
+  if (!freq) return;
+
   const now = Date.now();
-  const freqMs = freq * 24 * 60 * 60 * 1000;
-  
-  // Show reminder only if interval has passed since last shown
-  if ((now - lastShown) >= freqMs) {
-    state.settings.autoBackupReminderLastShown = now;
+  if (!s.autoBackupReminderLastShown && !s.lastBackupDate) {
+    s.autoBackupReminderLastShown = now;             // first launch: start the clock
+    return;
+  }
+  const last = Math.max(s.autoBackupReminderLastShown || 0, s.lastBackupDate || 0);
+  if (now - last >= freq * 86400000) {
+    s.autoBackupReminderLastShown = now;
     showBackupReminderModal();
   }
 }
@@ -5930,20 +5539,8 @@ function closeBackupReminderPopup() {
 ================================================================ */
 function renderSettings() {
   const s = state.settings;
-  document.getElementById('profile-name-preview').textContent = s.profile.name || 'Nombre, foto y datos personales';
-
-  const gcalBadge = document.getElementById('gcal-status-badge');
-  const gcalText  = document.getElementById('gcal-status-text');
-  if (s.gcalConnected) {
-    gcalBadge.className = 'status-badge connected'; gcalBadge.textContent = 'Conectado';
-    gcalText.textContent = s.gcalEmail;
-  } else {
-    gcalBadge.className = 'status-badge disconnected'; gcalBadge.textContent = 'Desconectado';
-    gcalText.textContent = 'Sin conectar';
-  }
 
   document.getElementById('reminder-time-preview').textContent = formatTime12(s.reminderTime);
-  document.getElementById('week-start-preview').textContent    = s.weekStart;
   document.getElementById('apple-cal-toggle').checked  = s.appleCalEnabled;
   document.getElementById('google-cal-toggle').checked = s.googleCalEnabled;
 
@@ -5953,7 +5550,11 @@ function renderSettings() {
   const freqLabels = {0:'Desactivado',1:'Diario',3:'Cada 3 días',7:'Cada 7 días',14:'Cada 14 días',30:'Mensual'};
   const freqLabel = freqLabels[s.autoBackupDays] || 'Cada '+s.autoBackupDays+' días';
   const autoStatusEl = document.getElementById('auto-backup-status-text');
-  if (autoStatusEl) autoStatusEl.textContent = s.autoBackupEnabled ? ('Activo · '+freqLabel) : 'Desactivado';
+  if (autoStatusEl) autoStatusEl.textContent = s.autoBackupEnabled
+  ? (s.lastAutoBackupDate
+      ? 'Último: ' + new Date(s.lastAutoBackupDate).toLocaleDateString('es-MX',{day:'numeric',month:'short'})
+      : 'Activo · Cada 7 días')
+  : 'Desactivado';
   const backupFreqEl = document.getElementById('backup-freq-preview');
   if (backupFreqEl) backupFreqEl.textContent = freqLabel;
 
@@ -5962,16 +5563,6 @@ function renderSettings() {
   const reminderFreqLabel = reminderFreqLabels[s.autoBackupReminderFreq] || 'Nunca';
   const reminderFreqEl = document.getElementById('backup-reminder-freq-preview');
   if (reminderFreqEl) reminderFreqEl.textContent = reminderFreqLabel;
-
-  // Update modal buttons when it opens
-  setTimeout(() => {
-    const freqVal = s.autoBackupReminderFreq;
-    document.querySelectorAll('#reminder-weekly-btn, #reminder-biweekly-btn, #reminder-monthly-btn, #reminder-never-btn').forEach(b => b.classList.remove('active'));
-    if (freqVal === 7) document.getElementById('reminder-weekly-btn').classList.add('active');
-    else if (freqVal === 14) document.getElementById('reminder-biweekly-btn').classList.add('active');
-    else if (freqVal === 30) document.getElementById('reminder-monthly-btn').classList.add('active');
-    else if (freqVal === 0) document.getElementById('reminder-never-btn').classList.add('active');
-  }, 10);
 
   renderUpcomingBottomBar();
 }
@@ -5982,91 +5573,7 @@ function toggleCalProvider(provider, on) {
   renderUpcomingBottomBar();
   if (state.currentScreen === 'calendar' && state.calView === 'month') showDayEvents(state.selectedDay || todayStr);
   if (state.currentScreen === 'calendar' && state.calView === 'upcoming') renderUpcoming();
-  showToast((provider==='apple'?'Apple Calendar':'Google Calendar')+(on?' activado':' desactivado'));
-}
-
-function triggerAvatarUpload() { document.getElementById('avatar-file-input').click(); }
-
-function handleAvatarUpload(event) {
-  const file = event.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    state.settings.profile.avatarDataUrl = e.target.result;
-    const circle = document.getElementById('profile-avatar-initials').parentElement;
-    document.getElementById('profile-avatar-initials').style.display = 'none';
-    let img = circle.querySelector('img');
-    if (!img) { img = document.createElement('img'); circle.insertBefore(img, circle.firstChild); }
-    img.src = e.target.result;
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0';
-    showToast('Foto actualizada');
-  };
-  reader.readAsDataURL(file);
-}
-
-function saveProfile() {
-  const name    = document.getElementById('profile-name-input').value.trim();
-  const tagline = document.getElementById('profile-tagline-input').value.trim();
-  const email   = document.getElementById('profile-email-input').value.trim();
-  state.settings.profile = { ...state.settings.profile, name, tagline, email };
-  if (name) {
-    document.getElementById('profile-display-name').textContent = name;
-    const parts = name.split(' ').filter(Boolean);
-    const initials = parts.length >= 2 ? (parts[0][0]+parts[parts.length-1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
-    document.getElementById('profile-avatar-initials').textContent = initials;
-  }
-  if (tagline) document.getElementById('profile-display-tagline').textContent = tagline;
-  closeModal('profile-modal');
-  renderSettings();
-  showToast('¡Perfil guardado!');
-}
-
-function connectGCal() {
-  const email = document.getElementById('gcal-email-input').value.trim();
-  if (!email) { showToast('Ingresa tu correo de Google'); return; }
-  state.settings.gcalConnected = true; state.settings.gcalEmail = email;
-  document.getElementById('gcal-connected-section').style.display    = 'block';
-  document.getElementById('gcal-disconnected-section').style.display = 'none';
-  document.getElementById('gcal-connected-email').textContent = email;
-  renderSettings(); showToast('Google Calendar conectado ✓');
-}
-
-function disconnectGCal() {
-  state.settings.gcalConnected = false; state.settings.gcalEmail = '';
-  document.getElementById('gcal-connected-section').style.display    = 'none';
-  document.getElementById('gcal-disconnected-section').style.display = 'block';
-  document.getElementById('gcal-email-input').value = '';
-  renderSettings(); showToast('Google Calendar desconectado');
-}
-
-function saveGeminiKey() {
-  const key = document.getElementById('gemini-key-input').value.trim();
-  if (!key) { showToast('Ingresa tu API key de Gemini'); return; }
-  
-  state.settings.geminiKey = key;
-  
-  const statusEl = document.getElementById('gemini-key-status');
-  statusEl.style.display = 'block';
-  statusEl.innerHTML = '<div style="background:var(--green-light);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:#3d7a60;display:flex;align-items:center;gap:8px"><span>✓</span><span>API key guardada correctamente</span></div>';
-  
-  document.getElementById('gemini-key-saved-actions').style.display = 'block';
-  document.getElementById('gemini-key-input').value = '••••••••••••••••';
-  document.getElementById('gemini-key-input').type = 'password';
-  
-  renderSettings();
-  showToast('¡API key de Gemini guardada!');
-}
-
-function removeGeminiKey() {
-  state.settings.geminiKey = '';
-  document.getElementById('gemini-key-input').value = '';
-  document.getElementById('gemini-key-status').style.display         = 'none';
-  document.getElementById('gemini-key-saved-actions').style.display  = 'none';
-  renderSettings(); showToast('API key eliminada');
-}
-
-function toggleApiKeyVisibility() {
-  const inp = document.getElementById('gemini-key-input');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
+  showToast((provider==='apple'?'Archivo .ics':'Google Calendar')+(on?' activado':' desactivado'));
 }
 
 function toggleReminders(on) {
@@ -6100,20 +5607,6 @@ function formatTime12(t) {
   return (h%12||12)+':'+ String(m).padStart(2,'0')+' '+period;
 }
 
-let pendingWeekStart = 'Lunes';
-
-function selectWeekStart(val, btn) {
-  pendingWeekStart = val;
-  document.querySelectorAll('.week-start-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function saveWeekStart() {
-  state.settings.weekStart = pendingWeekStart;
-  closeModal('week-start-modal');
-  renderSettings();
-  showToast('Inicio de semana: '+pendingWeekStart);
-}
 
 function downloadCSV(filename, rows) {
   const csv = rows.map(r => r.map(cell => '"'+String(cell).replace(/"/g,'""')+'"').join(',')).join('\n');
@@ -6163,9 +5656,7 @@ function exportBooksCSV() {
 
 function confirmClearData() {
   if (!confirm('⚠️ ¿Estás seguro? Esto borrará todos tus hábitos, objetivos y eventos locales. Esta acción no se puede deshacer.')) return;
-  state.habits = []; state.goals = []; state.events = []; state.books = [];
-  state.settings.profile = { name:'', tagline:'', email:'', avatarDataUrl:null };
-  state.settings.geminiKey = ''; state.settings.gcalConnected = false; state.settings.gcalEmail = '';
+  state.habits = []; state.goals = []; state.events = []; state.books = []; state.gratitudeEntries = []; state.notes = []; state.metas = [];
   renderSettings();
   showToast('Datos borrados');
 }
@@ -6544,20 +6035,8 @@ function addBook() {
   showToast('¡Libro agregado!');
 }
 
-function setBookColor(id, color) {
-  const b = state.books.find(x => x.id === id);
-  if (!b) return;
-  b.color = color;
-  document.querySelectorAll('#book-color-picker-'+id+' .ecswatch').forEach(s => {
-    s.style.borderColor = s.dataset.color === color ? '#1A1E2A' : 'transparent';
-  });
-  renderBooks();
-  showToast('Color actualizado');
-}
-
 function deleteBook(id) {
   if (!confirm('¿Eliminar este libro?')) return;
-  const book = state.books.find(b => b.id === id);
   state.books = state.books.filter(b => b.id !== id);
   closeModal('book-detail-modal'); 
   renderBooks(); 
@@ -6960,6 +6439,8 @@ function setNoteMode(mode) {
   window.noteCurrentMode = mode;
 }
 
+const NOTE_PLAY_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+
 function renderNotes() {
   window.noteExpandedDates = {};
   const body = document.getElementById('notes-body');
@@ -7018,7 +6499,7 @@ function renderNotes() {
             '<div style="background:var(--bg);border-radius:var(--r-sm);height:24px;position:relative;overflow:hidden">' +
             '<div id="note-progress-' + note.id + '" style="height:100%;background:var(--gold);width:0%;transition:width .1s linear"></div>' +
             '</div>' +
-            '<button class="btn-outline" style="padding:6px 10px;font-size:11px" onclick="playNoteRecording(' + note.id + ')">▶ Reproducir</button>' +
+            '<button class="btn-outline" style="padding:6px 10px;font-size:11px" onclick="playNoteRecording(' + note.id + ')">' + NOTE_PLAY_ICON + 'Reproducir</button>' +
             '</div>' : '') +
           '<div style="font-size:10px;color:var(--text-3);margin-bottom:6px">' + time + '</div>' +
           '<div style="display:flex;gap:6px">' +
@@ -7109,7 +6590,7 @@ function filterNotes() {
         html += '<div class="gratitude-entry">' +
           '<div style="font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:4px">🎤 ' + (note.title || 'Sin título') + '</div>' +
           (note.description ? '<div style="font-size:12px;color:var(--text-2);margin-bottom:6px;font-style:italic">' + escHtml(note.description) + '</div>' : '') +
-          (hasRec ? '<button class="btn-outline" style="padding:6px 10px;font-size:11px;width:100%;margin-bottom:8px" onclick="playNoteRecording(' + note.id + ')">▶ Reproducir</button>' : '') +
+          (hasRec ? '<button class="btn-outline" style="padding:6px 10px;font-size:11px;width:100%;margin-bottom:8px" onclick="playNoteRecording(' + note.id + ')">' + NOTE_PLAY_ICON + 'Reproducir</button>' : '') +
           '<div style="font-size:10px;color:var(--text-3);margin-bottom:6px">' + time + '</div>' +
           '<div style="display:flex;gap:6px">' +
           '<button class="btn-outline" style="padding:3px 8px;font-size:10px;flex:1" onclick="openEditNote(' + note.id + ')">Editar</button>' +
@@ -7396,7 +6877,6 @@ let cameraVideo = null;
 let overlayCanvas = null;
 let overlayCtx = null;
 let scannerAnimationFrame = null;
-let currentCapturedFrame = null;
 
 function openCameraScanner() {
   const modal = document.getElementById('camera-scanner-modal');
@@ -7881,147 +7361,6 @@ function importAllGeminiData() {
   showToast('✨ Importación completa');
 }
 
-/* ================================================================
-   SWIPE NAVIGATION - BACK TO HOME
-================================================================ */
-(function() {
-  let swipeStartX = 0;
-  let swipeStartY = 0;
-  const swipeThreshold = 100; // pixels
-  
-  document.addEventListener('pointerdown', e => {
-    swipeStartX = e.clientX;
-    swipeStartY = e.clientY;
-  }, true);
-  
-  document.addEventListener('pointerup', e => {
-    if (swipeStartX === 0) return;
-    
-    const currentScreen = document.querySelector('.screen.active');
-    if (!currentScreen || currentScreen.id === 'screen-home') {
-      swipeStartX = 0;
-      swipeStartY = 0;
-      return;
-    }
-    
-    const deltaX = swipeStartX - e.clientX;
-    const deltaY = Math.abs(swipeStartY - e.clientY);
-    
-    // Swipe left (positive deltaX) with minimal vertical movement
-    if (deltaX > swipeThreshold && deltaY < 50) {
-      navigateTo('home');
-    }
-    
-    swipeStartX = 0;
-    swipeStartY = 0;
-  }, true);
-})();
-
-function openEventCategoriesModal() {
-  const list = document.getElementById('categories-list');
-  list.innerHTML = Object.entries(state.eventCategories).map(([color, name]) => 
-    '<div style="display:flex;gap:8px;align-items:center">'+
-    '<div style="width:32px;height:32px;border-radius:50%;background:'+color+';flex-shrink:0"></div>'+
-    '<input class="form-input" type="text" value="'+escHtml(name)+'" onchange="updateCategoryName(\''+color+'\', this.value)" placeholder="Nombre de categoría" style="flex:1">'+
-    '</div>'
-  ).join('');
-  openModal('event-categories-modal');
-}
-
-function updateCategoryName(color, newName) {
-  state.eventCategories[color] = newName.trim() || 'Sin asignar';
-}
-
-function setupHabitDragListeners() {
-  const items = document.querySelectorAll('.checklist-item');
-  
-  items.forEach(item => {
-    let isDragging = false;
-    let dragStartY = 0;
-    let draggedHabitId = null;
-    
-    item.addEventListener('pointerdown', e => {
-      dragStartY = e.clientY;
-      draggedHabitId = parseInt(item.dataset.habitId);
-      
-      // Only drag if grabbed by the handle (⋮⋮)
-      if (!e.target.textContent.includes('⋮')) {
-        draggedHabitId = null;
-        return;
-      }
-      
-      isDragging = true;
-      item.style.opacity = '0.6';
-    });
-    
-    document.addEventListener('pointermove', e => {
-      if (!isDragging || !draggedHabitId) return;
-      
-      const deltaY = e.clientY - dragStartY;
-      const siblings = Array.from(document.querySelectorAll('.checklist-item'));
-      const currentIdx = siblings.findIndex(el => parseInt(el.dataset.habitId) === draggedHabitId);
-      
-      if (Math.abs(deltaY) > 30) {
-        if (deltaY < 0 && currentIdx > 0) {
-          // Move up
-          const prevHabit = parseInt(siblings[currentIdx - 1].dataset.habitId);
-          swapHabits(draggedHabitId, prevHabit);
-          dragStartY = e.clientY;
-        } else if (deltaY > 0 && currentIdx < siblings.length - 1) {
-          // Move down
-          const nextHabit = parseInt(siblings[currentIdx + 1].dataset.habitId);
-          swapHabits(draggedHabitId, nextHabit);
-          dragStartY = e.clientY;
-        }
-      }
-    });
-    
-    document.addEventListener('pointerup', () => {
-      if (isDragging) {
-        isDragging = false;
-        item.style.opacity = '1';
-        draggedHabitId = null;
-      }
-    });
-  });
-}
-
-function swapHabits(habitId1, habitId2) {
-  const idx1 = state.habits.findIndex(h => h.id === habitId1);
-  const idx2 = state.habits.findIndex(h => h.id === habitId2);
-  
-  if (idx1 !== -1 && idx2 !== -1) {
-    [state.habits[idx1], state.habits[idx2]] = [state.habits[idx2], state.habits[idx1]];
-    renderWeekGrid();
-    renderDailyChecklist();
-    renderStreaks();
-  }
-}
-
-function startHabitDrag(habitId, event) {
-  state.habitDragIndex = state.habits.findIndex(h => h.id === habitId);
-  event.dataTransfer.effectAllowed = 'move';
-}
-
-function dragOverHabit(habitId, event) {
-  event.preventDefault();
-  event.dataTransfer.dropEffect = 'move';
-}
-
-function dropHabit(habitId, event) {
-  event.preventDefault();
-  const targetIdx = state.habits.findIndex(h => h.id === habitId);
-  const sourceIdx = state.habitDragIndex;
-  
-  if (sourceIdx !== -1 && targetIdx !== -1 && sourceIdx !== targetIdx) {
-    [state.habits[sourceIdx], state.habits[targetIdx]] = [state.habits[targetIdx], state.habits[sourceIdx]];
-    renderDailyChecklist();
-  }
-}
-
-function endHabitDrag(event) {
-  state.habitDragIndex = null;
-}
 
 /* ================================================================
    METAS - COMPLETE IMPLEMENTATION
@@ -8534,8 +7873,8 @@ function buildEventNotificationCandidates() {
     // Support both reminders independently.
     // The fallback values also handle events created before this update.
     const reminders = [
-      { value: e.notification ?? '0', slot: 1 },
-      { value: e.notification2 ?? '1440', slot: 2 }
+      { value: e.notification ?? '1440', slot: 1 },
+      { value: e.notification2 ?? '0', slot: 2 }
     ];
 
     reminders.forEach(({ value, slot }) => {
@@ -8659,17 +7998,18 @@ async function rescheduleAllNotifications() {
 /* ================================================================
    INIT
 ================================================================ */
-document.getElementById('event-date-input').value = todayStr;
-renderHabits();
-renderGoals();
-renderSettings();
-checkAutoBackup();
-checkAndShowBackupReminder();
-initializeHabitDragListeners();
+(async function init() {
+  await loadState();
+  document.getElementById('event-date-input').value = todayStr;
+  renderHabits();
+  renderGoals();
+  renderSettings();
+  initializeHabitDragListeners();
+  checkAndShowBackupReminder();
+  runAutoBackupIfDue();
+  rescheduleAllNotifications();   // re-run now that real data is loaded
+  startAutoSave();                // only after loadState finished
+})();
 </script>
 </body>
 </html>
-
-
-
-
