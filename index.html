@@ -1284,11 +1284,24 @@ body {
       </div>
     </div>
 
+    <div class="settings-section">
+      <span class="settings-section-label">Legal</span>
+      <div class="settings-list">
+        <div class="settings-row" onclick="openPrivacyPolicy()">
+          <div class="settings-icon si-green"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="settings-row-text"><strong>Política de privacidad</strong><span>Cómo se usan tus datos</span></div>
+          <span class="settings-chevron">›</span>
+        </div>
+      </div>
+    </div>
+
     <div class="app-footer">
       <div class="app-logo-sm">Vívela<em>365</em></div>
       <div class="app-version">Una relación más profunda contigo mismo.<br>Un día, una página, una intención a la vez.</div>
     </div>
   </div>
+
+
 
   <!-- MODAL: Backup Reminder Frequency -->
   <div class="modal-overlay" id="backup-reminder-modal" onclick="modalOverlayClick(event,'backup-reminder-modal')">
@@ -2187,6 +2200,7 @@ const state = {
   affQueue: [],
   affAutoPlay: false,
   affRecordings: {},
+  affRecordingFiles: {},   // { 'aff_<hash>': { file, mime } }  <- saved to disk
   affirmations: [
     "Soy capaz de lograr todo lo que me propongo.",
     "Merezco amor, paz y abundancia.",
@@ -2460,11 +2474,11 @@ ${JSON.stringify(metas, null, 2)}`;
 }
 
 function getPlannerPromptTemplate() {
-  return `You are extracting structured data from a Spanish-language annual/monthly/weekly planner. 
+  return `You are extracting structured data from a 2027 Spanish-language annual/monthly/weekly planner. 
 Your task is to identify the page type and extract all relevant information according to the page's structure.
 
 CRITICAL INSTRUCTION: Return ONLY valid JSON with no markdown formatting, no code fences, no preamble, and no trailing text. The response must be parseable as JSON immediately.
-
+YEAR: This planner is for the year 2027. Every date you return must use 2027, with these exceptions for weeks that cross a year boundary: the week of Dec 28 - Jan 03 on the January pages starts in December 2026, and the week of Dec 27 - Jan 02 on the December pages ends in January 2028. The page does not print the year, so never guess a year from anything else.
 ---
 
 UNRECOGNIZED PAGES
@@ -2697,14 +2711,14 @@ For weekly_planner and daily_agenda pages that span a specific week:
 - Include both date and day name
 - Return in "week_date_range" field at the top level of "data"
 
-Example for page 207 (Dec 27 - Jan 02):
+Example for page 207 (Nov 29 - Dec 06):
 {
   "data": {
     "week_date_range": {
-      "start_date": "2024-12-27",
-      "end_date": "2025-01-02",
-      "start_day_name": "Viernes",
-      "end_day_name": "Jueves"
+      "start_date": "2027-11-29",
+      "end_date": "2028-01-05",
+      "start_day_name": "Lunes",
+      "end_day_name": "Domingo"
     },
     ...
   }
@@ -3199,49 +3213,16 @@ NOW EXTRACT THE PAGE AND RETURN ONLY JSON.`;
 }
 
 function extractBooksForPrompt() {
-  return state.books
-    .map(book => ({
-      id: book.id,
-      title: book.title,
-      author: book.author
-    }))
-    .slice(0, 50);
+  return state.books.map(b => ({ id: b.id, title: b.title })).slice(0, 50);
 }
-
 function extractHabitsForPrompt() {
-  return state.habits
-    .map(habit => ({
-      id: habit.id,
-      name: habit.name,
-      freq: habit.freq
-    }))
-    .slice(0, 50);
+  return state.habits.map(h => ({ id: h.id, name: h.name })).slice(0, 50);
 }
-
 function extractObjetivosForPrompt() {
-  return (state.goals || [])
-    .map(obj => ({
-      id: obj.id,
-      objetivo: obj.title || '',
-      category: obj.cat || '',
-      description: obj.desc || '',
-      status: obj.status || 'active',
-      milestones: (obj.milestones || []).map(m => ({
-        text: m.text || '',
-        done: !!m.done
-      }))
-    }))
-    .slice(0, 50);
+  return (state.goals || []).map(o => ({ id: o.id, objetivo: o.title || '' })).slice(0, 50);
 }
-
 function extractMetasForPrompt() {
-  return (state.metas || [])        
-    .map(meta => ({
-      id: meta.id,
-      meta: meta.title || '',     
-      month: meta.dueDate || ''
-    }))
-    .slice(0, 50);
+  return (state.metas || []).map(m => ({ id: m.id, meta: m.title || '' })).slice(0, 50);
 }
 
 function setScanActionsVisible(visible) {
@@ -5202,10 +5183,7 @@ function exportToICS(events) {
     );
   });
   ics.push('END:VCALENDAR');
-  const blob = new Blob([ics.filter(Boolean).join('\r\n')], { type:'text/calendar;charset=utf-8' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a'); a.href=url; a.download='vivela365-eventos.ics';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  saveAndShareFile('vivela365-eventos.ics', ics.filter(Boolean).join('\r\n'), 'text/calendar;charset=utf-8');
   showToast('Archivo .ics descargado ✓');
 }
 
@@ -5252,6 +5230,7 @@ function snapshotState() {
     events: state.events,
     books: state.books,
     affirmations: state.affirmations,
+    affRecordingFiles: state.affRecordingFiles,
     settings: state.settings,
     gratitudeEntries: state.gratitudeEntries,
     notes: state.notes,
@@ -5268,6 +5247,7 @@ function applySnapshot(d) {
   if (d.events)           state.events = d.events;
   if (d.books)            state.books = d.books;
   if (d.affirmations)     state.affirmations = d.affirmations;
+  if (d.affRecordingFiles) state.affRecordingFiles = d.affRecordingFiles;
   if (d.gratitudeEntries) state.gratitudeEntries = d.gratitudeEntries;
   if (d.notes)            state.notes = d.notes;
   if (d.metas)            state.metas = d.metas;
@@ -5323,18 +5303,14 @@ function buildBackupPayload() {
   };
 }
 
-function exportFullBackup(silent) {
-  const payload = buildBackupPayload();
-  const json = JSON.stringify(payload, null, 2);
-  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
-  const url  = URL.createObjectURL(blob);
+async function exportFullBackup(silent) {
+  const json = JSON.stringify(buildBackupPayload(), null, 2);
   const dateStr = new Date().toISOString().slice(0,10);
-  const a    = document.createElement('a');
-  a.href = url; a.download = 'vivela365-respaldo-'+dateStr+'.json';
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(url);
-  state.settings.lastBackupDate = Date.now();
-  if (!silent) showToast('¡Respaldo exportado correctamente!');
+  const ok = await saveAndShareFile('vivela365-respaldo-' + dateStr + '.json', json, 'application/json;charset=utf-8');
+  if (ok) {
+    state.settings.lastBackupDate = Date.now();
+    if (!silent) showToast('¡Respaldo exportado correctamente!');
+  }
 }
 
 function triggerImportBackup() {
@@ -5554,13 +5530,43 @@ function formatTime12(t) {
   return (h%12||12)+':'+ String(m).padStart(2,'0')+' '+period;
 }
 
+async function saveAndShareFile(filename, content, mime) {
+  const FS = window.Capacitor?.Plugins?.Filesystem;
+  const Share = window.Capacitor?.Plugins?.Share;
+
+  // Browser fallback (what you have today)
+  if (!FS || !Share) {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    return true;
+  }
+
+  try {
+    const res = await FS.writeFile({
+      path: filename,
+      data: content,
+      directory: 'CACHE',
+      encoding: 'utf8',
+    });
+    await Share.share({ title: filename, url: res.uri });
+    return true;
+  } catch (e) {
+    // Share rejects when the user dismisses the sheet; that's not an error
+    if (!/cancel/i.test(String(e?.message || e))) {
+      console.error('Share failed:', e);
+      showToast('No se pudo exportar el archivo');
+    }
+    return false;
+  }
+}
 
 function downloadCSV(filename, rows) {
   const csv = rows.map(r => r.map(cell => '"'+String(cell).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a'); a.href=url; a.download=filename;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  saveAndShareFile(filename, '\uFEFF' + csv, 'text/csv;charset=utf-8');
 }
 
 function exportHabitsCSV() {
@@ -5604,6 +5610,7 @@ function exportBooksCSV() {
 function confirmClearData() {
   if (!confirm('⚠️ ¿Estás seguro? Esto borrará todos tus hábitos, objetivos y eventos locales. Esta acción no se puede deshacer.')) return;
   state.habits = []; state.goals = []; state.events = []; state.books = []; state.gratitudeEntries = []; state.notes = []; state.metas = [];
+  clearAllRecordings();
   renderSettings();
   showToast('Datos borrados');
 }
@@ -5991,6 +5998,111 @@ function deleteBook(id) {
 }
 
 /* ================================================================
+   RECORDING STORAGE (files on device)
+================================================================ */
+const REC_DIR    = 'DATA';
+const REC_FOLDER = 'recordings';
+
+function getFS() { return window.Capacitor?.Plugins?.Filesystem || null; }
+
+function extFromMime(mime) {
+  if (/mp4|m4a|aac/i.test(mime)) return 'm4a';
+  if (/webm/i.test(mime)) return 'webm';
+  if (/ogg/i.test(mime))  return 'ogg';
+  if (/mpeg|mp3/i.test(mime)) return 'mp3';
+  if (/wav/i.test(mime))  return 'wav';
+  return 'webm';
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onloadend = () => {
+      const s = String(r.result || '');
+      resolve(s.slice(s.indexOf(',') + 1));
+    };
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+function base64ToBlob(b64, mime) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+// Stable key from the affirmation text, so recordings survive deletions/reordering
+function hashStr(s) {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+
+// Writes the blob to disk. Always returns a playable in-memory URL;
+// meta is null if it couldn't be persisted (browser preview or write error).
+async function saveRecordingFile(blob, baseName) {
+  const mime = (blob.type || 'audio/webm').split(';')[0];
+  const url  = URL.createObjectURL(blob);
+  const FS   = getFS();
+  if (!FS) return { meta: null, url };
+
+  const file = baseName + '.' + extFromMime(mime);
+  try {
+    const data = await blobToBase64(blob);
+    await FS.writeFile({
+      path: REC_FOLDER + '/' + file,
+      data,                         // no "encoding" = binary (base64 in)
+      directory: REC_DIR,
+      recursive: true,
+    });
+    return { meta: { file, mime }, url };
+  } catch (e) {
+    console.error('Recording save failed:', e);
+    showToast('No se pudo guardar la grabación en el dispositivo');
+    return { meta: null, url };
+  }
+}
+
+// Returns a playable URL: from cache, or by reading the file from disk
+async function loadRecordingUrl(cache, key, meta) {
+  if (cache[key]) return cache[key];
+  const FS = getFS();
+  if (!FS || !meta?.file) return null;
+  try {
+    const res = await FS.readFile({ path: REC_FOLDER + '/' + meta.file, directory: REC_DIR });
+    const blob = res.data instanceof Blob ? res.data : base64ToBlob(res.data, meta.mime);
+    const url = URL.createObjectURL(blob);
+    cache[key] = url;
+    return url;
+  } catch (e) {
+    console.error('Recording load failed:', e);
+    return null;
+  }
+}
+
+async function deleteRecordingFile(meta) {
+  const FS = getFS();
+  if (!FS || !meta?.file) return;
+  try { await FS.deleteFile({ path: REC_FOLDER + '/' + meta.file, directory: REC_DIR }); }
+  catch (e) { /* already gone */ }
+}
+
+async function clearAllRecordings() {
+  Object.values(state.affRecordings).concat(Object.values(state.noteRecordings))
+    .forEach(u => { try { URL.revokeObjectURL(u); } catch (_) {} });
+  state.affRecordings = {};
+  state.noteRecordings = {};
+  state.affRecordingFiles = {};
+  const FS = getFS();
+  if (FS) {
+    try { await FS.rmdir({ path: REC_FOLDER, directory: REC_DIR, recursive: true }); }
+    catch (e) { /* folder may not exist */ }
+  }
+}
+
+/* ================================================================
    AFFIRMATIONS
 ================================================================ */
 const AFF_COLORS = ['#2D3245','#3D4A58','#3C5545','#553C3C','#4A3C55','#3C4A5A','#55493C','#3C5550','#4A4535','#3D3D55','#553D4A','#35504A'];
@@ -6014,7 +6126,9 @@ function renderAffirmations() {
   renderAffCard('no-anim'); renderAffDots();
 }
 
-function currentAffKey() { return 'aff_'+state.affQueue[state.affIndex]; }
+function currentAffKey() {
+  return 'aff_' + hashStr(state.affirmations[state.affQueue[state.affIndex]] || '');
+}
 
 function renderAffCard(direction) {
   const wrap = document.getElementById('aff-card-wrap');
@@ -6024,7 +6138,8 @@ function renderAffCard(direction) {
   const bg   = AFF_COLORS[idx % AFF_COLORS.length];
   const num  = state.affIndex + 1;
   const total = state.affirmations.length;
-  const hasRec = !!state.affRecordings[currentAffKey()];
+  const key = currentAffKey();
+  const hasRec = !!(state.affRecordingFiles[key] || state.affRecordings[key]);
 
   const card = document.createElement('div');
   card.className = 'aff-card '+(direction==='no-anim'?'slide-in':direction==='in-from-right'?'slide-from-right':direction==='in-from-left'?'slide-from-left':'slide-from-right');
@@ -6100,17 +6215,33 @@ async function toggleRecording() {
 async function startRecording() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const key = currentAffKey();            // capture now, in case the card changes
     affAudioChunks = [];
     affMediaRecorder = new MediaRecorder(stream);
-    affMediaRecorder.ondataavailable = e => affAudioChunks.push(e.data);
-    affMediaRecorder.onstop = () => {
-      const blob = new Blob(affAudioChunks,{type:'audio/webm'});
-      state.affRecordings[currentAffKey()] = URL.createObjectURL(blob);
-      stream.getTracks().forEach(t=>t.stop());
-      // FIX: use 'no-anim' so the card refreshes in place without disappearing
+    const recorder = affMediaRecorder;
+
+    recorder.ondataavailable = e => { if (e.data && e.data.size) affAudioChunks.push(e.data); };
+    recorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      const type = recorder.mimeType || affAudioChunks[0]?.type || 'audio/webm';
+      const blob = new Blob(affAudioChunks, { type });
+
+      const saved = await saveRecordingFile(blob, key);
+
+      // Re-recording: clean up the previous file/URL
+      const old = state.affRecordingFiles[key];
+      if (saved.meta) {
+        if (old && old.file !== saved.meta.file) deleteRecordingFile(old);
+        state.affRecordingFiles[key] = saved.meta;
+      }
+      const oldUrl = state.affRecordings[key];
+      if (oldUrl) URL.revokeObjectURL(oldUrl);
+      state.affRecordings[key] = saved.url;
+
       renderAffCard('no-anim'); renderAffDots(); showToast('¡Voz grabada!');
     };
-    affMediaRecorder.start();
+
+    recorder.start();
     const btn   = document.getElementById('aff-rec-btn');
     const label = document.getElementById('aff-rec-label');
     if (btn)   btn.classList.add('recording');
@@ -6125,12 +6256,21 @@ function stopRecording(silent) {
   }
 }
 
-function playRecording() {
+async function playRecording() {
   stopPlayback();
-  const url = state.affRecordings[currentAffKey()]; if (!url) return;
+  const key = currentAffKey();
+  const url = await loadRecordingUrl(state.affRecordings, key, state.affRecordingFiles[key]);
+
+  if (key !== currentAffKey()) return;      // user moved to another card while loading
+  if (!url) {
+    showToast('Grabación no encontrada');
+    if (state.affAutoPlay) affAutoTimer = setTimeout(() => moveAff(1), 6000);
+    return;
+  }
   affCurrentAudio = new Audio(url);
-  affCurrentAudio.play();
   affCurrentAudio.onended = () => { if (state.affAutoPlay) moveAff(1); };
+  try { await affCurrentAudio.play(); }
+  catch (e) { showToast('No se pudo reproducir el audio'); }
 }
 
 function stopPlayback() {
@@ -6145,8 +6285,8 @@ function toggleAffAutoplay(on) {
 
 function scheduleAutoPlay() {
   clearTimeout(affAutoTimer);
-  const url = state.affRecordings[currentAffKey()];
-  if (url) playRecording();
+  const key = currentAffKey();
+  if (state.affRecordingFiles[key] || state.affRecordings[key]) playRecording();
   else affAutoTimer = setTimeout(() => moveAff(1), 6000);
 }
 
@@ -6478,6 +6618,10 @@ function renderNotes() {
   body.innerHTML = html;
 }
 
+function noteHasRecording(note) {
+  return !!(note.audio || state.noteRecordings['note_' + note.id]);
+}
+
 function filterNotes() {
   const query = document.getElementById('notes-search-input').value.toLowerCase().trim();
   state.noteSearch = query;
@@ -6533,7 +6677,7 @@ function filterNotes() {
       const isVoice = note.type === 'voice';
       
       if (isVoice) {
-        const hasRec = !!state.noteRecordings['note_' + note.id];
+        const hasRec = noteHasRecording(note);
         html += '<div class="gratitude-entry">' +
           '<div style="font-size:12px;font-weight:600;color:var(--text-1);margin-bottom:4px">🎤 ' + (note.title || 'Sin título') + '</div>' +
           (note.description ? '<div style="font-size:12px;color:var(--text-2);margin-bottom:6px;font-style:italic">' + escHtml(note.description) + '</div>' : '') +
@@ -6603,6 +6747,7 @@ function openAddNote() {
   document.getElementById('note-rec-stop-btn').style.display = 'none';
   document.getElementById('note-delete-row').style.display = 'none';
   window.noteCurrentMode = 'text';
+  window.noteCurrentRecordingBlob = null;
   setNoteMode('text');
   document.querySelector('#note-modal .modal-title').textContent = 'Nueva nota';
   document.getElementById('note-save-btn').textContent = 'Guardar nota';
@@ -6632,7 +6777,7 @@ function openEditNote(noteId) {
     setNoteMode('voice');
     document.getElementById('note-voice-title-input').value = note.title || '';
     document.getElementById('note-voice-desc-input').value = note.description || '';
-    const hasRec = !!state.noteRecordings['note_' + noteId];
+    const hasRec = noteHasRecording(note);
     document.getElementById('note-recorded-status').style.display = hasRec ? 'block' : 'none';
     document.getElementById('note-rec-start-btn').style.display = hasRec ? 'none' : 'block';
     document.getElementById('note-rec-stop-btn').style.display = 'none';
@@ -6646,13 +6791,13 @@ async function startNoteRecording() {
     const stream = await navigator.mediaDevices.getUserMedia({audio: true});
     noteAudioChunks = [];
     noteMediaRecorder = new MediaRecorder(stream);
+    const recorder = noteMediaRecorder;
     noteRecordingTime = 0;
-    
-    noteMediaRecorder.ondataavailable = e => noteAudioChunks.push(e.data);
-    noteMediaRecorder.onstop = () => {
-      const blob = new Blob(noteAudioChunks, {type: 'audio/webm'});
-      const url = URL.createObjectURL(blob);
-      window.noteCurrentRecordingUrl = url;
+
+    recorder.ondataavailable = e => { if (e.data && e.data.size) noteAudioChunks.push(e.data); };
+    recorder.onstop = () => {
+      const type = recorder.mimeType || noteAudioChunks[0]?.type || 'audio/webm';
+      window.noteCurrentRecordingBlob = new Blob(noteAudioChunks, { type });
       stream.getTracks().forEach(t => t.stop());
       document.getElementById('note-recorded-status').style.display = 'block';
       document.getElementById('note-rec-start-btn').style.display = 'none';
@@ -6660,16 +6805,16 @@ async function startNoteRecording() {
       clearInterval(noteRecordingTimer);
       showToast('Grabación lista');
     };
-    
-    noteMediaRecorder.start();
+
+    recorder.start();
     document.getElementById('note-rec-start-btn').style.display = 'none';
     document.getElementById('note-rec-stop-btn').style.display = 'block';
-    
+
     noteRecordingTimer = setInterval(() => {
       noteRecordingTime++;
       const mins = Math.floor(noteRecordingTime / 60);
       const secs = noteRecordingTime % 60;
-      document.getElementById('note-recorder-display').textContent = 
+      document.getElementById('note-recorder-display').textContent =
         String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
     }, 1000);
   } catch(e) {
@@ -6685,10 +6830,11 @@ function stopNoteRecording() {
 
 async function playNoteRecording(noteId) {
   if (noteCurrentPlayback) noteCurrentPlayback.pause();
-  
-  const url = state.noteRecordings['note_' + noteId];
+
+  const note = state.notes.find(n => n.id === noteId);
+  const url = await loadRecordingUrl(state.noteRecordings, 'note_' + noteId, note?.audio);
   if (!url) { showToast('Grabación no encontrada'); return; }
-  
+
   noteCurrentPlayback = new Audio(url);
   const progressBar = document.getElementById('note-progress-' + noteId);
   const durationDisplay = document.getElementById('note-duration-' + noteId);
@@ -6715,20 +6861,20 @@ async function playNoteRecording(noteId) {
     });
   }
   
-  noteCurrentPlayback.play();
+  noteCurrentPlayback.play().catch(() => showToast('No se pudo reproducir el audio'));
 }
 
-function addNote() {
+async function addNote() {
   const mode = window.noteCurrentMode;
   const date = document.getElementById('note-date-input').value;
-  
+
   if (!date) { showToast('Selecciona una fecha'); return; }
-  
+
   if (mode === 'text') {
     const title = document.getElementById('note-title-input').value.trim();
     const content = document.getElementById('note-text-input').value.trim();
     if (!content) { showToast('Escribe tu nota'); return; }
-    
+
     state.notes.push({
       id: state.nextNoteId++,
       date,
@@ -6740,11 +6886,13 @@ function addNote() {
   } else {
     const title = document.getElementById('note-voice-title-input').value.trim();
     const description = document.getElementById('note-voice-desc-input').value.trim();
-    const url = window.noteCurrentRecordingUrl;
-    
-    if (!url) { showToast('Graba una nota primero'); return; }
-    
+    const blob = window.noteCurrentRecordingBlob;
+
+    if (!blob) { showToast('Graba una nota primero'); return; }
+
     const noteId = state.nextNoteId++;
+    const saved = await saveRecordingFile(blob, 'note_' + noteId);
+
     state.notes.push({
       id: noteId,
       date,
@@ -6752,12 +6900,13 @@ function addNote() {
       type: 'voice',
       title,
       description,
+      audio: saved.meta,          // { file, mime } or null
     });
-    
-    state.noteRecordings['note_' + noteId] = url;
-    window.noteCurrentRecordingUrl = null;
+
+    state.noteRecordings['note_' + noteId] = saved.url;
+    window.noteCurrentRecordingBlob = null;
   }
-  
+
   closeModal('note-modal');
   renderNotes();
   showToast('¡Nota guardada!');
@@ -6792,6 +6941,9 @@ function deleteNote(noteId) {
   if (!confirm('¿Eliminar esta nota?')) return;
   const note = state.notes.find(n => n.id === noteId);
   if (note && note.type === 'voice') {
+    deleteRecordingFile(note.audio);
+    const u = state.noteRecordings['note_' + noteId];
+    if (u) URL.revokeObjectURL(u);
     delete state.noteRecordings['note_' + noteId];
   }
   state.notes = state.notes.filter(n => n.id !== noteId);
@@ -6943,6 +7095,12 @@ async function capturePage() {
 
 function deleteAffirmation(idx) {
   if (!confirm('¿Eliminar esta afirmación?')) return;
+  const key = 'aff_' + hashStr(state.affirmations[idx] || '');
+  deleteRecordingFile(state.affRecordingFiles[key]);
+  delete state.affRecordingFiles[key];
+  const u = state.affRecordings[key];
+  if (u) { URL.revokeObjectURL(u); delete state.affRecordings[key]; }
+
   state.affirmations.splice(idx, 1);
   shuffleAffQueue();
   renderAffirmations();
@@ -7927,6 +8085,13 @@ async function rescheduleAllNotifications() {
   }
 }
 
+const PRIVACY_POLICY_URL = 'https://teej10jones-hub.github.io/vivela365-politica-de-privacidad/';
+
+async function openPrivacyPolicy() {
+  const B = window.Capacitor?.Plugins?.Browser;
+  if (B) { try { await B.open({ url: PRIVACY_POLICY_URL }); return; } catch (e) {} }
+  window.open(PRIVACY_POLICY_URL, '_blank');
+}
 // Kick things off: ask permission (if not already granted), do an
 // initial schedule pass, and re-run every time the app comes back to
 // the foreground so expired one-time notifications get replaced by
