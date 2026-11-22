@@ -246,7 +246,7 @@ body {
 
 /* SCAN */
 .scan-area:active { opacity:.85; }
-.parsed-result { display:none;background:var(--green-light);border:0.5px solid rgba(107,170,142,.3);border-radius:var(--r-md);padding:14px;gap:10px;flex-direction:column; }
+.parsed-result { display:none;margin-top:16px;background:var(--green-light);border:0.5px solid rgba(107,170,142,.3);border-radius:var(--r-md);padding:14px;gap:10px;flex-direction:column; }
 .parsed-result.show { display:flex; }
 .parsed-item::before { content:'·';position:absolute;left:0;color:var(--green); }
 .parsed-actions { display:flex;gap:8px;flex-wrap:wrap; }
@@ -306,15 +306,6 @@ body {
 .week-cell.today-col { border-color:var(--gold); }
 .week-cell.today-col.done { background:var(--gold);border-color:var(--gold); }
 .week-cell.not-scheduled { background:transparent;border-color:transparent;cursor:default;pointer-events:none; }
-.heatmap-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px; }
-.heatmap-grid { display:flex;gap:3px;min-width:max-content; }
-.heatmap-col { display:flex;flex-direction:column;gap:3px; }
-.heatmap-cell { width:12px;height:12px;border-radius:2px;background:var(--surface2); }
-.heatmap-cell.l1 { background:rgba(196,184,142,.35); }
-.heatmap-cell.l2 { background:rgba(196,184,142,.6); }
-.heatmap-cell.l3 { background:rgba(196,184,142,.85); }
-.heatmap-cell.l4 { background:var(--gold-dark); }
-.heatmap-months { display:flex;gap:3px;margin-bottom:2px;font-size:9px;color:var(--text-3);font-weight:500;min-width:max-content; }
 .streak-row { display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:pointer; }
 .streak-row:last-child { border-bottom:none; }
 .streak-info strong { display:block;font-size:14px;font-weight:500; }
@@ -3556,19 +3547,27 @@ function showGeminiImportPreview(data) {
 
 
 function addGeminiImportButton(container, text, handler, enabled) {
-  const btn = document.createElement('button');
+  if (!enabled) return;
 
+  const btn = document.createElement('button');
   btn.className = 'btn-outline';
   btn.style.width = '100%';
   btn.style.marginBottom = '8px';
   btn.textContent = text;
 
-  if (!enabled) {
-    btn.disabled = true;
-    btn.style.opacity = '0.4';
-  } else {
-    btn.onclick = handler;
-  }
+  btn.onclick = () => {
+    let count = 0;
+    try {
+      count = handler() || 0;
+    } catch (err) {
+      console.error('Import error:', err);
+      showToast('Error al importar');
+      return;
+    }
+    showToast(count > 0
+      ? '¡Importación exitosa! ' + count + ' nuevo(s)'
+      : '¡Importación exitosa! Todo ya estaba en tu app');
+  };
 
   container.appendChild(btn);
 }
@@ -3588,7 +3587,7 @@ function importGeminiObjectives() {
     
     if (!data?.objectives?.length && !data?.weekly_objective) {
       console.log('❌ No objectives or weekly_objective found - EXITING');
-      return;
+      return 0;
     }
 
     console.log('✅ STEP 4 - Found data to import');
@@ -3655,22 +3654,17 @@ function importGeminiObjectives() {
     console.log('📊 STEP 7 - Total agregados:', added);
     console.log('Estado goals después:', state.goals);
 
-    if (added > 0) {
-      console.log('STEP 8 - Calling renderGoals');
-      renderGoals();
-      showToast(added + ' objetivo(s) importado(s)');
-    } else {
-      console.log('⚠️ No se agregaron objetivos');
-    }
+    if (added > 0) renderGoals();
+    return added;
   } catch (error) {
     console.error('❌ Error in importGeminiObjectives:', error);
-    console.error('Stack:', error.stack);
+    return 0;
   }
 }
 
 function importGeminiEvents() {
   const data = window.geminiImportData?.data;
-  if (!data?.events) return;
+  if (!data?.events) return 0;
 
   let added = 0;
 
@@ -3728,9 +3722,7 @@ function importGeminiEvents() {
     added++;
   });
 
-  if (added > 0) {
-    showToast(added + ' evento(s) importado(s)');
-  }
+  return added;
 }
 
 
@@ -3775,7 +3767,6 @@ function renderHabits() {
     today.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'});
   renderWeekGrid();
   renderDailyChecklist();
-  renderHeatmap();
   renderStreaks();
 }
 
@@ -3949,41 +3940,6 @@ function dropHabit(habitId, event) {
 
 function endHabitDrag(event) {
   state.habitDragIndex = null;
-}
-
-function renderHeatmap() {
-  const weeks = 26;
-  const start = new Date(today);
-  const currentMondayIndex = mondayIndex(start);
-
-  start.setDate(
-    start.getDate() - currentMondayIndex - (weeks - 1) * 7
-  );
-  let cols = ''; let lastMonth = -1; let monthLabels = '';
-  for (let w = 0; w < weeks; w++) {
-    let col = '<div class="heatmap-col">';
-    for (let d = 0; d < 7; d++) {
-      const date = new Date(start); date.setDate(start.getDate() + w*7 + d);
-      const ds = fmt(date);
-      const scheduledHabits = state.habits.filter(h => isScheduled(h, date));
-      const total = scheduledHabits.length;
-      const done  = scheduledHabits.filter(h => h.completions[ds]).length;
-      const ratio = total ? done/total : 0;
-      let lvl = 0;
-      if (ratio > 0)   lvl = 1;
-      if (ratio > 0.4) lvl = 2;
-      if (ratio > 0.7) lvl = 3;
-      if (ratio === 1) lvl = 4;
-      col += '<div class="heatmap-cell'+(lvl?' l'+lvl:'')+'"></div>';
-      if (d === 0 && date.getMonth() !== lastMonth) {
-        lastMonth = date.getMonth();
-        monthLabels += '<span>'+date.toLocaleDateString('es-MX',{month:'short'})+'</span>';
-      }
-    }
-    col += '</div>'; cols += col;
-  }
-  document.getElementById('heatmap-grid').innerHTML   = cols;
-  document.getElementById('heatmap-months').innerHTML = monthLabels;
 }
 
 function analyzeHabitByDayOfWeek(habitId) {
@@ -7017,7 +6973,7 @@ function importGeminiHabits() {
   const data = window.geminiImportData?.data;
   if (!data?.habits) {
     console.error('❌ No habits data found');
-    return;
+    return 0;
   }
 
   // PART 1: Process frequency/schedule from Page 8 (morning/afternoon/evening)
@@ -7028,7 +6984,7 @@ function importGeminiHabits() {
 
   if (!allHabits.length) {
     console.warn('⚠️ No habits extracted from Page 8');
-    return;
+    return 0;
   }
 
   let added = 0;
@@ -7176,7 +7132,7 @@ function importGeminiHabits() {
   });
 
   renderHabits();
-  showToast((added > 0 ? added + ' hábito(s) nuevo(s) y ' : '') + 'datos importados ✓');
+  return added;
 }
 
 function importGeminiMetas() {
@@ -7231,10 +7187,8 @@ function importGeminiMetas() {
     added++;
   });
 
-  if (added > 0) {
-    renderMetas();
-    showToast(added + ' meta(s) importada(s)');
-  }
+  if (added > 0) renderMetas();
+  return added;
 }
 
 function importGeminiBooks() {
@@ -7276,10 +7230,8 @@ function importGeminiBooks() {
     added++;
   });
 
-  if (added > 0) {
-    renderBooks();
-    showToast(added + ' libro(s) importado(s)');
-  }
+  if (added > 0) renderBooks();
+  return added;
 }
 
 function importGeminiGratitude() {
@@ -7294,16 +7246,14 @@ function importGeminiGratitude() {
     state.gratitudeEntries.push({
       id: state.nextGratitudeId++,
       text: g,
-      date: new Date().toISOString().split('T')[0]
+      date: todayStr,
+      timestamp: Date.now()
     });
 
     added++;
   });
 
-  if (added > 0) {
-    // renderGratitude?.();  // Skip render for now
-    showToast(added + ' entrada(s) de gratitud importada(s)');
-  }
+  return added;
 }
 
 function importGeminiBrainDump() {
@@ -7326,7 +7276,7 @@ function importGeminiBrainDump() {
       id: state.nextNoteId++,
       text: note,
       content: note,           // ✅ renderNotes expects 'content'
-      date: now.split('T')[0],
+      date: todayStr,
       timestamp: new Date(now).getTime(),  // ✅ renderNotes expects 'timestamp'
       type: 'text',            // ✅ renderNotes expects 'type'
       processed: false
@@ -7335,21 +7285,27 @@ function importGeminiBrainDump() {
     added++;
   });
 
-  if (added > 0) {
-    renderNotes();
-    showToast(added + ' nota(s) importada(s)');
-  }
+  if (added > 0) renderNotes();
+  return added;
 }
 
 function importAllGeminiData() {
-  importGeminiHabits();
-  importGeminiEvents?.();
-  importGeminiObjectives();
-  importGeminiMetas();          // ← add this
-  importGeminiBooks();
-  importGeminiGratitude();
-  importGeminiBrainDump();
-  showToast('✨ Importación completa');
+  let total = 0;
+  [
+    importGeminiHabits,
+    importGeminiEvents,
+    importGeminiObjectives,
+    importGeminiMetas,
+    importGeminiBooks,
+    importGeminiGratitude,
+    importGeminiBrainDump
+  ].forEach(fn => {
+    try { total += fn() || 0; }
+    catch (err) { console.error(fn.name + ' failed:', err); }
+  });
+  showToast(total > 0
+    ? '✨ Importación exitosa: ' + total + ' nuevo(s)'
+    : '✨ Importación exitosa. Todo ya estaba en tu app');
 }
 
 
