@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -2339,33 +2335,32 @@ async function callGeminiWorker(imageBase64, customPrompt) {
 
   try {
     const token = await getStoredToken();
+    if (!token) {
+      showToast('Activa tu agenda primero');
+      document.getElementById('activation-gate').classList.remove('hidden');
+      return null;
+    }
+
     const response = await fetch(GEMINI_WORKER_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + (token || ''),
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         imageBase64: imageBase64,
         prompt: customPrompt,
-        token: token,
+        token: token
       })
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.error || `Worker error: ${response.status}`);
     }
 
     const data = await response.json();
-    
-    // Your worker returns the full Gemini response
-    // The actual content is in data.candidates[0].content.parts[0].text
     if (data.error) {
       showToast('Error: ' + data.error);
       return null;
     }
-
     return data;
   } catch (error) {
     console.error('Gemini Worker error:', error);
@@ -8009,7 +8004,3 @@ async function rescheduleAllNotifications() {
 </script>
 </body>
 </html>
-
-
-
-
