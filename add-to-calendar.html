@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agregar a calendario</title>
+<style>
+  body{font-family:-apple-system,sans-serif;background:#F7F6F2;color:#1A1E2A;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:24px;text-align:center}
+  button{background:#C4B88E;color:#1A1E2A;border:none;border-radius:12px;padding:16px 28px;font-size:17px;font-weight:600;margin-top:20px}
+  p{color:#5C6070;font-size:14px}
+</style>
+</head>
+<body>
+<h2>Vívela365</h2>
+<p id="m">Preparando eventos…</p>
+<button id="b" style="display:none">Agregar al calendario</button>
+<script>
+function icsText(s){return String(s||'').replace(/[\r\n]+/g,' ').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').trim();}
+function toICSDate(d,t){const x=d.replace(/-/g,'');return t?x+'T'+t.replace(':','')+'00':x;}
+function b64urlDecode(s){
+  s=s.replace(/-/g,'+').replace(/_/g,'/');
+  while(s.length%4)s+='=';
+  return decodeURIComponent(escape(atob(s)));
+}
+try{
+  const events=JSON.parse(b64urlDecode(location.hash.slice(1)));
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Vívela365//ES','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+  events.forEach(([id,title,date,start,end,notes,seq])=>{
+    ics.push('BEGIN:VEVENT',
+      'UID:vivela365-event-'+id+'@vivela365.app',
+      'SEQUENCE:'+(seq||0),
+      'SUMMARY:'+icsText(title),
+      'DTSTART:'+toICSDate(date,start),
+      'DTEND:'+toICSDate(date,end||start),
+      notes?'DESCRIPTION:'+icsText(notes):'',
+      'END:VEVENT');
+  });
+  ics.push('END:VCALENDAR');
+  const blob=new Blob([ics.filter(Boolean).join('\r\n')],{type:'text/calendar;charset=utf-8'});
+  document.getElementById('m').textContent=events.length+' evento(s) listos.';
+  const b=document.getElementById('b');
+  b.style.display='block';
+  b.onclick=()=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='vivela365-eventos.ics';
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+}catch(err){
+  document.getElementById('m').textContent='No se pudieron leer los eventos. Vuelve a intentarlo desde la app.';
+}
+</script>
+</body>
+</html>
